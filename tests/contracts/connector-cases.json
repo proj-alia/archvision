@@ -1,0 +1,688 @@
+{
+  "design_status": "draft",
+  "runtime_executed": false,
+  "core_changes_allowed_for_new_platform": false,
+  "examples": [
+    {
+      "id": "webchat",
+      "manifest": "config/connectors/webchat/manifest.json",
+      "definition": "config/connectors/webchat/connector.json",
+      "instance": "config/connectors/webchat/instance.json"
+    },
+    {
+      "id": "anonymous-form",
+      "manifest": "config/connectors/anonymous-form/manifest.json",
+      "definition": "config/connectors/anonymous-form/connector.json",
+      "instance": "config/connectors/anonymous-form/instance.json"
+    },
+    {
+      "id": "anonymous-setup",
+      "manifest": "config/connectors/anonymous-setup/manifest.json",
+      "definition": "config/connectors/anonymous-setup/connector.json",
+      "instance": "config/connectors/anonymous-setup/instance.json",
+      "setup": "config/connectors/anonymous-setup/setup.json"
+    },
+    {
+      "id": "anonymous-form-second-account",
+      "manifest": "config/connectors/anonymous-form/manifest.json",
+      "definition": "config/connectors/anonymous-form/connector.json",
+      "instance": "config/connectors/anonymous-form/instance-2.json"
+    },
+    {
+      "id": "anonymous-avatar",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "instance": "config/connectors/anonymous-avatar/instance.json"
+    }
+  ],
+  "payload_cases": [
+    {
+      "id": "valid_input",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "input_id": "message-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-1",
+        "actor_ref": "member-1",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "valid_endpoint",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "endpoint",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "endpoint_ref": "room-1",
+        "revision": 1,
+        "conversation_ref": "room-1",
+        "audience_refs": [
+          "member-1"
+        ],
+        "privacy": "unknown",
+        "reachable": true,
+        "observed_at": "2026-11-13T12:00:00Z",
+        "expires_at": "2026-11-13T12:05:00Z",
+        "input_types": [
+          "content.text"
+        ],
+        "output_types": [
+          "content.text"
+        ],
+        "features": [
+          "interaction.output.text"
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "valid_deliver",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-1",
+        "endpoint_revision": 1,
+        "audience_refs": [
+          "member-1"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-13T12:05:00Z",
+        "cancel_generation": 0,
+        "idempotency_key": "delivery-1"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "delivery_accepted_only",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "output_schema",
+      "payload": {
+        "operation_id": "op-1",
+        "status": "accepted"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "accepted_not_delivered",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "output_schema",
+      "payload": {
+        "operation_id": "op-1",
+        "status": "completed"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "input_cannot_claim_core_actor",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "input_id": "message-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-1",
+        "actor_ref": "member-1",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ],
+        "actor_id": "admin"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "retraction_without_content",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "input_id": "message-1",
+        "revision": 1,
+        "kind": "retract",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-1",
+        "actor_ref": "member-1",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ]
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "valid_retraction",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "input_id": "message-1",
+        "revision": 1,
+        "kind": "retract",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-1",
+        "actor_ref": "member-1",
+        "content_parts": []
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "delivery_endpoint_revision_required",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-1",
+        "audience_refs": [
+          "member-1"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-13T12:05:00Z",
+        "cancel_generation": 0,
+        "idempotency_key": "delivery-1"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "active_delivery_generation",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 0,
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-1",
+        "endpoint_revision": 1,
+        "audience_refs": [
+          "member-1"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-13T12:05:00Z",
+        "cancel_generation": 0,
+        "idempotency_key": "delivery-1"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "valid_connect_shape",
+      "contract_id": "alia.connector.management",
+      "member_kind": "method",
+      "member_name": "connect",
+      "schema_slot": "input_schema",
+      "payload": {
+        "instance": {
+          "connector_id": "form-1",
+          "configuration_revision": 1,
+          "connection_generation": 1
+        },
+        "configuration_version": "1.0.0",
+        "config": {
+          "endpoint": "https://gateway.invalid",
+          "account_label": "account"
+        },
+        "credential_refs": {}
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "valid_test_observation",
+      "contract_id": "alia.connector.management",
+      "member_kind": "method",
+      "member_name": "test",
+      "schema_slot": "output_schema",
+      "payload": {
+        "operation_id": "probe-1",
+        "reachable": true,
+        "authentication": "unknown",
+        "observed_at": "2026-11-13T12:00:00Z"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "valid_setup_challenge",
+      "contract_id": "alia.connector.setup",
+      "member_kind": "method",
+      "member_name": "begin",
+      "schema_slot": "output_schema",
+      "payload": {
+        "setup_id": "setup-example",
+        "revision": 2,
+        "state": "awaiting_input",
+        "step": {
+          "step_id": "pair",
+          "revision": 1,
+          "kind": "qr",
+          "text": "合成认证挑战，仅用于契约样例。",
+          "asset": {
+            "blob_ref": "example:qr-not-generated",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "expires_at": "2026-11-13T12:05:00Z"
+          }
+        },
+        "credential_write_receipts": []
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "valid_setup_submission",
+      "contract_id": "alia.connector.setup",
+      "member_kind": "method",
+      "member_name": "submit",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connector_id": "setup-1",
+        "setup_id": "setup-example",
+        "expected_revision": 2,
+        "step_id": "pair",
+        "step_revision": 1,
+        "input": {}
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "setup_step_revision_required",
+      "contract_id": "alia.connector.setup",
+      "member_kind": "method",
+      "member_name": "submit",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connector_id": "setup-1",
+        "setup_id": "setup-example",
+        "expected_revision": 2,
+        "step_id": "pair",
+        "input": {}
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "core_receipt_reuse",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "receipt",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "form-1",
+        "connection_generation": 1,
+        "receipt": {
+          "schema_version": "1.0",
+          "scope": {
+            "tenant_id": "tenant-1",
+            "identity_id": "identity-001",
+            "branch_id": "main",
+            "access_scope": "private-1"
+          },
+          "data_policy": {
+            "owner_id": "user-1",
+            "purpose": "contract-review",
+            "classification": "private",
+            "retention_policy_id": "retain-1",
+            "lineage_ids": []
+          },
+          "output_delivery_id": "delivery-1",
+          "expression_id": "expression-1",
+          "turn_id": "turn-1",
+          "binding_id": "binding-1",
+          "status": "completed",
+          "recorded_at": "2026-11-12T12:00:00Z",
+          "segments": [
+            {
+              "segment_id": "segment-1",
+              "channel_id": "org.example.channel",
+              "audience": [
+                "user-1"
+              ],
+              "content_ref": "output-1",
+              "offset_unit": "text.codepoint",
+              "from": 0,
+              "to": 5,
+              "status": "delivered",
+              "recorded_at": "2026-11-12T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "connect_requires_reserved_generation",
+      "contract_id": "alia.connector.management",
+      "member_kind": "method",
+      "member_name": "connect",
+      "schema_slot": "input_schema",
+      "payload": {
+        "instance": {
+          "connector_id": "form-1",
+          "configuration_revision": 1,
+          "connection_generation": 0
+        },
+        "configuration_version": "1.0.0",
+        "config": {
+          "endpoint": "https://gateway.invalid",
+          "account_label": "account"
+        },
+        "credential_refs": {}
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "setup_terminal_cannot_keep_challenge",
+      "contract_id": "alia.connector.setup",
+      "member_kind": "method",
+      "member_name": "begin",
+      "schema_slot": "output_schema",
+      "payload": {
+        "setup_id": "setup-example",
+        "revision": 2,
+        "state": "succeeded",
+        "step": {
+          "step_id": "pair",
+          "revision": 1,
+          "kind": "qr",
+          "text": "合成认证挑战，仅用于契约样例。",
+          "asset": {
+            "blob_ref": "example:qr-not-generated",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "expires_at": "2026-11-13T12:05:00Z"
+          }
+        },
+        "credential_write_receipts": []
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "setup_waiting_requires_challenge",
+      "contract_id": "alia.connector.setup",
+      "member_kind": "method",
+      "member_name": "begin",
+      "schema_slot": "output_schema",
+      "payload": {
+        "setup_id": "setup-example",
+        "revision": 2,
+        "state": "awaiting_input",
+        "credential_write_receipts": []
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "delivery_requires_instance",
+      "contract_id": "alia.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema",
+      "payload": {
+        "connection_generation": 1,
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-1",
+        "endpoint_revision": 1,
+        "audience_refs": [
+          "member-1"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-13T12:05:00Z",
+        "cancel_generation": 0,
+        "idempotency_key": "delivery-1"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "avatar_mapped_input",
+      "contract_id": "alia.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "connector_id": "avatar-1",
+        "connection_generation": 1,
+        "input_id": "c7-42",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-c",
+        "actor_ref": "speaker-c",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ]
+      },
+      "expected_valid": true
+    }
+  ],
+  "configuration_cases": [
+    {
+      "id": "webchat_configuration",
+      "definition": "config/connectors/webchat/connector.json",
+      "data": {
+        "title": "ALIA"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "webchat_extra_field",
+      "definition": "config/connectors/webchat/connector.json",
+      "data": {
+        "title": "ALIA",
+        "unexpected": "not allowed"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "anonymous-form_configuration",
+      "definition": "config/connectors/anonymous-form/connector.json",
+      "data": {
+        "endpoint": "https://gateway.invalid",
+        "account_label": "example-account"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "anonymous-form_extra_field",
+      "definition": "config/connectors/anonymous-form/connector.json",
+      "data": {
+        "endpoint": "https://gateway.invalid",
+        "account_label": "example-account",
+        "unexpected": "not allowed"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "anonymous-setup_configuration",
+      "definition": "config/connectors/anonymous-setup/connector.json",
+      "data": {
+        "server": "https://pairing.invalid"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "anonymous-setup_extra_field",
+      "definition": "config/connectors/anonymous-setup/connector.json",
+      "data": {
+        "server": "https://pairing.invalid",
+        "unexpected": "not allowed"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "invalid_gateway_url",
+      "definition": "config/connectors/anonymous-form/connector.json",
+      "data": {
+        "endpoint": "not a url",
+        "account_label": "a"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "avatar_peer_config",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "data": {
+        "endpoint": "wss://avatar.invalid/bridge",
+        "peer_protocol": "C7",
+        "client_ref": "client-example"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "avatar_unknown_peer_version",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "data": {
+        "endpoint": "wss://avatar.invalid/bridge",
+        "peer_protocol": "C8",
+        "client_ref": "client-example"
+      },
+      "expected_valid": false
+    }
+  ],
+  "dependency_cases": [
+    {
+      "id": "dependency_none",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "none",
+      "expected_valid": true
+    },
+    {
+      "id": "dependency_missing_contribution",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "missing_contribution",
+      "expected_valid": false
+    },
+    {
+      "id": "dependency_self_dependency",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "self_dependency",
+      "expected_valid": false
+    },
+    {
+      "id": "dependency_missing_feature",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "missing_feature",
+      "expected_valid": false
+    },
+    {
+      "id": "dependency_missing_required_feature",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "missing_required_feature",
+      "expected_valid": false
+    },
+    {
+      "id": "dependency_duplicate_dependency",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "duplicate_dependency",
+      "expected_valid": false
+    },
+    {
+      "id": "dependency_unprovided_service",
+      "definition": "config/connectors/anonymous-avatar/connector.json",
+      "manifest": "config/connectors/anonymous-avatar/manifest.json",
+      "change": "unprovided_service",
+      "expected_valid": false
+    }
+  ]
+}

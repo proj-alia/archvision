@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "tenant-example",
+  "data_policy": {
+    "owner_id": "operator-example",
+    "purpose": "connector-configuration",
+    "classification": "private",
+    "retention_policy_id": "connector-policy",
+    "lineage_ids": []
+  },
+  "setup_id": "setup-example",
+  "connector_id": "anonymous-setup-1",
+  "definition_ref": {
+    "definition_id": "org.example.setup.connector",
+    "version": "1.0.0",
+    "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+  },
+  "configuration_revision": 1,
+  "extension_session_id": "extension-session-example",
+  "extension_generation": 1,
+  "operator_id": "operator-example",
+  "revision": 2,
+  "state": "awaiting_input",
+  "created_at": "2026-11-13T12:00:00Z",
+  "updated_at": "2026-11-13T12:00:01Z",
+  "expires_at": "2026-11-13T12:05:00Z",
+  "step": {
+    "step_id": "pair",
+    "revision": 1,
+    "kind": "qr",
+    "text": "合成认证挑战，仅用于契约样例。",
+    "asset": {
+      "blob_ref": "example:qr-not-generated",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expires_at": "2026-11-13T12:05:00Z"
+    }
+  },
+  "credential_refs": {}
+}

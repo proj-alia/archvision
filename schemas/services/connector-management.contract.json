@@ -1,0 +1,484 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "alia.connector.management",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "validate",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "configuration_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "connection_generation": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "connector_id",
+              "configuration_revision",
+              "connection_generation"
+            ]
+          },
+          "configuration_version": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+          },
+          "config": {
+            "type": "object"
+          },
+          "credential_refs": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "instance",
+          "configuration_version",
+          "config",
+          "credential_refs"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "code": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+                }
+              },
+              "required": [
+                "path",
+                "code"
+              ]
+            },
+            "minItems": 0
+          }
+        },
+        "required": [
+          "valid",
+          "errors"
+        ]
+      },
+      "side_effect_class": "none",
+      "supports_cancel": false
+    },
+    {
+      "name": "test",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "configuration_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "connection_generation": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "connector_id",
+              "configuration_revision",
+              "connection_generation"
+            ]
+          },
+          "configuration_version": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+          },
+          "config": {
+            "type": "object"
+          },
+          "credential_refs": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "instance",
+          "configuration_version",
+          "config",
+          "credential_refs"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reachable": {
+            "type": "boolean"
+          },
+          "authentication": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "valid",
+              "invalid"
+            ]
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "operation_id",
+          "reachable",
+          "authentication",
+          "observed_at"
+        ]
+      },
+      "side_effect_class": "read",
+      "supports_cancel": true
+    },
+    {
+      "name": "connect",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "configuration_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "connection_generation": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "connector_id",
+              "configuration_revision",
+              "connection_generation"
+            ]
+          },
+          "configuration_version": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+          },
+          "config": {
+            "type": "object"
+          },
+          "credential_refs": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z][a-z0-9_]*$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "instance",
+          "configuration_version",
+          "config",
+          "credential_refs"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "rejected"
+            ]
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "operation_id",
+          "status"
+        ]
+      },
+      "side_effect_class": "reversible_write",
+      "supports_cancel": true
+    },
+    {
+      "name": "disconnect",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "configuration_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "connection_generation": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "connector_id",
+          "configuration_revision",
+          "connection_generation"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "rejected"
+            ]
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "operation_id",
+          "status"
+        ]
+      },
+      "side_effect_class": "reversible_write",
+      "supports_cancel": true
+    },
+    {
+      "name": "status",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "configuration_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "connection_generation": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "connector_id",
+          "configuration_revision",
+          "connection_generation"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "configuration_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "connection_generation": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "connector_id",
+              "configuration_revision",
+              "connection_generation"
+            ]
+          },
+          "reported_state": {
+            "type": "string",
+            "enum": [
+              "disconnected",
+              "connecting",
+              "connected",
+              "disconnecting",
+              "failed"
+            ]
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "available_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "instance",
+          "reported_state",
+          "observed_at",
+          "available_features"
+        ]
+      },
+      "side_effect_class": "read",
+      "supports_cancel": true
+    }
+  ],
+  "events": [
+    {
+      "name": "status",
+      "payload_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "instance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "configuration_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "connection_generation": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "connector_id",
+              "configuration_revision",
+              "connection_generation"
+            ]
+          },
+          "reported_state": {
+            "type": "string",
+            "enum": [
+              "disconnected",
+              "connecting",
+              "connected",
+              "disconnecting",
+              "failed"
+            ]
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "available_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "instance",
+          "reported_state",
+          "observed_at",
+          "available_features"
+        ]
+      }
+    }
+  ],
+  "streams": []
+}

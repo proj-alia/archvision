@@ -1,0 +1,56 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "org.example.browser",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "source_url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 32768
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "truncated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "source_url",
+          "text",
+          "observed_at",
+          "truncated"
+        ]
+      },
+      "side_effect_class": "read",
+      "supports_cancel": true
+    }
+  ],
+  "events": [],
+  "streams": []
+}

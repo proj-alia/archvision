@@ -57,6 +57,9 @@
     "expires_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "resource_ref": {
+      "$ref": "#/$defs/resource_ref"
     }
   },
   "required": [
@@ -195,7 +198,64 @@
         ]
       },
       "minItems": 1
+    },
+    "resource_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "resource_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "type_id",
+        "resource_id"
+      ]
     }
   },
-  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "contract_ref": {
+            "properties": {
+              "contract_id": {
+                "enum": [
+                  "alia.connector.management",
+                  "alia.connector.setup",
+                  "alia.interaction"
+                ]
+              }
+            },
+            "required": [
+              "contract_id"
+            ]
+          }
+        },
+        "required": [
+          "contract_ref"
+        ]
+      },
+      "then": {
+        "required": [
+          "resource_ref"
+        ],
+        "properties": {
+          "resource_ref": {
+            "properties": {
+              "type_id": {
+                "const": "connector.instance"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

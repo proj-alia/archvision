@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Connector Instance 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_policy": {
+      "$ref": "#/$defs/data_policy"
+    },
+    "connector_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "installation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "extension_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "definition_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "definition_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "definition_id",
+        "version",
+        "sha256"
+      ]
+    },
+    "configuration_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "configuration_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "runtime_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "config": {
+      "type": "object"
+    },
+    "credential_refs": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "configuration_status": {
+      "type": "string",
+      "enum": [
+        "valid",
+        "invalid",
+        "needs_revision"
+      ]
+    },
+    "authentication_status": {
+      "type": "string",
+      "enum": [
+        "not_required",
+        "missing",
+        "pending",
+        "valid",
+        "expired",
+        "failed"
+      ]
+    },
+    "authentication_expires_at": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "connection_status": {
+      "type": "string",
+      "enum": [
+        "disconnected",
+        "connecting",
+        "connected",
+        "disconnecting",
+        "failed"
+      ]
+    },
+    "availability": {
+      "type": "string",
+      "enum": [
+        "unavailable",
+        "degraded",
+        "ready"
+      ]
+    },
+    "connection_generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "applied_configuration_revision": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "active_binding_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "tenant_id",
+    "data_policy",
+    "connector_id",
+    "installation_id",
+    "extension_id",
+    "definition_ref",
+    "configuration_version",
+    "configuration_revision",
+    "runtime_revision",
+    "config",
+    "credential_refs",
+    "enabled",
+    "configuration_status",
+    "authentication_status",
+    "authentication_expires_at",
+    "connection_status",
+    "availability",
+    "connection_generation",
+    "applied_configuration_revision",
+    "active_binding_ids",
+    "observed_at"
+  ],
+  "$defs": {
+    "data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "private",
+            "restricted"
+          ]
+        },
+        "retention_policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "owner_id",
+        "purpose",
+        "classification",
+        "retention_policy_id",
+        "lineage_ids"
+      ]
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "availability": {
+            "enum": [
+              "ready",
+              "degraded"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "enabled": {
+            "const": true
+          },
+          "configuration_status": {
+            "const": "valid"
+          },
+          "authentication_status": {
+            "type": "string",
+            "enum": [
+              "not_required",
+              "valid"
+            ]
+          },
+          "connection_status": {
+            "const": "connected"
+          },
+          "connection_generation": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "applied_configuration_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "active_binding_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "enabled": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "availability": {
+            "const": "unavailable"
+          }
+        }
+      }
+    }
+  ],
+  "description": "Internal snapshot of one interaction-platform instance; not a required tool state."
+}

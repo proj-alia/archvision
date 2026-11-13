@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "tenant-example",
+  "data_policy": {
+    "owner_id": "operator-example",
+    "purpose": "connector-configuration",
+    "classification": "private",
+    "retention_policy_id": "connector-policy",
+    "lineage_ids": []
+  },
+  "connector_id": "avatar-1",
+  "installation_id": "avatar-installation",
+  "extension_id": "org.example.avatar",
+  "definition_ref": {
+    "definition_id": "org.example.avatar.connector",
+    "version": "1.0.0",
+    "sha256": "e2118cab66a487598db7de1b70e921e6ae45e99caa0566b22ec16f371d35c99f"
+  },
+  "configuration_version": "1.0.0",
+  "configuration_revision": 1,
+  "runtime_revision": 0,
+  "config": {
+    "endpoint": "wss://avatar.invalid/bridge",
+    "peer_protocol": "C7",
+    "client_ref": "client-example"
+  },
+  "credential_refs": {},
+  "enabled": false,
+  "configuration_status": "valid",
+  "authentication_status": "missing",
+  "authentication_expires_at": null,
+  "connection_status": "disconnected",
+  "availability": "unavailable",
+  "connection_generation": 0,
+  "applied_configuration_revision": null,
+  "active_binding_ids": [],
+  "observed_at": "2026-11-13T12:00:00Z"
+}

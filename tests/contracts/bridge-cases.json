@@ -1,0 +1,113 @@
+{
+  "design_status": "draft",
+  "runtime_executed": false,
+  "translation_executed": false,
+  "peer_schema": "config/connectors/anonymous-avatar/peer.schema.json",
+  "pairs": [
+    {
+      "id": "client_text_to_alia",
+      "direction": "inbound",
+      "peer_payload": {
+        "protocol": "C7",
+        "op": "user.say",
+        "id": "c7-42",
+        "room": "room-c",
+        "speaker": "speaker-c",
+        "body": "你好"
+      },
+      "alia_member_kind": "event",
+      "alia_member_name": "input",
+      "alia_schema_slot": "payload_schema",
+      "alia_payload": {
+        "connector_id": "avatar-1",
+        "connection_generation": 1,
+        "input_id": "c7-42",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-13T12:00:00Z",
+        "conversation_ref": "room-c",
+        "actor_ref": "speaker-c",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ]
+      },
+      "text_pointer": "/content_parts/0/text",
+      "peer_text_key": "body"
+    },
+    {
+      "id": "alia_text_to_client",
+      "direction": "outbound",
+      "peer_payload": {
+        "protocol": "C7",
+        "op": "avatar.say",
+        "request": "delivery-1",
+        "room": "room-c",
+        "to": [
+          "speaker-c"
+        ],
+        "body": "你好"
+      },
+      "alia_member_kind": "method",
+      "alia_member_name": "deliver",
+      "alia_schema_slot": "input_schema",
+      "alia_payload": {
+        "connector_id": "avatar-1",
+        "connection_generation": 1,
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-c",
+        "endpoint_revision": 1,
+        "audience_refs": [
+          "speaker-c"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-13T12:05:00Z",
+        "cancel_generation": 0,
+        "idempotency_key": "delivery-1"
+      },
+      "text_pointer": "/segments/0/content_parts/0/text",
+      "peer_text_key": "body"
+    }
+  ],
+  "peer_cases": [
+    {
+      "id": "peer_ack_is_only_acceptance",
+      "data": {
+        "protocol": "C7",
+        "op": "accepted",
+        "request": "delivery-1"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "peer_wrong_version",
+      "data": {
+        "protocol": "C8",
+        "op": "accepted",
+        "request": "delivery-1"
+      },
+      "expected_valid": false
+    }
+  ],
+  "limitations": [
+    "The peer frames are synthetic. No actual Live2D application is implemented or connected.",
+    "Matching pair shapes and text is not proof of conversion, authentication, actor identity, animation or delivery.",
+    "accepted carries no playback completion evidence; no completed DeliveryReceipt may be derived from it."
+  ]
+}

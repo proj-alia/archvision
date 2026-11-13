@@ -12,6 +12,24 @@
 - 最佳实践：优先有意义的事件，不要高频无关状态刷屏；行动结果须回报有效变化： https://github.com/VedalAI/neuro-sdk/blob/3957516556cf2185b3bdc21f1d3d6660e54186aa/API/BEST_PRACTICES.md
 - 未公开的训练、记忆、人格和完整认知流水线无法凭 SDK 反向声称已掌握。
 
+## AstrBot 平台接入与配置（源码核查：2026-11-13）
+
+研究快照固定为 `23db1ad08064a8330a09077138ce8ecc05362219`，已阅读注册、配置服务、平台管理及相关 WebUI 源码，未在本机运行 AstrBot。
+
+- [平台注册](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/register.py)将适配器类与类型元数据登记；默认配置模板和 config_metadata 支持用户配置及表单生成。
+- [配置服务](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/dashboard/services/config_service.py)汇集注册表中的模板/字段信息；[编辑器](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/dashboard/src/components/platform/PlatformEditor.vue)使用通用 AstrBotConfig 组件。配置入口不必是每个平台独立编写的前端应用。
+- [平台管理器](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/manager.py)根据配置查找类、创建实例并启动运行，同时初始化内置 WebChat；内置适配器导入仍有按平台类型的分支。
+
+ALIA 的取舍：借鉴类型注册、配置贡献、运行实例的区分；官方定义通用交互语义，社区提供适配实现和配置入口，默认一包交付。交互、工具、模型及媒体只共享扩展管理机制，不强制共用交互业务协议；核心和 WebUI 不内置平台名称分支。这是 ALIA 自身设计，不表示 AstrBot 已验证本项目的身份/权限/持久化边界，也不承诺兼容其 Python 插件 ABI。
+
+## Live2D 引擎与客户端接口的区别（文档核查：2026-11-13）
+
+[Cubism Core 官方说明](https://docs.live2d.com/en/cubism-sdk-manual/cubism-core-api-reference/)描述根据模型参数计算渲染数据的职责；[表情 SDK 文档](https://docs.live2d.com/en/cubism-sdk-manual/expression/)说明模型表情与动作接口。它们不能单独证明某个第三方客户端具有聊天/远程控制协议。
+
+作为具体客户端接口的例子，[VTube Studio 官方 API 文档](https://github.com/DenchiSoft/VTubeStudio)定义自己的 WebSocket 连接、认证、消息请求和热键等功能。这支持“适配实际客户端协议，而不是假设统一 Live2D 通信语言”的区分；不表示用户举的匿名 AI 客户端就是 VTube Studio，也未验证任何实际连接。
+
+ALIA 的设计推导是由平台交互协议插件桥接两侧契约；客户端的聊天、渲染与系统操作按实际能力分别映射。无接口时需要补外侧接入点，只有部分接口时明确受限。新增匿名 C7 帧仅为项目自己构造的设计用例，不是从上述产品提取的真实协议。
+
 ## Letta / MemGPT
 - Core blocks、archival、conversation history 的职能分离：https://github.com/letta-ai/skills/blob/main/letta/agent-development/references/memory-architecture.md
 - Agent State / multiple conversations 及 export/import：https://docs.letta.com/api/resources/agents

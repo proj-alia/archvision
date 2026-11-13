@@ -130,12 +130,43 @@
           },
           "contract_ref": {
             "$ref": "#/$defs/contract_ref"
+          },
+          "descriptor_ref": {
+            "$ref": "#/$defs/package_resource_ref"
           }
         },
         "required": [
           "contribution_id",
           "type_id",
           "contract_ref"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type_id": {
+                  "const": "alia.contribution.connector"
+                }
+              },
+              "required": [
+                "type_id"
+              ]
+            },
+            "then": {
+              "required": [
+                "descriptor_ref"
+              ],
+              "properties": {
+                "contract_ref": {
+                  "properties": {
+                    "contract_id": {
+                      "const": "alia.connector.management"
+                    }
+                  }
+                }
+              }
+            }
+          }
         ]
       },
       "minItems": 0
@@ -303,6 +334,24 @@
         ]
       },
       "minItems": 1
+    },
+    "package_resource_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9_-][A-Za-z0-9_.-]*(?:/[A-Za-z0-9_-][A-Za-z0-9_.-]*)*$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
     }
   },
   "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."

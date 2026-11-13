@@ -75,6 +75,7 @@
         "世界模型",
         "认知处理",
         "对话",
+        "动态需要",
         "行动动机",
         "长任务",
         "能力接入",
@@ -194,7 +195,8 @@
         "Q05",
         "Q06",
         "Q07",
-        "Q08"
+        "Q08",
+        "Q09"
       ]
     },
     {
@@ -212,6 +214,9 @@
         "V10",
         "V11",
         "V12",
+        "V13",
+        "V14",
+        "V15",
         "A01",
         "A02",
         "A03",
@@ -220,12 +225,25 @@
         "A06",
         "A07",
         "A08",
+        "A09",
+        "A10",
         "H01",
         "H02",
         "H03",
         "H04",
         "H05",
-        "H06"
+        "H06",
+        "H07",
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "N07",
+        "N08",
+        "N09",
+        "N10"
       ]
     },
     {
@@ -242,7 +260,200 @@
         "fork_identity",
         "fake_game_contract",
         "prompt_injection",
-        "roleplay_isolation"
+        "roleplay_isolation",
+        "personality_need_independence",
+        "need_evidence_dedup",
+        "need_source_revision",
+        "need_bounded_time",
+        "need_offline_restore",
+        "need_unmet_no_action",
+        "need_control_authority",
+        "scoped_reliability_learning",
+        "layered_learning_routes",
+        "need_lifecycle_race",
+        "need_private_lineage",
+        "need_definition_revision",
+        "need_single_handoff",
+        "need_commitment_independence",
+        "need_feedback_attribution",
+        "need_startup_and_capacity",
+        "need_withdrawal_and_identity"
+      ]
+    },
+    {
+      "document": "docs/05-STATE-CONTRACTS.md",
+      "markers": [
+        "NeedDefinition",
+        "NeedState",
+        "Appraisal",
+        "MotivationCandidate",
+        "StateStore",
+        "read_set",
+        "不可变依据快照",
+        "持续执行所需的当前前置条件",
+        "必要原始来源的修订依赖"
+      ]
+    },
+    {
+      "document": "docs/02-RUNTIME-ALGORITHMS.md",
+      "markers": [
+        "动态需要、评价和动机",
+        "NeedState",
+        "MotivationCandidate",
+        "N_t",
+        "PersonaChangeProposal"
+      ]
+    },
+    {
+      "document": "docs/appendices/15-SITUATED-BEHAVIOR.md",
+      "markers": [
+        "### 6.3 动态需要与动机",
+        "NeedDefinition",
+        "NeedState",
+        "MotivationCandidate",
+        "settled",
+        "expired",
+        "invalidated",
+        "H07",
+        "定义发布与采用",
+        "withdrawn",
+        "容量不足",
+        "同一关切",
+        "来源贡献、运行读集和普通关联"
+      ]
+    },
+    {
+      "document": "docs/appendices/13-DATA-STORAGE.md",
+      "markers": [
+        "需要定义 / cognition",
+        "动态需要 / cognition",
+        "评价与动机依据 / cognition",
+        "人物可靠性 / relations",
+        "StateStore"
+      ]
+    },
+    {
+      "document": "config/persona.example.yaml",
+      "markers": [
+        "stable_need_preferences:",
+        "trait_semantics:",
+        "need.autonomy",
+        "need.understanding",
+        "need.coordination",
+        "need.exploration",
+        "stable_need_preference_changes_require_confirmation: true",
+        "definition_publication_implies_adoption: false"
+      ]
+    },
+    {
+      "document": "config/cognitive-policy.example.yaml",
+      "markers": [
+        "drive: events_and_bounded_trusted_time",
+        "time_calibration_profiles:",
+        "missing_time_calibration: validity_and_expiry_only",
+        "prohibit_same_event_feedback_amplification: true",
+        "offline_resume: revalidate_then_reset_schedule_without_accrual",
+        "handoff_grants_execution_permission: false",
+        "representation: immutable_rationale_snapshot",
+        "owns_scheduler_or_budget: false",
+        "derived_events_are_independent_evidence: false",
+        "task_completion_implies_need_satisfaction: false",
+        "capacity_dimensions:",
+        "definition_adoption: pinned_persona_reference_with_semantic_change_confirmation"
+      ]
+    },
+    {
+      "document": "docs/design/UIUX/design/UX_SPEC.md",
+      "markers": [
+        "当前关切",
+        "长期偏好",
+        "未评估/不可访问",
+        "服务端验证"
+      ]
+    },
+    {
+      "document": "docs/appendices/11-EXTENSION-PLATFORM.md",
+      "markers": [
+        "统一的是插件管理基础",
+        "工具可复用表单",
+        "ConnectorDefinition",
+        "ConnectorInstance",
+        "SetupSession",
+        "connection_generation",
+        "availability",
+        "管理服务在账号未连接时即可 ready",
+        "配置界面不执行平台连接",
+        "浏览器工具"
+      ]
+    },
+    {
+      "document": "docs/appendices/13-DATA-STORAGE.md",
+      "markers": [
+        "同一契约允许多个安装/会话并存",
+        "connector_instances",
+        "setup_sessions",
+        "credential_slots",
+        "不将连接配置复制进身份分叉"
+      ]
+    },
+    {
+      "document": "docs/design/UIUX/design/UX_SPEC.md",
+      "markers": [
+        "`/chat`",
+        "`/console`",
+        "本节 Connector 接口仅用于交互接入",
+        "getConnectorStatus",
+        "beginConnectorSetup",
+        "特殊面板",
+        "不向面板暴露"
+      ]
+    },
+    {
+      "document": "docs/06-VALIDATION.md",
+      "markers": [
+        "交互与工具分工验收",
+        "connector_readiness_order",
+        "tool_without_interaction",
+        "webchat_shared_core"
+      ]
+    },
+    {
+      "document": "docs/appendices/11-EXTENSION-PLATFORM.md",
+      "markers": [
+        "平台交互协议插件",
+        "客户端原有协议 P",
+        "required_features",
+        "connection_dependents",
+        "allowed_operations",
+        "唯一责任",
+        "回显",
+        "反向连接",
+        "外部 system/assistant/tool",
+        "新的认知或动作语义"
+      ]
+    },
+    {
+      "document": "docs/03-MEDIA-EXPRESSION.md",
+      "markers": [
+        "具体客户端的接口",
+        "只分配一个执行者",
+        "动作表变化"
+      ]
+    },
+    {
+      "document": "docs/design/UIUX/design/UX_SPEC.md",
+      "markers": [
+        "平台交互协议插件",
+        "外部客户端在线情况",
+        "只调用 ConnectorManager"
+      ]
+    },
+    {
+      "document": "docs/06-VALIDATION.md",
+      "markers": [
+        "bridge_unknown_peer",
+        "bridge_single_delivery",
+        "bridge_panel_application_boundary"
       ]
     }
   ]

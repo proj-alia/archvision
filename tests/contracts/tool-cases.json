@@ -1,0 +1,58 @@
+{
+  "design_status": "draft",
+  "runtime_executed": false,
+  "contract_file": "config/tools/browser-read/service.contract.json",
+  "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57",
+  "manifest": "config/tools/browser-read/manifest.json",
+  "capability": "config/tools/browser-read/capability.json",
+  "payload_cases": [
+    {
+      "id": "tool_read_without_connector",
+      "contract_id": "org.example.browser",
+      "member_kind": "method",
+      "member_name": "read",
+      "schema_slot": "input_schema",
+      "payload": {
+        "url": "https://example.invalid/page"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "tool_rejects_interaction_fields",
+      "contract_id": "org.example.browser",
+      "member_kind": "method",
+      "member_name": "read",
+      "schema_slot": "input_schema",
+      "payload": {
+        "url": "https://example.invalid/page",
+        "connector_id": "unnecessary"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "tool_invalid_url",
+      "contract_id": "org.example.browser",
+      "member_kind": "method",
+      "member_name": "read",
+      "schema_slot": "input_schema",
+      "payload": {
+        "url": "not-a-url"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "tool_read_result",
+      "contract_id": "org.example.browser",
+      "member_kind": "method",
+      "member_name": "read",
+      "schema_slot": "output_schema",
+      "payload": {
+        "source_url": "https://example.invalid/page",
+        "text": "合成网页内容",
+        "observed_at": "2026-11-13T12:00:00Z",
+        "truncated": false
+      },
+      "expected_valid": true
+    }
+  ]
+}

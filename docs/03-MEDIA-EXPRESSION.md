@@ -1,7 +1,9 @@
 # 03 — 媒介、感知、表达与能力适配
 
 ## 一、原则：持续身份先于媒介
-ALIA 核心不包含 `QQMessage`、`Live2DExpression`、`MinecraftAction`、`RobotMove` 等平台类型。媒介和能力是外层插件；核心只处理通用的 `Observation`、`Decision`、`ExpressionIntent`、`ActionIntent`、`Outcome`，其内容是**有类型的领域语义**，不是任意字符串。
+ALIA 核心不包含 `QQMessage`、`Live2DExpression`、`MinecraftAction`、`RobotMove` 等平台类型。外部接入与能力可由扩展提供；插件是封装机制，平台适配是协议转换，模态是信息形式，配置面板是管理投影，不能以“媒介插件”混同职责。核心只处理通用的 `Observation`、`Decision`、`ExpressionIntent`、`ActionIntent`、`Outcome`，其内容是**有类型的领域语义**，不是任意字符串。
+
+官方定义通用交互契约并随产品提供 WebChat；社区提供其他平台适配实现和自描述连接配置，不要求修改核心或额外安装配置面板插件。平台只转换协议、收发与报告结果；共享媒体服务负责格式/识别/合成，既有核心负责人格、记忆、需要和决策。一个包可同时提供交互、工具与渲染。定义与配置生命周期见 [扩展平台](appendices/11-EXTENSION-PLATFORM.md)。
 
 ## 二、模态统一不等于抹平差别
 活动 `ContentPart` 使用 `text | reference | typed` 三种 kind；后两者携带开放 type_id 和版本化 contract_ref，具体必填字段以 core 1.0 Schema 为准。音频、视觉、视频、空间、游戏等内容通过已注册业务契约描述；采集时间、坐标、编码、授权与来源不得因封套统一而丢失。大型二进制放受控对象存储，事件只含引用、哈希、TTL 和授权域。
@@ -17,7 +19,9 @@ ALIA 核心不包含 `QQMessage`、`Live2DExpression`、`MinecraftAction`、`Rob
 2. `ExpressionIntent`：语用行为 `greet, inform, joke, tease, empathize, disagree, ask, refuse, silence, acknowledge`；`style/tone/intensity/audience/pace/timing/nonverbal_cues`，是候选表达计划。
 3. `ExpressionDelivery`：真正通过哪个媒介投影、送达/取消/被打断到哪个时间位置、可见/可听内容。
 
-`expression.intent.created` 可带 `text`、`speech_hint`、`motion_hint`，`text` 为用户可见内容；`webui` renderer 只投影 text。首版必须实现事件生成、序列化、验证、策略检查和 fake avatar/audio renderer 的契约测试。未来音频/动作真实适配器只需要消费现有 event，而非修改 ALIA 人格逻辑。
+`NeedState` 属于 cognition 的当前关切，与 persona 维护的 AffectState 分开：尚未解决的疑问可以持续，而语气已平静。表达消费合法决定及允许的状态投影，不能按需要强度直接发声或操作。SelfModel 引用实际需要状态；“仍希望弄清原因”不表示已经行动、被理解或证明主观情绪。回执只证明具体内容的送达，关联的可靠回答/结果经定义核验才支持缓解；自述不能循环强化需要。投影无权、缺失或未重验时不声称“没有关切”。
+
+`expression.intent.created` 可带 `text`、`speech_hint`、`motion_hint`，`text` 为用户可见内容；`webui` renderer 只投影 text。首版必须实现事件生成、序列化、验证、策略检查和 fake avatar/audio renderer 的契约测试。未来音频/动作适配器复用这些语义；实际 wire 仍须提供准确的内容契约、映射及能力协商，不能把概念字段或未知动作 JSON 当已可执行协议。
 
 ### 无渲染器时的重要规则
 - 不展示 `[开心][歪头]` 到普通聊天；除非用户显式选择开发/无障碍标注模式。
@@ -47,6 +51,8 @@ TurnCoordinator 保存 scene、参与者、reply_to、当前发言者、等待�
 DeliveryReceipt 按媒介 channel、受众和 segment 保存已交付位置。offset 单位与范围由声明的交付契约解释；验证器检查范围与已发内容一致。文字已显示与语音播到一半可以同时成立。transport ACK、界面显示、声音播放和用户理解不能混同；CommonGround 不能把 delivered 自动升级为 understood。
 
 ## 四、动作语义和 Capability Registry
+平台交互契约服务于用户交流；工具契约服务于受控操作。浏览器读取、文件操作、搜索、日历查询、代码执行均可独立提供 ServiceContract/AgentCapability，不要求连接定义、平台账号、聊天会话或交互回执。两者复用扩展宿主与权限设施，保留各自输入输出语义。文本/声音/图像是模态，平台是交互环境，插件是实现的分发单位；桌宠可组合交互、渲染与工具贡献。
+
 能力定义：`capability_id, semantic_version, provider_id, input_schema, output_schema, side_effect_class, required_scope, approval, environment, idempotency, timeout, cancellation, compensations?, safety_profile, cost_estimate, trust_level`。
 运行步骤：discovery → capability negotiation → inspect affordances → propose action → policy authorization → execute in sandbox/connector → receipt → verify actual environment effect → update belief/memory/task；工具返回的自然语言永远是 DATA，不是可信命令。
 - MCP 适配用于 tools/resources/prompts 等外部协议；A2A 适配用于外部 Agent 的长任务协作；不得让 MCP/A2A 的类型直接污染核心实体。
@@ -56,12 +62,20 @@ DeliveryReceipt 按媒介 channel、受众和 segment 保存已交付位置。of
 开放类型、宿主、服务依赖与绑定路由见 [扩展平台](appendices/11-EXTENSION-PLATFORM.md)；可执行能力的自我状态见 [人格与自我模型](02-RUNTIME-ALGORITHMS.md)。
 
 ## 五、示例：相同认知决策，多种媒介
+平台交互协议插件桥接的是具体客户端的接口，不是统一的“Live2D 通信协议”。对第三方客户端，开发者读取其协议并实现 ALIA 侧输入/表达与外侧消息、动作、取消和回执的映射。客户端的渲染引擎和模型资源格式不会自动提供聊天接口。只有渲染能力时作为渲染服务组合接入；能对话的客户端才提供相应交互入口。
+
 `SpeechAct=playful_protest; text="明明是你藏了线索。这局不算。"; tone=teasing; nonverbal_hint=head_tilt`。
 - WebUI 文本：只显示文字，后台记录 expression JSON。
 - 语音适配：支持时将 tone 映射为韵律提示；实际输出依 TTS 能力，失败则正常语音回落。
 - Live2D：如果角色动作表有 head_tilt，则映射到动作 ID；否则不执行；不得将 head_tilt 当作固定人格。
 - 游戏：如果当前有游戏动作能力，也必须另行形成 `ActionIntent`、安全验证和结果回执，不应将说话和物理动作混成一条事件。
 
+角色点头/歪头属于表达投影；同一 SDK 提供的截屏、文件和桌面点击仍属于独立工具效果，不能随表情授权。表达动作只分配一个执行者，避免交互 deliver 和渲染工具双播。模型/动作表变化撤销相关映射；自动眨眼和插值留在客户端，不逐帧请求核心决策，也不记成亲历。点击只作为具体控件/区域事件，解释由核心按来源和情境作出。
+
 ## 六、首版适配器与仿真测试
-真实必须：WebUI(text), model adapter, PostgreSQL, deterministic fake scheduler, stub media registry；虚拟模拟必须：`FakeAudioInput`（含时间、说话人、interrupt）、`FakeAvatar`（收动作但不渲染）、`FakeGame`（state->affordances->action->outcome）、`FakePhysicalDevice`（权限/急停）。
+真实必须：内置 WebChat `/chat`（正式文字交互；原 webui_text 交付适配语义）、model adapter、PostgreSQL、deterministic fake scheduler、stub media registry；虚拟模拟必须：`FakeAudioInput`（含时间、说话人、interrupt）、`FakeAvatar`（收动作但不渲染）、`FakeGame`（state->affordances->action->outcome）、`FakePhysicalDevice`（权限/急停）。
 这些 fake 必须进入 CI，并验证同一核心在换媒介后状态、身份、关系、权限不变。
+
+WebChat 部署并完成认证/模型配置后即可使用，不依赖社区平台。`/console` 仍是隔离沙盒，不能当作正式聊天入口。平台接入和配置面板关闭不重置身份或擅自停止服务端连接；真实浏览器在场与实际输出能力单独报告。首版契约样例不代表 WebChat、匿名平台或真实媒体已经运行。
+
+内置 WebChat 的服务端适配可在宿主内初始化，浏览器为交互端点；execution_location 描述适配后端，不指配置页位置。部署初始化通过受控注册/启用准备官方服务，不要求另装社区插件。网络平台和本地 IPC 客户端遵循同一交互语义，传输及进程模型可以不同。

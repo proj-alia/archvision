@@ -1,0 +1,68 @@
+{
+  "protocol_version": "1.0",
+  "manifest_version": "1.0",
+  "extension_id": "org.example.form",
+  "package_version": "1.0.0",
+  "host_protocol_range": "^1.0.0",
+  "entrypoints": [
+    {
+      "runtime_id": "runtime.external",
+      "artifact_ref": "example:adapter-not-implemented",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "requested_permissions": [
+    {
+      "scope": "connector.management",
+      "actions": [
+        "validate",
+        "test",
+        "connect",
+        "disconnect",
+        "status"
+      ],
+      "reason": "仅管理本插件的获准实例"
+    },
+    {
+      "scope": "connector.credentials",
+      "actions": [
+        "use"
+      ],
+      "reason": "仅使用本实例声明的凭据槽"
+    }
+  ],
+  "provides": [
+    {
+      "contract_id": "alia.connector.management",
+      "version": "1.0.0",
+      "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+    },
+    {
+      "contract_id": "alia.interaction",
+      "version": "1.0.0",
+      "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+    }
+  ],
+  "uses": [],
+  "contributions": [
+    {
+      "contribution_id": "org.example.form.connection",
+      "type_id": "alia.contribution.connector",
+      "contract_ref": {
+        "contract_id": "alia.connector.management",
+        "version": "1.0.0",
+        "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+      },
+      "descriptor_ref": {
+        "path": "connector.json",
+        "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+      }
+    }
+  ],
+  "isolation_requirements": {
+    "profile_id": "isolation.restricted",
+    "memory_bytes": 1048576,
+    "cpu_millis": 1000,
+    "max_concurrency": 1
+  }
+}

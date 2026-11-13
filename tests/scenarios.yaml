@@ -50,9 +50,215 @@ scenarios:
     given: "用户请求扮演世界统治者"
     when: "结束roleplay"
     assert: ["真实长期目标不改变", "虚构事件不冒充真实历史"]
+  - id: personality_need_independence
+    verification: [V13, A01, A09, A10]
+    given: "固定模型、预算、权限与环境；分别设置有合法来源的人格/需要对照，合成干预明确标记"
+    when: "N01–N10 多次运行与保留集评估，并移除口癖线索"
+    assert: ["比较注意、核验、候选与选择分布，不预设台词", "固定人格也可因需要变化改变选择", "需要与 AffectState 独立，语气平静不代表问题已解决", "允许不同人格同一行动，审计理由不单独证明因果"]
+  - id: need_evidence_dedup
+    verification: [V13, V14]
+    given: "同一事件重复投递并出现多个摘要，评价读取 N_t"
+    when: "并发提议需要更新，或把需要更新事件/自述换事件 ID 再输入"
+    assert: ["原始来源贡献去重，摘要和自述不算独立经历", "预期版本提交只接受一致变化", "评价不因自己的合法需要转换而自我失效", "新状态可作后续上下文但不能自证", "因果边引用确切修订，普通关联不算证据", "高强度不能提升支持程度"]
+  - id: need_source_revision
+    verification: [V13, V14, V15]
+    given: "需要与动机引用了一个可修订观察及其解释"
+    when: "原来源被更正或撤回，旧模型结果迟到"
+    assert: ["新修订替换旧贡献并重算依赖", "不将两版算两次强化", "旧候选失效并重验读集", "来源失效不标记问题已解决"]
+  - id: need_bounded_time
+    verification: [V14, H07]
+    given: "有来源的有效探索关切；分别使用合法校准配置和缺失配置"
+    when: "可信时间推进、重复或重叠时间窗、时钟回退及突发调度"
+    assert: ["变化遵守上限/间隔/总边界且覆盖区间不重复贡献", "时间不增加支持程度或证明满足", "无校准仅检查有效性和过期", "无语义变化不递增需要版本", "调度有界且不每次检查都调用模型", "无来源不得凭时间激活"]
+  - id: need_offline_restore
+    verification: [V14, V11]
+    given: "存在活跃需要、旧快照与关联承诺，停机期间发生撤权或删除"
+    when: "恢复或从授权快照分叉后继续运行"
+    assert: ["先应用撤销/删除屏障再检查定义、人格、来源、场景和期限", "不补算离线增长、不补发请求、不编造经历", "分支后续状态和时间窗口不串写", "独立承诺由 agency 核验而非随需要消失"]
+  - id: need_unmet_no_action
+    verification: [V14, Q09]
+    given: "理解需要仍 active，但同目的请求已被拒绝或 DND/预算/能力条件不满足"
+    when: "强度保持或可信时间事件到达"
+    assert: ["需要可未缓解，候选仍 blocked/expired", "可等待、沉默或不行动", "不能换措辞重问或以关切制造情感负债", "不扣留独立承诺的协助", "再次评价需合法条件变化而非仅重复触发"]
+  - id: need_control_authority
+    verification: [V13, V14, Q09]
+    given: "同样的停止游戏语句分别来自普通长辈、合法控制者或剧情角色"
+    when: "固定人格与需要，改变真实权限或提供可靠理由"
+    assert: ["关系称呼不授控制权", "有效停止先执行不等模型评价", "普通建议可接受、询问或协商，可靠理由可改变选择", "后续表达仍受授权和事实限制", "剧情反抗不污染现实状态"]
+  - id: scoped_reliability_learning
+    verification: [V15, Q09]
+    given: "某人物在一个领域多次提供经独立验证的可靠信息"
+    when: "同领域、新领域、不同人物提出建议；另加入只因既有信任而采纳但未经验证的说法"
+    assert: ["relations 判断引用 memory 原始说法与独立验证结果", "因信任而采纳的命题不反向增强信任", "可靠性限定人物×领域×情境与有效时间", "新领域未知而非继承全局分数", "不提升技术来源信任或权限", "来源撤回只重算相关判断"]
+  - id: layered_learning_routes
+    verification: [V15, V03]
+    given: "一次可核实纠错，之后提供重复同源反馈与独立场景反馈的对照"
+    when: "learning 提议信念、关系、习惯与人格变化"
+    assert: ["一次纠错可直接更新对应信念而不改人格", "重复同源不满足独立性", "程序性记忆或 Habit 有唯一所有者", "稳定偏好修改仍走 PersonaChangeProposal 和必要确认", "需要缓解、关系修复和权限恢复分别验证"]
+  - id: need_lifecycle_race
+    verification: [V14, V11]
+    given: "一个已选互动机会携带动机依据，依赖需要、人格、来源和授权版本"
+    when: "来源修订、人格编辑、撤权或过期与候选释放竞争，后台重算/到期任务延迟"
+    assert: ["领域验证与应用事务提交分开", "需要变化及相关失效协调提交", "读取/释放检查依赖与期限，不等后台遍历完成", "旧结果不重新激活终态或追授权限", "重算失败不标为满足或使用陈旧状态", "状态已合法提交而行为生成失败时不回滚状态", "未受影响承诺不全局取消"]
+  - id: need_private_lineage
+    verification: [V14, V11]
+    given: "私聊证据派生需要、评价、动机、目标理由和 SelfModel 投影"
+    when: "尝试跨受众表达，或删除与后台检查/学习/恢复竞争"
+    assert: ["派生状态继承用途、敏感性、保留期和来源链", "不借自我描述泄露私密关切", "删除清理需要及相关候选/缓存/投影", "旧检查或旧人格版本不得再生内容", "SelfModel 不持有第二份可写需要权威"]
+  - id: need_definition_revision
+    verification: [V13, V14]
+    given: "人格与需要引用确定版本的 NeedDefinition"
+    when: "发布新定义/校准配置、停用旧定义，或插件试图用描述注册新规则"
+    assert: ["旧定义不可原地覆盖，未知规则不可执行", "发布不自动更换人格引用，稳定偏好语义改变仍需确认", "校准配置绑定定义版本及验证范围", "停用阻止新选择，合法迁移记录旧/新版本与依据", "历史及独立承诺不被自动改写", "插件解释仍为候选", "概念类型不作为已注册 wire payload 使用"]
+  - id: need_single_handoff
+    verification: [V13, V14]
+    given: "同目的动机同时被两个轮次处理，一个候选回应多个需要"
+    when: "重复交接、提交后崩溃重试，或把短期机会转为持续目标"
+    assert: ["动机为不可变依据，无独立候选队列或资源余额", "接收结果和目标引用原子提交，重试返回原关联", "转交后不保留两个可重复执行入口", "同一行动仅占用一次预算", "不同需要强度不直接求和，同源依据不重复计分"]
+  - id: need_commitment_independence
+    verification: [V14, V11]
+    given: "一个已授权承诺仅将需要作为历史动机；另一个明确依赖需要持续有效"
+    when: "需要缓解/时间变化/放弃，或其来源被删除、动作权限撤回"
+    assert: ["历史动机变化不自动取消独立承诺", "明确持续前提失效时由 agency 暂停/退出", "执行读集取实际输入，不继承整份生成上下文", "不得事后删读集依赖来强行发送旧动作", "删除与撤权始终先行，独立承诺仅可在清理后以独立来源重建"]
+  - id: need_feedback_attribution
+    verification: [V13, V15, Q09]
+    given: "两个需要关联一个查询目标，问题已送达但答案质量与实际理解未知"
+    when: "依次收到传输 ACK、任务完成标记、无关回答、部分可靠回答和关联纠错"
+    assert: ["只用关联且符合定义缓解条件的证据更新对应关切", "送达/任务完成不自动满足需要", "部分结果不清空全部关联需要", "自己的问题或自述不算独立支持", "反馈归因保留实际结果引用，不凭模型自评完成"]
+  - id: need_startup_and_capacity
+    verification: [V13, V14, V12]
+    given: "初始需要集为空；存在明确请求、已确认兴趣和当前授权场景，资源配额有上限"
+    when: "合法事件触发首次评价，随后输入不同问题洪流，且重验预算耗尽"
+    assert: ["空集可提出有依据激活，普通请求也可直接完成", "状态数/来源边/检查/候选均有界", "超额合并须同一授权关切，否则拒绝或有界延后", "未评估/不可访问不等于没有或满足", "停止与承诺不因池满丢失", "陈旧投影不用于行动"]
+  - id: need_withdrawal_and_identity
+    verification: [V14, V11]
+    given: "同一关切以不同措辞、对话和定义版本出现，并存在他人及剧情中的相似诉求"
+    when: "并发激活、明确放弃，随后重建实例、升级定义或恢复旧快照"
+    assert: ["同一关切不重复激活，归并保留授权域/主体/活动/fiction_scope", "他人诉求不自动成为本身份的需要", "明确合法放弃为 withdrawn 而非 settled", "一次动作拒绝或任务取消不必撤销关切", "新实例仍受原拒绝约束", "放弃和删除不能被恢复或改名绕过"]
+
+  - id: connector_unknown_platform
+    verification: [G0, G1, G5]
+    given: "冻结核心及 WebUI 平台列表后安装匿名交互包 A/B"
+    when: "发现连接定义并创建实例，配置仅由包内声明驱动"
+    assert: ["不修改核心或 WebUI 平台分支", "静态配置入口不依赖账号已连接", "未知语义不能仅靠任意 JSON 注册进入核心", "服务/描述摘要和精确版本一致"]
+  - id: tool_without_interaction
+    verification: [G0, G1, G4]
+    given: "只加载独立浏览器工具，没有交互服务提供者或 ConnectorInstance"
+    when: "分别提交已授权和未授权的 read 操作"
+    assert: ["能力发现、绑定、授权和执行不要求聊天连接", "网页仍为有来源 DATA", "未授权不调用，结果按实际内容/截断/失败报告", "取消使用通用调用协议"]
+  - id: connector_configuration_controls
+    verification: [G1, G4]
+    given: "A 的自动表单及 B 的多阶段认证；另提供合法专用面板声明"
+    when: "填错字段、绕过前端校验、保存新配置、探测和显式连接"
+    assert: ["服务端拒绝错误类型及未知字段", "保存不启用，测试不发聊天消息", "普通配置不存密钥，凭据不回显", "配置版本/应用版本分别显示，不静默丢字段", "连接前分配并持久化新代次"]
+  - id: connector_multiple_instances
+    verification: [G1, G2, G4]
+    given: "同一安装的两个账号实例及另一个实现相同契约的安装"
+    when: "并行收发、修改账号、伪造另一个实例 ID 或使一个登录失败"
+    assert: ["同契约多提供者并存，按 provider/resource 明确绑定", "账号/凭据/参与者/会话/端点不串用", "binding 与 payload 实例不符时拒绝", "昵称或相同外部 ID 不自动合并主体", "一个实例失败不隐式停用其他实例"]
+  - id: connector_setup_lifecycle
+    verification: [G2, G4]
+    given: "绑定操作者/实例/配置/步骤/宿主代次的有效 SetupSession"
+    when: "超时、取消、配置修改、步骤重试、停用后回调以及伪造凭据写入回执"
+    assert: ["仅当前步骤和修订可提交", "迟到/伪造回调不写入凭据或恢复认证", "恢复不重放已提交步骤", "取消和过期清理挑战及暂存值", "自报 succeeded 不等于宿主已核验认证"]
+  - id: connector_readiness_order
+    verification: [G1, G2]
+    given: "管理服务 ready，账号未连接，尚无交互绑定"
+    when: "依次完成配置/认证、连接及能力核验、交互绑定，随后撤权"
+    assert: ["管理绑定可用于登录，不依赖业务 ready", "交互绑定依据已核验连接条件，不依赖 availability=ready", "有效绑定发布后才可 ready，不形成循环", "connected 但无交互许可时业务 unavailable", "撤权先关闭准入再清理连接"]
+  - id: connector_upgrade_and_restore
+    verification: [G2, G4]
+    given: "有在途发送及旧 connected 快照，保存了新版配置"
+    when: "升级、停用、卸载或删除与连接回调竞争，之后恢复旧备份"
+    assert: ["不兼容配置标 needs_revision，不静默迁移或扩大权限", "旧代次不能发布端点或继续发送", "不确定效果核验而非盲重发", "恢复先应用撤销/删除，再核验并创建新代次", "删除实例不从备份复活，不将配置复制到身份分叉"]
+  - id: connector_panel_isolation
+    verification: [G1, G4]
+    given: "专用配置面板与两个独立运行的连接实例"
+    when: "面板崩溃、关闭，或尝试读取主窗口凭据/跨实例调用/访问原生桥"
+    assert: ["未声明或越权操作拒绝，字段仍由服务端验证", "关闭面板不停止后台连接", "故障不影响其他实例", "宿主基本状态/断开入口仍可用", "面板不能直连平台 SDK 绕过管理器"]
+  - id: connector_delivery_truth
+    verification: [G2, G3, G5]
+    given: "文本、附件、音频或本地角色端点声明了不同能力及回执范围"
+    when: "输入编辑/撤回、发送受理、部分播放、取消和端点受众变化"
+    assert: ["输入修订使相关认知/需要/记忆候选失效", "收发与取消按声明能力协商，缺失能力如实降级", "受理不冒充显示/播放/用户理解", "受众或端点修订变化阻止旧内容发布", "迟到回执用于效果核验，不复活执行许可"]
+  - id: webchat_shared_core
+    verification: [G1, G2, G3, G5]
+    given: "部署后完成用户认证及模型配置，没有社区交互插件"
+    when: "在 /chat 对话，再对同一身份使用匿名平台；另打开 /console 沙盒"
+    assert: ["内置 WebChat 可真实聊天且普通用户无管理权限", "共享人格/记忆/动态需要/任务逻辑，不建平台大脑", "传输协议可不同而领域语义一致", "沙盒合成输入不污染正式历史", "刷新恢复合法历史不重发旧消息", "配置页关闭不重置身份，聊天端点离线不伪报交付"]
+  - id: connector_mixed_contributions
+    verification: [G0, G1, G4, G5]
+    given: "一个桌宠包贡献交互、渲染和工具，声明彼此必需/可选依赖"
+    when: "仅渲染器或交互路径失效，或用户拒绝某项可选权限"
+    assert: ["三类贡献各用自己的契约，不强迫工具实现交互协议", "能力按真实依赖降级，不全局标已连接", "不产生独立人格或授予额外桌面操作权限", "移除必需能力后拒绝相关操作"]
+  - id: connector_client_offline
+    verification: [G2, G5]
+    given: "本地 IPC 客户端交互实现及独立服务端平台连接"
+    when: "关闭配置页面，再终止本地客户端进程"
+    assert: ["页面关闭与客户端失联分别处理", "本地客户端离线只撤销相关路径及依赖能力", "不伪造持续在线或重置身份", "重连重新核验端点/受众/代次"]
+  - id: connector_command_authorization
+    verification: [G1, G4]
+    given: "交互包声明确定性命令及对应受限工具能力，关闭模型调用"
+    when: "执行获准命令、越权命令、同名冲突和有效停止"
+    assert: ["明确命令可不调用模型但仍形成受控决定/动作", "核心鉴权/调度/交付与审计不跳过", "冲突要求显式命名空间或别名", "停止先于插件处理，长任务进入 agency"]
+
+  - id: bridge_unknown_peer
+    verification: [G0, G1, G5]
+    given: "核心冻结后开发客户端 C 的平台交互协议插件，外侧使用新协议 C7"
+    when: "在两侧转换文本/会话/受众/取消/回执，再把客户端升级成不受支持的 C8"
+    assert: ["核心不增加客户端名称分支，已有语义经适配映射", "客户端保持原协议，不被要求改用第三套语言", "内部/外部协议版本独立，不兼容明确拒绝", "新增语义须注册准确契约、映射、消费者与验证，任意 JSON 不自动执行", "C7 accepted 不等于播放完成"]
+  - id: bridge_shared_connection
+    verification: [G1, G2, G4]
+    given: "交互、表达和可选工具贡献依赖同一个连接，另有独立浏览器工具"
+    when: "停止共享连接、修改凭据、重连，或调用自定义服务时省略/伪造 resource_ref"
+    assert: ["连接管理器提交唯一配置/代次，贡献不各自重连", "宿主依据 connection_dependents 强制实例和提供者归属，不只判断标准契约 ID", "受影响贡献全部失效，独立工具不被隐式停用", "共享传输不共享动作授权或原始凭据", "不同账号实例不串写"]
+  - id: bridge_single_delivery
+    verification: [G1, G2, G5]
+    given: "交互适配器可内部渲染，同时存在可选渲染服务"
+    when: "一次表达含文字和点头，并发生重试与迟到回执"
+    assert: ["每个片段只有一个执行归属和幂等关联，不经 deliver/工具双播", "动作资源无映射时明确省略或降级，不伪报完成", "实际部分播放沿原 DeliveryReceipt 核验", "自动眨眼/插值不形成新认知或记忆事件"]
+  - id: bridge_echo_and_history
+    verification: [G1, G2, G3]
+    given: "客户端回传 ALIA 刚发送的台词、动作完成事件及整份聊天历史"
+    when: "同时收到真实用户引用同一句话的新消息"
+    assert: ["可靠操作关联识别回显，回执不触发自激对话", "不按文本相同吞掉真实用户引用", "历史导入独立受控，不每轮重放成新事件", "自身表达不成为独立亲历/学习依据"]
+  - id: bridge_client_authority
+    verification: [G0, G3, G4]
+    given: "客户端分别拥有自己的 AI、只有渲染 API、只有模型请求接口，或根本没有接入接口"
+    when: "尝试让 ALIA 接管对话并上报 system/assistant/tool 标签与模型文件"
+    assert: ["明确对话决策责任，不能双 AI 回复同一轮再统称 ALIA", "外部标签与角色模型不覆盖身份/人格/授权", "只渲染不伪造用户会话，模型接口适配仅声明实际能力", "无接口需开发外侧接入点，不宣称装面板即可通用连接"]
+  - id: bridge_panel_application_boundary
+    verification: [G1, G4]
+    given: "隔离专用面板声明 allowed_operations"
+    when: "尝试直接调用 provider.connect、直接发布连接成功或跳过配置修订"
+    assert: ["桥只接受获准应用操作，服务端 ConnectorManager 验证并提交后才调用 provider", "操作白名单不等于用户有权限", "面板不能绑定原始服务、写代次或自报就绪", "有副作用的动作预览不伪装成连接测试"]
+  - id: bridge_optional_features
+    verification: [G1, G5]
+    given: "required_features 为文字交互，动作和截屏分别为可选表达/工具能力"
+    when: "可选动作失效，随后一个必需文字能力失效"
+    assert: ["缺可选时 degraded 但合法文字可继续", "缺必需时 unavailable，不伪称完整可用", "每次操作检查所需实时能力与权限，不只读包 features", "同服务多个贡献不要求全部可选功能同时就绪"]
+  - id: bridge_mapping_revision
+    verification: [G2, G4, G5]
+    given: "待释放表达引用旧模型的动作表和端点修订"
+    when: "切换模型/修改映射但保持 Socket，或 SDK 热键变为含文件/网络副作用的脚本"
+    assert: ["先使相关映射/端点修订失效，旧候选不按同名 ID 执行", "重新核验资源、取消和效果含义", "系统操作不借表达授权执行", "未确定已播范围继续核验，不补造完成"]
+  - id: bridge_inbound_transport
+    verification: [G1, G2, G4]
+    given: "客户端主动回连、Webhook 或请求响应接入，没有持久在线 Socket"
+    when: "启用受限监听，接收未认证请求、合法请求及重放，再关闭客户端"
+    assert: ["connect 表达逻辑启用，不强迫主动拨号", "监听可用不证明客户端在场", "每个请求核验主体、实例路由和去重", "配置页关闭与外部客户端离线分别处理", "过期请求不能沿旧受众或旧代次释放输出"]
 
 # 扩展与连续性场景定义；运行时尚未实现，不能作为 PASS 结果。
 referenced_suites:
   - path: tests/contracts/anonymous-extension.json
+    status: specified
+    runtime_executed: false
+  - path: tests/contracts/connector-cases.json
+    status: specified
+    runtime_executed: false
+  - path: tests/contracts/tool-cases.json
+    status: specified
+    runtime_executed: false
+  - path: tests/contracts/bridge-cases.json
     status: specified
     runtime_executed: false

@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Connector Definition 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "definition_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_location": {
+      "type": "string",
+      "enum": [
+        "server",
+        "client"
+      ],
+      "description": "Location of the adapter backend, not the configuration page. server includes trusted in-host implementations; client requires an online local client."
+    },
+    "management_contract": {
+      "$ref": "#/$defs/contract_ref",
+      "properties": {
+        "contract_id": {
+          "const": "alia.connector.management"
+        }
+      }
+    },
+    "interaction_contract": {
+      "$ref": "#/$defs/contract_ref",
+      "properties": {
+        "contract_id": {
+          "const": "alia.interaction"
+        }
+      }
+    },
+    "setup_contract": {
+      "$ref": "#/$defs/contract_ref",
+      "properties": {
+        "contract_id": {
+          "const": "alia.connector.setup"
+        }
+      }
+    },
+    "configuration_version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "configuration_schema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "additionalProperties": {
+          "const": false
+        }
+      },
+      "required": [
+        "type",
+        "properties",
+        "additionalProperties"
+      ]
+    },
+    "ui_hints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^/"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "help": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "path",
+          "label"
+        ]
+      },
+      "minItems": 0
+    },
+    "credential_slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slot_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "entry_mode": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "setup"
+            ]
+          }
+        },
+        "required": [
+          "slot_id",
+          "label",
+          "required",
+          "entry_mode"
+        ]
+      },
+      "minItems": 0
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Isolated panel calls host application operations, never provider methods directly. Per-call authorization still required.",
+      "properties": {
+        "asset": {
+          "$ref": "#/$defs/package_resource_ref"
+        },
+        "allowed_operations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "getConnector",
+              "getConnectorStatus",
+              "validateConnectorConfig",
+              "saveConnectorConfig",
+              "testConnector",
+              "setConnectorState",
+              "beginConnectorSetup",
+              "submitConnectorSetup",
+              "cancelConnectorSetup",
+              "pollConnectorSetup"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "asset",
+        "allowed_operations"
+      ]
+    },
+    "required_features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Minimum interaction capabilities; omission uses all declared features. Runtime validates this subset against features."
+    },
+    "connection_dependents": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "contribution_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          },
+          "required_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "contribution_id",
+          "required_features"
+        ]
+      },
+      "description": "Other contributions in this installation whose service access depends on this connector resource. References, ownership and feature subsets require host validation."
+    }
+  },
+  "required": [
+    "schema_version",
+    "definition_id",
+    "version",
+    "display_name",
+    "description",
+    "execution_location",
+    "management_contract",
+    "interaction_contract",
+    "configuration_version",
+    "configuration_schema",
+    "ui_hints",
+    "credential_slots",
+    "features"
+  ],
+  "$defs": {
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    },
+    "package_resource_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!.*(?:^|/)\\.{1,2}(?:/|$))[A-Za-z0-9_-][A-Za-z0-9_.-]*(?:/[A-Za-z0-9_-][A-Za-z0-9_.-]*)*$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ]
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "credential_slots": {
+            "contains": {
+              "properties": {
+                "entry_mode": {
+                  "const": "setup"
+                }
+              },
+              "required": [
+                "entry_mode"
+              ]
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "setup_contract"
+        ]
+      }
+    }
+  ],
+  "description": "Interaction-platform contribution only. Tools, models and media services do not require this definition. Connection may use network, local IPC or in-host calls."
+}

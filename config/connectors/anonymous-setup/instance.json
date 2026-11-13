@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "tenant-example",
+  "data_policy": {
+    "owner_id": "operator-example",
+    "purpose": "connector-configuration",
+    "classification": "private",
+    "retention_policy_id": "connector-policy",
+    "lineage_ids": []
+  },
+  "connector_id": "anonymous-setup-1",
+  "installation_id": "org.example.setup-installation",
+  "extension_id": "org.example.setup",
+  "definition_ref": {
+    "definition_id": "org.example.setup.connector",
+    "version": "1.0.0",
+    "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+  },
+  "configuration_version": "1.0.0",
+  "configuration_revision": 1,
+  "runtime_revision": 0,
+  "config": {
+    "server": "https://pairing.invalid"
+  },
+  "credential_refs": {},
+  "enabled": false,
+  "configuration_status": "valid",
+  "authentication_status": "missing",
+  "authentication_expires_at": null,
+  "connection_status": "disconnected",
+  "availability": "unavailable",
+  "connection_generation": 0,
+  "applied_configuration_revision": null,
+  "active_binding_ids": [],
+  "observed_at": "2026-11-13T12:00:00Z"
+}

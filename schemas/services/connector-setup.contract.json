@@ -1,0 +1,904 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "alia.connector.setup",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "begin",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "configuration_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "config": {
+            "type": "object"
+          },
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "connector_id",
+          "configuration_revision",
+          "config",
+          "setup_id",
+          "expires_at"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "awaiting_input",
+              "processing",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired"
+            ]
+          },
+          "step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "form",
+                  "qr",
+                  "link",
+                  "notice"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "input_schema": {
+                "type": "object"
+              },
+              "asset": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "blob_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "blob_ref",
+                  "sha256",
+                  "expires_at"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              }
+            },
+            "required": [
+              "step_id",
+              "revision",
+              "kind",
+              "text"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "form"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "input_schema"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "qr"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "asset"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "link"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "url"
+                  ]
+                }
+              }
+            ]
+          },
+          "credential_write_receipts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "setup_id",
+          "revision",
+          "state",
+          "credential_write_receipts"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "awaiting_input"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "step"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "cancelled",
+                    "expired"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "step"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "side_effect_class": "reversible_write",
+      "supports_cancel": true
+    },
+    {
+      "name": "submit",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "step_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "step_revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "input": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "connector_id",
+          "setup_id",
+          "expected_revision",
+          "step_id",
+          "step_revision",
+          "input"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "awaiting_input",
+              "processing",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired"
+            ]
+          },
+          "step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "form",
+                  "qr",
+                  "link",
+                  "notice"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "input_schema": {
+                "type": "object"
+              },
+              "asset": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "blob_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "blob_ref",
+                  "sha256",
+                  "expires_at"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              }
+            },
+            "required": [
+              "step_id",
+              "revision",
+              "kind",
+              "text"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "form"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "input_schema"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "qr"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "asset"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "link"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "url"
+                  ]
+                }
+              }
+            ]
+          },
+          "credential_write_receipts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "setup_id",
+          "revision",
+          "state",
+          "credential_write_receipts"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "awaiting_input"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "step"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "cancelled",
+                    "expired"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "step"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "side_effect_class": "reversible_write",
+      "supports_cancel": true
+    },
+    {
+      "name": "cancel",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "connector_id",
+          "setup_id",
+          "expected_revision"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "awaiting_input",
+              "processing",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired"
+            ]
+          },
+          "step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "form",
+                  "qr",
+                  "link",
+                  "notice"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "input_schema": {
+                "type": "object"
+              },
+              "asset": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "blob_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "blob_ref",
+                  "sha256",
+                  "expires_at"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              }
+            },
+            "required": [
+              "step_id",
+              "revision",
+              "kind",
+              "text"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "form"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "input_schema"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "qr"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "asset"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "link"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "url"
+                  ]
+                }
+              }
+            ]
+          },
+          "credential_write_receipts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "setup_id",
+          "revision",
+          "state",
+          "credential_write_receipts"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "awaiting_input"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "step"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "cancelled",
+                    "expired"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "step"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "side_effect_class": "reversible_write",
+      "supports_cancel": true
+    },
+    {
+      "name": "poll",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "connector_id",
+          "setup_id",
+          "expected_revision"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "setup_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "awaiting_input",
+              "processing",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "expired"
+            ]
+          },
+          "step": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "step_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "form",
+                  "qr",
+                  "link",
+                  "notice"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "input_schema": {
+                "type": "object"
+              },
+              "asset": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "blob_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "blob_ref",
+                  "sha256",
+                  "expires_at"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              }
+            },
+            "required": [
+              "step_id",
+              "revision",
+              "kind",
+              "text"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "form"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "input_schema"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "qr"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "asset"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "link"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "url"
+                  ]
+                }
+              }
+            ]
+          },
+          "credential_write_receipts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "diagnostic_code": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          }
+        },
+        "required": [
+          "setup_id",
+          "revision",
+          "state",
+          "credential_write_receipts"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "const": "awaiting_input"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "step"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "state": {
+                  "enum": [
+                    "succeeded",
+                    "failed",
+                    "cancelled",
+                    "expired"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "step"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "side_effect_class": "read",
+      "supports_cancel": true
+    }
+  ],
+  "events": [],
+  "streams": []
+}

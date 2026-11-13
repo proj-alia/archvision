@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "definition_id": "org.example.form.connector",
+  "version": "1.0.0",
+  "display_name": "匿名接入 A",
+  "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+  "execution_location": "server",
+  "management_contract": {
+    "contract_id": "alia.connector.management",
+    "version": "1.0.0",
+    "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+  },
+  "interaction_contract": {
+    "contract_id": "alia.interaction",
+    "version": "1.0.0",
+    "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+  },
+  "configuration_version": "1.0.0",
+  "configuration_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "endpoint": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "account_label": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "endpoint",
+      "account_label"
+    ]
+  },
+  "ui_hints": [
+    {
+      "path": "/endpoint",
+      "label": "服务地址"
+    },
+    {
+      "path": "/account_label",
+      "label": "账号标签"
+    }
+  ],
+  "credential_slots": [
+    {
+      "slot_id": "token",
+      "label": "访问令牌",
+      "required": true,
+      "entry_mode": "manual"
+    }
+  ],
+  "features": [
+    "interaction.input.text",
+    "interaction.output.text"
+  ]
+}

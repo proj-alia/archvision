@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "tenant-example",
+  "data_policy": {
+    "owner_id": "operator-example",
+    "purpose": "connector-configuration",
+    "classification": "private",
+    "retention_policy_id": "connector-policy",
+    "lineage_ids": []
+  },
+  "connector_id": "anonymous-form-2",
+  "installation_id": "org.example.form-installation",
+  "extension_id": "org.example.form",
+  "definition_ref": {
+    "definition_id": "org.example.form.connector",
+    "version": "1.0.0",
+    "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+  },
+  "configuration_version": "1.0.0",
+  "configuration_revision": 1,
+  "runtime_revision": 0,
+  "config": {
+    "endpoint": "https://gateway.invalid",
+    "account_label": "second-account"
+  },
+  "credential_refs": {},
+  "enabled": false,
+  "configuration_status": "valid",
+  "authentication_status": "missing",
+  "authentication_expires_at": null,
+  "connection_status": "disconnected",
+  "availability": "unavailable",
+  "connection_generation": 0,
+  "applied_configuration_revision": null,
+  "active_binding_ids": [],
+  "observed_at": "2026-11-13T12:00:00Z"
+}

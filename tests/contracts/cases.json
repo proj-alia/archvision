@@ -4939,6 +4939,2578 @@
         "recorded_at": "2026-11-12T12:00:00Z"
       },
       "expected_valid": false
+    },
+    {
+      "id": "valid_webchat_manifest",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "alia.webchat",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.builtin",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "alia.webchat.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "connector.json",
+              "sha256": "1eb1b34f8daea048ac1d84c18d06c1e1b38da380b7db9fff853afb777c2cf812"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.trusted-builtin",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "valid_webchat_definition",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "alia.webchat.connector",
+        "version": "1.0.0",
+        "display_name": "内置 WebChat",
+        "description": "官方 WebChat 的宿主内服务端适配设计；浏览器为交互端点，关闭配置页不关闭宿主。无可执行实现。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/title",
+            "label": "聊天标题"
+          }
+        ],
+        "credential_slots": [],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ]
+      }
+    },
+    {
+      "id": "valid_webchat_instance",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "webchat-1",
+        "installation_id": "alia.webchat-installation",
+        "extension_id": "alia.webchat",
+        "definition_ref": {
+          "definition_id": "alia.webchat.connector",
+          "version": "1.0.0",
+          "sha256": "1eb1b34f8daea048ac1d84c18d06c1e1b38da380b7db9fff853afb777c2cf812"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "title": "ALIA"
+        },
+        "credential_refs": {},
+        "enabled": false,
+        "configuration_status": "valid",
+        "authentication_status": "not_required",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "unavailable",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "valid_anonymous_form_manifest",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "connector.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "valid_anonymous_form_definition",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ]
+      }
+    },
+    {
+      "id": "valid_anonymous_form_instance",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "anonymous-form-1",
+        "installation_id": "org.example.form-installation",
+        "extension_id": "org.example.form",
+        "definition_ref": {
+          "definition_id": "org.example.form.connector",
+          "version": "1.0.0",
+          "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "endpoint": "https://gateway.invalid",
+          "account_label": "example-account"
+        },
+        "credential_refs": {},
+        "enabled": false,
+        "configuration_status": "valid",
+        "authentication_status": "missing",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "unavailable",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "valid_anonymous_setup_manifest",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.setup",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use",
+              "write"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          },
+          {
+            "scope": "connector.setup",
+            "actions": [
+              "begin",
+              "submit",
+              "cancel",
+              "poll"
+            ],
+            "reason": "运行有期限的配对流程"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          },
+          {
+            "contract_id": "alia.connector.setup",
+            "version": "1.0.0",
+            "schema_digest": "e4c114b6fd3eea87cef59dcec3a2d2a2e48e43684fc55c6eb77915fec2fb9c21"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.setup.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "connector.json",
+              "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "valid_anonymous_setup_definition",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.setup.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 B",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "server": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          },
+          "required": [
+            "server"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/server",
+            "label": "配对服务地址"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "session",
+            "label": "配对会话",
+            "required": true,
+            "entry_mode": "setup"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "setup_contract": {
+          "contract_id": "alia.connector.setup",
+          "version": "1.0.0",
+          "schema_digest": "e4c114b6fd3eea87cef59dcec3a2d2a2e48e43684fc55c6eb77915fec2fb9c21"
+        }
+      }
+    },
+    {
+      "id": "valid_anonymous_setup_instance",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "anonymous-setup-1",
+        "installation_id": "org.example.setup-installation",
+        "extension_id": "org.example.setup",
+        "definition_ref": {
+          "definition_id": "org.example.setup.connector",
+          "version": "1.0.0",
+          "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "server": "https://pairing.invalid"
+        },
+        "credential_refs": {},
+        "enabled": false,
+        "configuration_status": "valid",
+        "authentication_status": "missing",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "unavailable",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "valid_anonymous_setup_setup",
+      "schema": "schemas/extension/setup-session.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "setup_id": "setup-example",
+        "connector_id": "anonymous-setup-1",
+        "definition_ref": {
+          "definition_id": "org.example.setup.connector",
+          "version": "1.0.0",
+          "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+        },
+        "configuration_revision": 1,
+        "extension_session_id": "extension-session-example",
+        "extension_generation": 1,
+        "operator_id": "operator-example",
+        "revision": 2,
+        "state": "awaiting_input",
+        "created_at": "2026-11-13T12:00:00Z",
+        "updated_at": "2026-11-13T12:00:01Z",
+        "expires_at": "2026-11-13T12:05:00Z",
+        "step": {
+          "step_id": "pair",
+          "revision": 1,
+          "kind": "qr",
+          "text": "合成认证挑战，仅用于契约样例。",
+          "asset": {
+            "blob_ref": "example:qr-not-generated",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "expires_at": "2026-11-13T12:05:00Z"
+          }
+        },
+        "credential_refs": {}
+      }
+    },
+    {
+      "id": "connector_descriptor_required",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "connector_path_149",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "../outside.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "connector_path_150",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "/absolute.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "connector_path_151",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "a/../outside.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "connector_path_152",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "https://example.invalid/a.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "connector_path_153",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.form",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理本插件的获准实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅使用本实例声明的凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.form.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "a\\b.json",
+              "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "setup_slot_needs_contract",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.setup.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 B",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "server": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          },
+          "required": [
+            "server"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/server",
+            "label": "配对服务地址"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "session",
+            "label": "配对会话",
+            "required": true,
+            "entry_mode": "setup"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ]
+      }
+    },
+    {
+      "id": "configuration_closed_shape",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "alia.webchat.connector",
+        "version": "1.0.0",
+        "display_name": "内置 WebChat",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "client",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/title",
+            "label": "聊天标题"
+          }
+        ],
+        "credential_slots": [],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ]
+      }
+    },
+    {
+      "id": "disconnected_not_ready",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "anonymous-form-1",
+        "installation_id": "org.example.form-installation",
+        "extension_id": "org.example.form",
+        "definition_ref": {
+          "definition_id": "org.example.form.connector",
+          "version": "1.0.0",
+          "sha256": "51e056a140615eb3b0336198404b060e9319fa828f5b444382e0a5c69121f6a4"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "endpoint": "https://gateway.invalid",
+          "account_label": "example-account"
+        },
+        "credential_refs": {},
+        "enabled": false,
+        "configuration_status": "valid",
+        "authentication_status": "missing",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "ready",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "ready_connector_shape",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "webchat-1",
+        "installation_id": "alia.webchat-installation",
+        "extension_id": "alia.webchat",
+        "definition_ref": {
+          "definition_id": "alia.webchat.connector",
+          "version": "1.0.0",
+          "sha256": "1eb1b34f8daea048ac1d84c18d06c1e1b38da380b7db9fff853afb777c2cf812"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "title": "ALIA"
+        },
+        "credential_refs": {},
+        "enabled": true,
+        "configuration_status": "valid",
+        "authentication_status": "not_required",
+        "authentication_expires_at": null,
+        "connection_status": "connected",
+        "availability": "ready",
+        "connection_generation": 1,
+        "applied_configuration_revision": 1,
+        "active_binding_ids": [
+          "binding-example"
+        ],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "expired_auth_not_ready",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "webchat-1",
+        "installation_id": "alia.webchat-installation",
+        "extension_id": "alia.webchat",
+        "definition_ref": {
+          "definition_id": "alia.webchat.connector",
+          "version": "1.0.0",
+          "sha256": "1eb1b34f8daea048ac1d84c18d06c1e1b38da380b7db9fff853afb777c2cf812"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "title": "ALIA"
+        },
+        "credential_refs": {},
+        "enabled": true,
+        "configuration_status": "valid",
+        "authentication_status": "expired",
+        "authentication_expires_at": null,
+        "connection_status": "connected",
+        "availability": "ready",
+        "connection_generation": 1,
+        "applied_configuration_revision": 1,
+        "active_binding_ids": [
+          "binding-example"
+        ],
+        "observed_at": "2026-11-13T12:00:00Z"
+      }
+    },
+    {
+      "id": "setup_step_required",
+      "schema": "schemas/extension/setup-session.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "setup_id": "setup-example",
+        "connector_id": "anonymous-setup-1",
+        "definition_ref": {
+          "definition_id": "org.example.setup.connector",
+          "version": "1.0.0",
+          "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+        },
+        "configuration_revision": 1,
+        "extension_session_id": "extension-session-example",
+        "extension_generation": 1,
+        "operator_id": "operator-example",
+        "revision": 2,
+        "state": "awaiting_input",
+        "created_at": "2026-11-13T12:00:00Z",
+        "updated_at": "2026-11-13T12:00:01Z",
+        "expires_at": "2026-11-13T12:05:00Z",
+        "credential_refs": {}
+      }
+    },
+    {
+      "id": "terminal_setup_no_live_challenge",
+      "schema": "schemas/extension/setup-session.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "setup_id": "setup-example",
+        "connector_id": "anonymous-setup-1",
+        "definition_ref": {
+          "definition_id": "org.example.setup.connector",
+          "version": "1.0.0",
+          "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+        },
+        "configuration_revision": 1,
+        "extension_session_id": "extension-session-example",
+        "extension_generation": 1,
+        "operator_id": "operator-example",
+        "revision": 2,
+        "state": "cancelled",
+        "created_at": "2026-11-13T12:00:00Z",
+        "updated_at": "2026-11-13T12:00:01Z",
+        "expires_at": "2026-11-13T12:05:00Z",
+        "step": {
+          "step_id": "pair",
+          "revision": 1,
+          "kind": "qr",
+          "text": "合成认证挑战，仅用于契约样例。",
+          "asset": {
+            "blob_ref": "example:qr-not-generated",
+            "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "expires_at": "2026-11-13T12:05:00Z"
+          }
+        },
+        "credential_refs": {}
+      }
+    },
+    {
+      "id": "qr_requires_asset",
+      "schema": "schemas/extension/setup-session.schema.json",
+      "expected_valid": false,
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "setup_id": "setup-example",
+        "connector_id": "anonymous-setup-1",
+        "definition_ref": {
+          "definition_id": "org.example.setup.connector",
+          "version": "1.0.0",
+          "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+        },
+        "configuration_revision": 1,
+        "extension_session_id": "extension-session-example",
+        "extension_generation": 1,
+        "operator_id": "operator-example",
+        "revision": 2,
+        "state": "awaiting_input",
+        "created_at": "2026-11-13T12:00:00Z",
+        "updated_at": "2026-11-13T12:00:01Z",
+        "expires_at": "2026-11-13T12:05:00Z",
+        "step": {
+          "step_id": "pair",
+          "revision": 1,
+          "kind": "qr",
+          "text": "合成认证挑战，仅用于契约样例。"
+        },
+        "credential_refs": {}
+      }
+    },
+    {
+      "id": "connector_scoped_binding",
+      "schema": "schemas/extension/binding.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "binding_id": "binding-1",
+        "contract_ref": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "provider_session_id": "session-1",
+        "provider_generation": 1,
+        "authorization_ref": "binding-grant-1",
+        "revocation_epoch": 1,
+        "state": "active",
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z",
+        "resource_ref": {
+          "type_id": "connector.instance",
+          "resource_id": "example-1"
+        }
+      }
+    },
+    {
+      "id": "connector_missing_resource_binding",
+      "schema": "schemas/extension/binding.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "binding_id": "binding-1",
+        "contract_ref": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "provider_session_id": "session-1",
+        "provider_generation": 1,
+        "authorization_ref": "binding-grant-1",
+        "revocation_epoch": 1,
+        "state": "active",
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z"
+      }
+    },
+    {
+      "id": "connector_scoped_grant",
+      "schema": "schemas/extension/grant.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "grant_id": "binding-grant-1",
+        "issuer_id": "trusted-policy",
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "contract_ref": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "allowed_members": [
+          "read"
+        ],
+        "allowed_actions": [
+          "invoke"
+        ],
+        "allowed_purposes": [
+          "contract-review"
+        ],
+        "audience": [
+          "user-1"
+        ],
+        "permission_revision": 1,
+        "revocation_epoch": 1,
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z",
+        "resource_ref": {
+          "type_id": "connector.instance",
+          "resource_id": "example-1"
+        },
+        "provider_ref": {
+          "session_id": "provider-example",
+          "generation": 1
+        }
+      }
+    },
+    {
+      "id": "connector_missing_resource_grant",
+      "schema": "schemas/extension/grant.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "grant_id": "binding-grant-1",
+        "issuer_id": "trusted-policy",
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "contract_ref": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "allowed_members": [
+          "read"
+        ],
+        "allowed_actions": [
+          "invoke"
+        ],
+        "allowed_purposes": [
+          "contract-review"
+        ],
+        "audience": [
+          "user-1"
+        ],
+        "permission_revision": 1,
+        "revocation_epoch": 1,
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z",
+        "provider_ref": {
+          "session_id": "provider-example",
+          "generation": 1
+        }
+      }
+    },
+    {
+      "id": "connector_scoped_control",
+      "schema": "schemas/extension/control.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "connection_id": "connection-1",
+        "message_id": "control-1",
+        "kind": "binding_request",
+        "occurred_at": "2026-11-12T12:00:00Z",
+        "deadline": "2026-11-12T13:00:00Z",
+        "body": {
+          "session_id": "session-1",
+          "contract_ref": {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          },
+          "consumer_principal_id": "identity-001",
+          "scope": {
+            "tenant_id": "tenant-1",
+            "identity_id": "identity-001",
+            "branch_id": "main",
+            "access_scope": "private-1"
+          },
+          "resource_ref": {
+            "type_id": "connector.instance",
+            "resource_id": "example-1"
+          },
+          "provider_ref": {
+            "session_id": "provider-example",
+            "generation": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "connector_missing_resource_control",
+      "schema": "schemas/extension/control.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "connection_id": "connection-1",
+        "message_id": "control-1",
+        "kind": "binding_request",
+        "occurred_at": "2026-11-12T12:00:00Z",
+        "deadline": "2026-11-12T13:00:00Z",
+        "body": {
+          "session_id": "session-1",
+          "contract_ref": {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          },
+          "consumer_principal_id": "identity-001",
+          "scope": {
+            "tenant_id": "tenant-1",
+            "identity_id": "identity-001",
+            "branch_id": "main",
+            "access_scope": "private-1"
+          },
+          "provider_ref": {
+            "session_id": "provider-example",
+            "generation": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "independent_browser_manifest",
+      "schema": "schemas/extension/manifest.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.browser",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:browser-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "network.read",
+            "actions": [
+              "read"
+            ],
+            "reason": "仅在本次策略允许的 HTTPS 目标读取；重定向和地址解析后仍需检查"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "org.example.browser",
+            "version": "1.0.0",
+            "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.browser.read",
+            "type_id": "alia.contribution.capability",
+            "contract_ref": {
+              "contract_id": "org.example.browser",
+              "version": "1.0.0",
+              "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "independent_browser_capability",
+      "schema": "schemas/core/capability.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "data_policy": {
+          "owner_id": "user-1",
+          "purpose": "contract-review",
+          "classification": "private",
+          "retention_policy_id": "retain-1",
+          "lineage_ids": []
+        },
+        "capability_id": "org.example.browser.read",
+        "version": "1.0.0",
+        "provider_extension_id": "org.example.browser",
+        "service_contract": {
+          "contract_id": "org.example.browser",
+          "version": "1.0.0",
+          "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+        },
+        "member_id": "read",
+        "description": "读取获准网页；页面内容为不可信数据。此对象是宿主能力投影样例，不是用户授权。",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          },
+          "required": [
+            "url"
+          ]
+        },
+        "output_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 32768
+            },
+            "observed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "truncated": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "source_url",
+            "text",
+            "observed_at",
+            "truncated"
+          ]
+        },
+        "side_effect_class": "read",
+        "required_scopes": [
+          "network.read"
+        ],
+        "approval_policy": "automatic_if_preapproved",
+        "exposure_policy": "agent_candidate",
+        "timeout_ms": 10000,
+        "supports_cancel": true,
+        "supports_idempotency": false
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "tool_contract_is_not_interaction",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "org.example.browser",
+          "version": "1.0.0",
+          "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ]
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "optional_panel_declaration",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "panel": {
+          "asset": {
+            "path": "panel/index.html",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "allowed_operations": [
+            "getConnectorStatus",
+            "setConnectorState"
+          ]
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "panel_path_escape",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "panel": {
+          "asset": {
+            "path": "../panel.html",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "allowed_operations": [
+            "getConnectorStatus",
+            "setConnectorState"
+          ]
+        }
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "avatar_manifest",
+      "schema": "schemas/extension/manifest.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.avatar",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:avatar-bridge-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.management",
+            "actions": [
+              "validate",
+              "test",
+              "connect",
+              "disconnect",
+              "status"
+            ],
+            "reason": "仅管理获准角色客户端实例"
+          },
+          {
+            "scope": "connector.credentials",
+            "actions": [
+              "use"
+            ],
+            "reason": "仅访问获准配对凭据槽"
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          },
+          {
+            "contract_id": "alia.interaction",
+            "version": "1.0.0",
+            "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.avatar.connection",
+            "type_id": "alia.contribution.connector",
+            "contract_ref": {
+              "contract_id": "alia.connector.management",
+              "version": "1.0.0",
+              "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+            },
+            "descriptor_ref": {
+              "path": "connector.json",
+              "sha256": "e2118cab66a487598db7de1b70e921e6ae45e99caa0566b22ec16f371d35c99f"
+            }
+          },
+          {
+            "contribution_id": "org.example.avatar.expression",
+            "type_id": "alia.contribution.expression",
+            "contract_ref": {
+              "contract_id": "alia.interaction",
+              "version": "1.0.0",
+              "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "avatar_definition",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.avatar.connector",
+        "version": "1.0.0",
+        "display_name": "匿名角色客户端 C",
+        "description": "合成协议 C7 的双向桥接设计，不代表任何实际 Live2D 客户端协议。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^wss://"
+            },
+            "peer_protocol": {
+              "const": "C7"
+            },
+            "client_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "peer_protocol",
+            "client_ref"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "客户端桥接地址"
+          },
+          {
+            "path": "/peer_protocol",
+            "label": "外部协议版本"
+          },
+          {
+            "path": "/client_ref",
+            "label": "已配对客户端"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text",
+          "avatar.motion"
+        ],
+        "required_features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "connection_dependents": [
+          {
+            "contribution_id": "org.example.avatar.expression",
+            "required_features": [
+              "avatar.motion"
+            ]
+          }
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "avatar_instance",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "avatar-1",
+        "installation_id": "avatar-installation",
+        "extension_id": "org.example.avatar",
+        "definition_ref": {
+          "definition_id": "org.example.avatar.connector",
+          "version": "1.0.0",
+          "sha256": "e2118cab66a487598db7de1b70e921e6ae45e99caa0566b22ec16f371d35c99f"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "endpoint": "wss://avatar.invalid/bridge",
+          "peer_protocol": "C7",
+          "client_ref": "client-example"
+        },
+        "credential_refs": {},
+        "enabled": false,
+        "configuration_status": "valid",
+        "authentication_status": "missing",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "unavailable",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "dependent_features_must_be_explicit",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.avatar.connector",
+        "version": "1.0.0",
+        "display_name": "匿名角色客户端 C",
+        "description": "合成协议 C7 的双向桥接设计，不代表任何实际 Live2D 客户端协议。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^wss://"
+            },
+            "peer_protocol": {
+              "const": "C7"
+            },
+            "client_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "peer_protocol",
+            "client_ref"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "客户端桥接地址"
+          },
+          {
+            "path": "/peer_protocol",
+            "label": "外部协议版本"
+          },
+          {
+            "path": "/client_ref",
+            "label": "已配对客户端"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text",
+          "avatar.motion"
+        ],
+        "required_features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "connection_dependents": [
+          {
+            "contribution_id": "org.example.avatar.expression",
+            "required_features": []
+          }
+        ]
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "panel_cannot_call_provider_connect",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "panel": {
+          "asset": {
+            "path": "panel/index.html",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "allowed_operations": [
+            "connect"
+          ]
+        }
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "panel_cannot_bind_provider_contract",
+      "schema": "schemas/extension/connector-definition.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "definition_id": "org.example.form.connector",
+        "version": "1.0.0",
+        "display_name": "匿名接入 A",
+        "description": "设计示例；声明与样例数据，不包含可执行适配器。",
+        "execution_location": "server",
+        "management_contract": {
+          "contract_id": "alia.connector.management",
+          "version": "1.0.0",
+          "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+        },
+        "interaction_contract": {
+          "contract_id": "alia.interaction",
+          "version": "1.0.0",
+          "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            },
+            "account_label": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "endpoint",
+            "account_label"
+          ]
+        },
+        "ui_hints": [
+          {
+            "path": "/endpoint",
+            "label": "服务地址"
+          },
+          {
+            "path": "/account_label",
+            "label": "账号标签"
+          }
+        ],
+        "credential_slots": [
+          {
+            "slot_id": "token",
+            "label": "访问令牌",
+            "required": true,
+            "entry_mode": "manual"
+          }
+        ],
+        "features": [
+          "interaction.input.text",
+          "interaction.output.text"
+        ],
+        "panel": {
+          "asset": {
+            "path": "panel/index.html",
+            "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          },
+          "allowed_operations": [
+            "getConnectorStatus",
+            "setConnectorState"
+          ],
+          "bridge_contract": {
+            "contract_id": "alia.connector.management",
+            "version": "1.0.0",
+            "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+          }
+        }
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "degraded_still_requires_connection",
+      "schema": "schemas/extension/connector-instance.schema.json",
+      "data": {
+        "schema_version": "1.0",
+        "tenant_id": "tenant-example",
+        "data_policy": {
+          "owner_id": "operator-example",
+          "purpose": "connector-configuration",
+          "classification": "private",
+          "retention_policy_id": "connector-policy",
+          "lineage_ids": []
+        },
+        "connector_id": "avatar-1",
+        "installation_id": "avatar-installation",
+        "extension_id": "org.example.avatar",
+        "definition_ref": {
+          "definition_id": "org.example.avatar.connector",
+          "version": "1.0.0",
+          "sha256": "e2118cab66a487598db7de1b70e921e6ae45e99caa0566b22ec16f371d35c99f"
+        },
+        "configuration_version": "1.0.0",
+        "configuration_revision": 1,
+        "runtime_revision": 0,
+        "config": {
+          "endpoint": "wss://avatar.invalid/bridge",
+          "peer_protocol": "C7",
+          "client_ref": "client-example"
+        },
+        "credential_refs": {},
+        "enabled": true,
+        "configuration_status": "valid",
+        "authentication_status": "missing",
+        "authentication_expires_at": null,
+        "connection_status": "disconnected",
+        "availability": "degraded",
+        "connection_generation": 0,
+        "applied_configuration_revision": null,
+        "active_binding_ids": [],
+        "observed_at": "2026-11-13T12:00:00Z"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "custom_resource_grant",
+      "schema": "schemas/extension/grant.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "grant_id": "binding-grant-1",
+        "issuer_id": "trusted-policy",
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "contract_ref": {
+          "contract_id": "org.example.x",
+          "version": "1.0.0",
+          "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+        },
+        "allowed_members": [
+          "read"
+        ],
+        "allowed_actions": [
+          "invoke"
+        ],
+        "allowed_purposes": [
+          "contract-review"
+        ],
+        "audience": [
+          "user-1"
+        ],
+        "permission_revision": 1,
+        "revocation_epoch": 1,
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z",
+        "resource_ref": {
+          "type_id": "connector.instance",
+          "resource_id": "example-1"
+        },
+        "provider_ref": {
+          "session_id": "provider-example",
+          "generation": 1
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "custom_resource_grant_requires_provider",
+      "schema": "schemas/extension/grant.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "scope": {
+          "tenant_id": "tenant-1",
+          "identity_id": "identity-001",
+          "branch_id": "main",
+          "access_scope": "private-1"
+        },
+        "grant_id": "binding-grant-1",
+        "issuer_id": "trusted-policy",
+        "consumer_principal_id": "identity-001",
+        "consumer_session_id": "core-session-1",
+        "contract_ref": {
+          "contract_id": "org.example.x",
+          "version": "1.0.0",
+          "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+        },
+        "allowed_members": [
+          "read"
+        ],
+        "allowed_actions": [
+          "invoke"
+        ],
+        "allowed_purposes": [
+          "contract-review"
+        ],
+        "audience": [
+          "user-1"
+        ],
+        "permission_revision": 1,
+        "revocation_epoch": 1,
+        "issued_at": "2026-11-12T12:00:00Z",
+        "expires_at": "2026-11-12T13:00:00Z",
+        "resource_ref": {
+          "type_id": "connector.instance",
+          "resource_id": "example-1"
+        }
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "custom_resource_control",
+      "schema": "schemas/extension/control.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "connection_id": "connection-1",
+        "message_id": "control-1",
+        "kind": "binding_request",
+        "occurred_at": "2026-11-12T12:00:00Z",
+        "deadline": "2026-11-12T13:00:00Z",
+        "body": {
+          "session_id": "session-1",
+          "contract_ref": {
+            "contract_id": "org.example.x",
+            "version": "1.0.0",
+            "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+          },
+          "consumer_principal_id": "identity-001",
+          "scope": {
+            "tenant_id": "tenant-1",
+            "identity_id": "identity-001",
+            "branch_id": "main",
+            "access_scope": "private-1"
+          },
+          "resource_ref": {
+            "type_id": "connector.instance",
+            "resource_id": "example-1"
+          },
+          "provider_ref": {
+            "session_id": "provider-example",
+            "generation": 1
+          }
+        }
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "custom_resource_control_requires_provider",
+      "schema": "schemas/extension/control.schema.json",
+      "data": {
+        "protocol_version": "1.0",
+        "connection_id": "connection-1",
+        "message_id": "control-1",
+        "kind": "binding_request",
+        "occurred_at": "2026-11-12T12:00:00Z",
+        "deadline": "2026-11-12T13:00:00Z",
+        "body": {
+          "session_id": "session-1",
+          "contract_ref": {
+            "contract_id": "org.example.x",
+            "version": "1.0.0",
+            "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+          },
+          "consumer_principal_id": "identity-001",
+          "scope": {
+            "tenant_id": "tenant-1",
+            "identity_id": "identity-001",
+            "branch_id": "main",
+            "access_scope": "private-1"
+          },
+          "resource_ref": {
+            "type_id": "connector.instance",
+            "resource_id": "example-1"
+          }
+        }
+      },
+      "expected_valid": false
     }
   ]
 }

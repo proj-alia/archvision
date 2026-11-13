@@ -1,0 +1,48 @@
+{
+  "protocol_version": "1.0",
+  "manifest_version": "1.0",
+  "extension_id": "org.example.browser",
+  "package_version": "1.0.0",
+  "host_protocol_range": "^1.0.0",
+  "entrypoints": [
+    {
+      "runtime_id": "runtime.external",
+      "artifact_ref": "example:browser-not-implemented",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "requested_permissions": [
+    {
+      "scope": "network.read",
+      "actions": [
+        "read"
+      ],
+      "reason": "仅在本次策略允许的 HTTPS 目标读取；重定向和地址解析后仍需检查"
+    }
+  ],
+  "provides": [
+    {
+      "contract_id": "org.example.browser",
+      "version": "1.0.0",
+      "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+    }
+  ],
+  "uses": [],
+  "contributions": [
+    {
+      "contribution_id": "org.example.browser.read",
+      "type_id": "alia.contribution.capability",
+      "contract_ref": {
+        "contract_id": "org.example.browser",
+        "version": "1.0.0",
+        "schema_digest": "39f2cea88686032c2bd90f0c2837de3d502eb349707e20ed0498a786de0c8a57"
+      }
+    }
+  ],
+  "isolation_requirements": {
+    "profile_id": "isolation.restricted",
+    "memory_bytes": 1048576,
+    "cpu_millis": 1000,
+    "max_concurrency": 1
+  }
+}

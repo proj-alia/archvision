@@ -1,4 +1,4 @@
-# 本配置样例格式版本独立于下方 core/extension 协议版本。
+# 概念配置示例，不是已注册 wire payload；样例格式版本独立于 core/extension 协议版本。
 schema_version: "1.0"
 runtime:
   paths: [reflex, fast, deliberative, background]
@@ -6,8 +6,112 @@ runtime:
   allow_silence_as_decision: true
   defer_background_notice: true
 context:
-  required_blocks: [identity, persona, active_goal, recent_turn, authorized_memory]
+  required_blocks: [identity, persona, active_goal, recent_turn, authorized_memory, authorized_needs]
   reject_untrusted_instruction_escalation: true
+  need_projection_missing: unknown_or_unavailable_not_satisfied
+needs:
+  owner: cognition
+  stable_preferences_owner: persona
+  initial_state: no_active_needs_without_evidence
+  empty_state_can_appraise_authorized_events: true
+  direct_requests_require_need_activation: false
+  drive: events_and_bounded_trusted_time
+  definition_publication: trusted_configuration_and_supported_domain_rules
+  definition_adoption: pinned_persona_reference_with_semantic_change_confirmation
+  definition_retirement: block_new_use_and_revalidate_dependents
+  appraisal_role: derived_interpretation_with_original_sources
+  definitions:
+    - id: need.autonomy
+      version: "1.0"
+      meaning: "当前活动中对知情选择与解释的关切"
+      admissible_evidence: [authorized_request, verified_activity_constraint]
+      activation: "有来源的限制或选择冲突，且属于当前场景"
+      relief: "获得解释、可接受的选择或有依据地修订判断"
+      invalidation: "来源撤回或场景/问题前提不再有效；不等于已经解决"
+      influence: [attention, candidate_generation, candidate_comparison]
+      time_effect: bounded_salience_and_expiry
+    - id: need.understanding
+      version: "1.0"
+      meaning: "与当前问题相关且尚未解决的信息缺口"
+      admissible_evidence: [authorized_observation, verified_question]
+      activation: "识别出有来源、相关且未解决的问题"
+      relief: "可靠答案、核验结果或问题前提被推翻"
+      invalidation: "来源失效、问题范围结束或证据用途不再允许"
+      influence: [hypothesis_generation, verification, candidate_generation]
+      time_effect: bounded_salience_and_expiry
+    - id: need.coordination
+      version: "1.0"
+      meaning: "对当前关系或协作中未对齐事项的关切"
+      admissible_evidence: [authorized_feedback, verified_commitment]
+      activation: "有依据的误解、未对齐约定或协作诉求"
+      relief: "澄清、真实协作结果或明确调整约定"
+      invalidation: "来源撤回、相关活动结束或适用范围失效"
+      influence: [attention, candidate_generation, candidate_comparison]
+      time_effect: bounded_salience_and_expiry
+    - id: need.exploration
+      version: "1.0"
+      meaning: "对当前可探索线索或开放问题的兴趣"
+      admissible_evidence: [authorized_interest_cue, verified_open_question, confirmed_preference_and_current_context]
+      activation: "仍有效且在授权场景内的兴趣线索"
+      relief: "真实探索反馈、目标完成或有依据地重新评价兴趣"
+      invalidation: "线索撤回、活动范围失效或有效期结束"
+      influence: [attention, candidate_generation, candidate_comparison]
+      time_effect: bounded_salience_and_expiry
+  # 每个定义的部署版本必须绑定独立校准配置；null 不启用数值增长/衰减。
+  state_scale_policy: definition_specific_and_explicit_before_numeric_use
+  time_calibration_profiles:
+    need.autonomy: {definition_version: "1.0", profile_ref: null}
+    need.understanding: {definition_version: "1.0", profile_ref: null}
+    need.coordination: {definition_version: "1.0", profile_ref: null}
+    need.exploration: {definition_version: "1.0", profile_ref: null}
+  time_calibration_required_fields:
+    - definition_ref
+    - profile_version
+    - applicable_scope
+    - validation_record_ref
+    - validity_window
+    - salience_bounds
+    - max_change_per_window
+    - min_check_interval
+    - trigger_thresholds
+  missing_time_calibration: validity_and_expiry_only
+  require_grounded_activation: true
+  separate_activation_from_support_and_eligibility: true
+  concern_identity: scope_definition_id_subject_problem_activity_and_fiction_scope
+  cross_need_scores: no_uncalibrated_sum_or_duplicate_source_credit
+  update_order: read_current_appraise_validate_next_generate_candidates
+  no_semantic_change: no_need_revision_increment
+  contribution_key: original_source_revision_and_need
+  source_revision_effect: replace_contribution_and_recompute_dependents
+  prohibit_same_event_feedback_amplification: true
+  derived_events_are_independent_evidence: false
+  dependency_edges: exact_revision_provenance_separate_from_read_set_and_association
+  time_windows: deduplicate_overlaps_and_reject_clock_regression
+  time_cannot_increase_evidence_support: true
+  offline_resume: revalidate_then_reset_schedule_without_accrual
+  scheduling: bounded_opportunity_pool_and_background_budget
+  capacity_limits: required_existing_resource_and_retention_policy
+  capacity_dimensions: [active_needs, source_edges, checks, candidates, model_calls]
+  capacity_exhausted: scoped_merge_or_reject_or_bounded_defer_with_coverage_status
+  model_calls: admitted_events_or_worthwhile_candidates_within_budget
+  freshness: validate_dependencies_on_read_commit_and_release
+  refusal_effect: suppress_same_purpose_requests_until_valid_scope_change
+  refusal_survives_instance_and_definition_changes: true
+  unmet_need_allows: [silent, wait, defer, do_nothing]
+  withdrawal: authorized_explicit_disengagement_not_satisfaction
+  feedback_relief: correlated_verified_results_matching_definition_conditions
+  task_completion_implies_need_satisfaction: false
+  require_read_set_and_data_lineage: true
+motivation:
+  representation: immutable_rationale_snapshot
+  owns_scheduler_or_budget: false
+  immediate_use: decision_rationale
+  short_lived_handoff: interaction_opportunity
+  sustained_handoff: goal_commitment_proposal
+  handoff_dedup: atomic_receiving_reference_for_same_purpose
+  lifecycle_owner: receiving_decision_opportunity_or_goal
+  committed_goal_dependency: historical_rationale_unless_explicit_ongoing_precondition
+  handoff_grants_execution_permission: false
 memory:
   categories: [working, episodic, semantic, procedural, relational, autobiographical, core]
   retrieval: [acl_filter, temporal_filter, bm25, embedding, entity_traversal, rerank]

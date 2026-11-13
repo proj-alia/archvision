@@ -1,0 +1,84 @@
+{
+  "protocol_version": "1.0",
+  "manifest_version": "1.0",
+  "extension_id": "org.example.setup",
+  "package_version": "1.0.0",
+  "host_protocol_range": "^1.0.0",
+  "entrypoints": [
+    {
+      "runtime_id": "runtime.external",
+      "artifact_ref": "example:adapter-not-implemented",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "requested_permissions": [
+    {
+      "scope": "connector.management",
+      "actions": [
+        "validate",
+        "test",
+        "connect",
+        "disconnect",
+        "status"
+      ],
+      "reason": "仅管理本插件的获准实例"
+    },
+    {
+      "scope": "connector.credentials",
+      "actions": [
+        "use",
+        "write"
+      ],
+      "reason": "仅使用本实例声明的凭据槽"
+    },
+    {
+      "scope": "connector.setup",
+      "actions": [
+        "begin",
+        "submit",
+        "cancel",
+        "poll"
+      ],
+      "reason": "运行有期限的配对流程"
+    }
+  ],
+  "provides": [
+    {
+      "contract_id": "alia.connector.management",
+      "version": "1.0.0",
+      "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+    },
+    {
+      "contract_id": "alia.interaction",
+      "version": "1.0.0",
+      "schema_digest": "5c70160439bcc023afb2aa652896c39786f91b3b6d8b3022ddc490e00bc54f7a"
+    },
+    {
+      "contract_id": "alia.connector.setup",
+      "version": "1.0.0",
+      "schema_digest": "e4c114b6fd3eea87cef59dcec3a2d2a2e48e43684fc55c6eb77915fec2fb9c21"
+    }
+  ],
+  "uses": [],
+  "contributions": [
+    {
+      "contribution_id": "org.example.setup.connection",
+      "type_id": "alia.contribution.connector",
+      "contract_ref": {
+        "contract_id": "alia.connector.management",
+        "version": "1.0.0",
+        "schema_digest": "df197010a5ab2c5237fa157c5cc7bd5c166d3574c2a0b0fb26df1e4abaee0c21"
+      },
+      "descriptor_ref": {
+        "path": "connector.json",
+        "sha256": "64715ef7602e726b971b0e27e719aefb251541749c8bdac816bb5b46b802ea87"
+      }
+    }
+  ],
+  "isolation_requirements": {
+    "profile_id": "isolation.restricted",
+    "memory_bytes": 1048576,
+    "cpu_millis": 1000,
+    "max_concurrency": 1
+  }
+}

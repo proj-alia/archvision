@@ -8,6 +8,8 @@
 | Persona | 可定制的价值偏好、稳定特质、兴趣/表达倾向、版本化演化规则 | 系统硬约束的修改权、某次情绪/剧情角色 |
 | SelfModel | 自我能力、局限、身份、近期行为与不确定性描述 | 主观意识证明 |
 | AffectState | 短期可解释的情境性表达/注意倾向 | 人类生理感受 |
+| NeedDefinition / NeedState | 版本化需要语义；当前被激活的关切、证据、对象、范围和有效期 | 自动执行权、主观感受证明或永久人格 |
+| Appraisal / MotivationCandidate | 事件对当前关切的意义判断；候选的期望变化与依据快照 | 第二套信念库、调度队列、已批准的目标或已发生结果 |
 | Memory | 来源明确的经历与学习材料及索引 | 任何来源不明的模型推测 |
 | Belief | 带来源、时间、置信度、冲突的命题 | 永远正确的事实库 |
 | Relationship | 与主体的互动事实、约定、边界、适应模式 | 单一好感度 |
@@ -43,7 +45,7 @@ I14 非文本媒介暂无适配器时，事件、表达和能力契约依然有�
 I15 工具可以提供能力，但 ALIA 不允许未经授权自行扩权、自我复制、跨租户访问。
 
 ## 三、单体中的领域模块
-`kernel/identity` 身份+分支+版本；`kernel/runtime` 事件、轮次、检查点；`kernel/perception` 来源/模态标准化；`kernel/cognition` 上下文/推断/行动仲裁；`kernel/persona` 人格/自我/情境态；`kernel/memory` 记忆/知识/信念来源；`kernel/relations` 社会关系与权限域；`kernel/agency` 目标/工作流/计划/行动；`kernel/expression` 表达语义；`kernel/capabilities` 工具发现/副作用/协议；`kernel/policy` 授权/隐私/安全；`kernel/learning` 反思、候选更新和验证。
+`kernel/identity` 身份+分支+版本；`kernel/runtime` 事件、轮次、检查点与资源调度；`kernel/perception` 来源/模态标准化；`kernel/cognition` 上下文/评价/动态需要与候选选择；`kernel/persona` 人格/自我投影/短期情境态；`kernel/memory` 记忆/知识/信念来源；`kernel/relations` 社会关系与互动边界；`kernel/agency` 目标/工作流/计划/行动；`kernel/expression` 表达语义；`kernel/capabilities` 工具发现/副作用/协议；`kernel/policy` 授权/隐私/安全；`kernel/learning` 反思、候选更新和验证。
 
 **外围基础设施**：`adapters/webui`、`adapters/model`、`adapters/postgres`、`adapters/mcp`、`adapters/a2a`、`adapters/fake-*`、`adapters/otel`。外部 SDK 只能出现在 adapters 中。部署默认一个进程+数据库+WebUI，可按实际扩容后拆服务，不能在领域上反向依赖。
 
@@ -60,12 +62,18 @@ ContractRegistry、ExtensionHost、BindingRouter、SemanticGateway、ContextSour
 
 扩展不注册核心 reducer，不改变领域不变量。
 
+平台交互协议插件作为明确功能分类桥接 ALIA 通用交互契约与外部客户端原有协议；核心不必预知具体平台。一个逻辑连接的配置/代次归 ConnectorManager，实际传输归适配实现；共享该连接的贡献声明 connection_dependents，不能重复维护连接或扩大许可。外部客户端的 AI、Prompt、历史和角色模型不是第二份 ALIA 状态权威。
+
+ExtensionHost 统一管理扩展包，不强制统一业务协议。平台交互通过 ConnectorManager 和交互契约接入，工具通过 ServiceContract/AgentCapability 接入；模型与媒体处理按各自服务契约接入。工具可以没有任何聊天连接。一个包可组合多种贡献，桌宠等产品形态不成为核心插件类型枚举。
+
+连接定义 ConnectorDefinition、用户连接实例 ConnectorInstance 和临时认证 SetupSession 由应用扩展/连接管理器维护，不新增领域人格模块。宿主负责包与进程状态，管理器负责配置、凭据引用、连接代次和健康投影；runtime 仍是 OutputEndpoint/DeliveryReceipt/Turn 的唯一领域所有者。平台数据经 SemanticGateway 与 perception 入站，不能由适配器自报权威身份、关系、需要或事实。配置 UI 不是连接执行器；WebChat 作为官方交互实现复用同一核心。
+
 技术选择为 Rust 模块化单体。纯 domain 不依赖 Tokio/Axum/Tower、SQLx、Tauri、Wasmtime 和前端 SDK；异步编排在 application，具体 I/O 实现在 adapters。Rust crate 图及模块可见性门禁约束依赖方向；禁止跨层暴露框架类型。
 
 React/Vite 和 Tauri 只投影核心事件与状态。窗口、前端 store 或插件进程不拥有 ALIA 身份，重连从快照与 cursor 恢复。完整 Port、执行与部署边界见 [技术选型](appendices/14-TECHNOLOGY-STACK.md)。
 
 ## 五、通用状态向量（逻辑，不建议全部序列化成单一巨大 JSON）
-`S_t = (I, P, Self, A, M, B, R, W, G, T, C, Policies, Resources)`；输入 `E_t=(observation, provenance, trust, time, modality)`；迁移 `S_{t+1} = Reduce(S_t, ValidatedEvents(Decide(S_t,E_t)))`。LLM 输出候选结构，确定性 reducer 执行合法变更。事件提交与 outbox 在同一事务内；外部动作状态异步收敛。
+`S_t = (I, P, Self, A, N, M, B, R, W, G, T, C, Policies, Resources)`；N 为有来源的动态需要状态；输入 `E_t=(observation, provenance, trust, time, modality)`；迁移 `S_{t+1} = Reduce(S_t, ValidatedEvents(Decide(S_t,E_t)))`。LLM 输出候选结构，确定性 reducer 执行合法变更。事件提交与 outbox 在同一事务内；外部动作状态异步收敛。
 
 ## 六、模型切换与分叉
 - 模型是认知计算资源；迁移保存 identity + states + memories + policies + lineage + histories + task checkpoints，运行跨模型行为回归。
@@ -80,8 +88,9 @@ I01–I15 不变。I08 的“长期价值底线”指系统安全/隐私/授权�
 | 对象/状态 | 唯一领域所有者 | 其他模块的权限 |
 |---|---|---|
 | SceneContext / PerceptionHypothesis | memory 的 WorldModel/Belief 聚合 | perception 提供来源与候选，cognition 提交解释建议；不得绕过证据验证写事实 |
-| InteractionOpportunity / Appraisal | cognition | agency 提供承诺/资源约束，runtime 提供时机；选择不代替授权 |
-| PersonaProfile / EvolutionPolicy / PersonaChangeProposal | persona | learning 提议，policy 验证授权，用户认证命令确认；只有 persona 提交有效新版本 |
+| NeedDefinition / NeedState / Appraisal / MotivationCandidate / InteractionOpportunity | cognition | persona 提供稳定偏好，memory/relations 提供证据，agency 提供承诺/资源，runtime 提供可信时机；模型、插件与 learning 只提候选 |
+| PersonaProfile / EvolutionPolicy / PersonaChangeProposal | persona | learning 提议，policy 验证授权，用户认证命令确认；persona 验证有效新版本的领域条件 |
+| AffectState / SelfModel | persona | cognition 提议短期情境态；SelfModel 引用各所有者的有效状态，不改写需要、能力、注意队列或资源事实 |
 | SharedSymbol / 共同理解 / 关系边界与修复 | relations | memory 供应来源，expression 供应送达，learning 提候选；无真实理解证据不置 grounded |
 | InteractionFrame | expression | cognition 提议语用及作用范围，relations 提供共同理解；不能改 Belief 事实 |
 | Interest / Habit 配置 | persona | agency 读取并安排任务，learning 基于真实结果提变化；活动实例归 agency |
@@ -90,7 +99,11 @@ I01–I15 不变。I08 的“长期价值底线”指系统安全/隐私/授权�
 | OutputEndpoint / DeliveryReceipt / 发言权 | runtime | 适配器上报来源核验后的状态；policy 解释暴露/流出限制，expression 消费有效版本 |
 | Authorization / 删除屏障 | policy | 所有消费者读取，只有受信任政策命令更新；不受人格变化支配 |
 
-“唯一所有者”是逻辑写入责任，不要求独立服务或物理表。事务协调仍在应用 StateStore；领域间通过已验证事件、候选与版本引用交接。输入输出、生命周期、恢复和删除责任见 [情境行为](appendices/15-SITUATED-BEHAVIOR.md)，数据归属见 [数据存储](appendices/13-DATA-STORAGE.md)。
+“唯一所有者”负责所属聚合的规则、转换和合法新状态；应用层协调 StateStore 原子提交，存储适配器执行持久化。它不要求独立服务或物理表，也不让各领域模块各自直接操作数据库。领域间通过已验证事件、候选与版本引用交接。输入输出、生命周期、恢复和删除责任见 [情境行为](appendices/15-SITUATED-BEHAVIOR.md)，数据归属见 [数据存储](appendices/13-DATA-STORAGE.md)。
+
+Persona 保存长期需要偏好；NeedDefinition 由受信任的配置变更提供版本化语义，cognition 验证其激活、时间与缓解规则；NeedState 保存当前关切。AffectState 表示短期表达/注意倾向，两者可不同步。SelfModel 只引用有效需要及其来源，不复制一套可写权威。MotivationCandidate 是交给既有互动机会或目标提案的依据快照，不独立排队、承诺或预留预算。持续承诺与执行仍归 agency，实际发言权和共享资源调度归 runtime。
+
+跨领域依赖通过应用层收集的只读投影与版本引用交接：persona 引用需要定义标识，不调用 cognition 的状态机；cognition 消费人格、信念、关系与承诺投影，不直接写这些聚合。规则发布不自动改变人格所引用的定义版本；改变稳定偏好语义仍走 persona 的确认边界。概念相互关联不要求领域模块相互导入实现。
 
 ## 八、模块输入、输出与失败责任
 
@@ -99,8 +112,8 @@ I01–I15 不变。I08 的“长期价值底线”指系统安全/隐私/授权�
 | identity / 身份与分支 | 认证创建/恢复/分叉命令 → 身份谱系与分支引用 | 冲突写入拒绝；名字、模型和媒介不能创建隐式新身份 |
 | runtime / 事件与轮次 | 合法事件/调度/回执 → 顺序、轮次、检查点与端点状态 | 重复去重，缺口核验，取消与送达分开；不执行外部 I/O 于 reducer |
 | perception / 来源标准化 | 适配器观察 → 带覆盖、时间与信任的 Observation | 缺失标未知，过期与修订显式传播；不写事实和权限 |
-| cognition / 评价与选择 | 合法上下文、人格、关系、目标 → 结构化候选决定及读集 | 超时/陈旧重新仲裁或等待；模型不直接提交状态 |
-| persona / 人格与自我状态 | 认证编辑、预授权演化候选、运行事实 → 人格版本与 SelfModel | 旧预览、越界漂移拒绝；安全政策不可编辑 |
+| cognition / 需要、评价与选择 | 合法上下文、人格、当前需要、关系、目标、可信时间 → 需要更新/动机/决定候选及读集 | 来源修订重算，重复证据不强化，超时/陈旧重新仲裁；模型不直接提交状态 |
+| persona / 人格与自我状态 | 认证编辑、预授权演化候选、评价及运行事实 → 人格版本、AffectState 与 SelfModel 投影 | 临时情境态不改人格；投影不覆盖来源权威；旧预览、越界漂移拒绝 |
 | memory / 记忆、Belief、WorldModel | 来源证据、观察与纠错 → 分层记忆、信念及场景投影 | 冲突/未知保留，删除级联；不把模型猜测写作亲历 |
 | relations / 关系与共同理解 | 合法互动、送达及反馈 → 范围化边界、共同符号与修复状态 | 无采纳证据不确认；关系不产生权限 |
 | agency / 目标与任务 | 候选目标、承诺、预算 → 计划、检查点、资源租约 | 可取消/恢复；不确定效果先核验；租约不签发授权 |

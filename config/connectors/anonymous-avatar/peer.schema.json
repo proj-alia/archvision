@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Synthetic client C7 frame; not a Live2D standard",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "const": "C7"
+        },
+        "op": {
+          "const": "user.say"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "room": {
+          "type": "string",
+          "minLength": 1
+        },
+        "speaker": {
+          "type": "string",
+          "minLength": 1
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "protocol",
+        "op",
+        "id",
+        "room",
+        "speaker",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "const": "C7"
+        },
+        "op": {
+          "const": "avatar.say"
+        },
+        "request": {
+          "type": "string",
+          "minLength": 1
+        },
+        "room": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "protocol",
+        "op",
+        "request",
+        "room",
+        "to",
+        "body"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "const": "C7"
+        },
+        "op": {
+          "const": "accepted"
+        },
+        "request": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "protocol",
+        "op",
+        "request"
+      ]
+    }
+  ]
+}
