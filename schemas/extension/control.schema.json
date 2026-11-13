@@ -1,0 +1,607 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Host Control Protocol 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": {
+      "const": "1.0"
+    },
+    "connection_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "message_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "hello",
+        "authenticate",
+        "session_opened",
+        "status",
+        "grant",
+        "revoke",
+        "binding_request",
+        "binding_result",
+        "stream_credit",
+        "stop",
+        "ack",
+        "connection_closed"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "body": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "protocol_version",
+    "connection_id",
+    "message_id",
+    "kind",
+    "occurred_at",
+    "deadline",
+    "body"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "hello"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "extension_id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+              },
+              "package_version": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.+-]+)?$"
+              },
+              "protocol_range": {
+                "type": "string",
+                "minLength": 1
+              },
+              "manifest_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "manifest_digest": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "extension_id",
+              "package_version",
+              "protocol_range",
+              "manifest_ref",
+              "manifest_digest"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "authenticate"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "credential_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "credential_ref"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "session_opened"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "generation": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "host_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "$ref": "#/$defs/scope"
+              }
+            },
+            "required": [
+              "session_id",
+              "generation",
+              "host_id",
+              "scope"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "status"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "validated",
+                  "waiting_dependencies",
+                  "starting",
+                  "ready",
+                  "degraded",
+                  "stopping",
+                  "stopped",
+                  "failed"
+                ]
+              },
+              "missing_contract_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+                }
+              }
+            },
+            "required": [
+              "session_id",
+              "state",
+              "missing_contract_ids"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "grant"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "permission_revision": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "grant_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "session_id",
+              "permission_revision",
+              "grant_ref"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "revoke"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "permission_revision": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "grant_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "session_id",
+              "permission_revision",
+              "grant_ref"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "binding_request"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contract_ref": {
+                "$ref": "#/$defs/contract_ref"
+              },
+              "consumer_principal_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "$ref": "#/$defs/scope"
+              }
+            },
+            "required": [
+              "session_id",
+              "contract_ref",
+              "consumer_principal_id",
+              "scope"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "binding_result"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "binding_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "session_id",
+              "binding_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "stream_credit"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "binding_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "stream_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "credits": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "binding_id",
+              "stream_id",
+              "credits"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "stop"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "session_id",
+              "reason"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "ack"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "in_reply_to": {
+                "type": "string",
+                "minLength": 1
+              },
+              "recorded": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "in_reply_to",
+              "recorded"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "connection_closed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access_scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "tenant_id",
+        "identity_id",
+        "branch_id",
+        "access_scope"
+      ]
+    },
+    "data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "private",
+            "restricted"
+          ]
+        },
+        "retention_policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "owner_id",
+        "purpose",
+        "classification",
+        "retention_policy_id",
+        "lineage_ids"
+      ]
+    },
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    },
+    "read_set": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "resource_id",
+          "kind",
+          "revision"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."
+}

@@ -1,0 +1,424 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Extension Communication Protocol 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "protocol_version": {
+      "const": "1.0"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "message_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "request",
+        "response",
+        "event",
+        "stream_open",
+        "stream_chunk",
+        "stream_close",
+        "cancel",
+        "error"
+      ]
+    },
+    "plane": {
+      "type": "string",
+      "enum": [
+        "control",
+        "data"
+      ]
+    },
+    "binding_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_generation": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "caller_principal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "contract_ref": {
+      "$ref": "#/$defs/contract_ref"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "member_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "payload": {},
+    "in_reply_to": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "completed",
+        "failed",
+        "uncertain"
+      ]
+    },
+    "stream_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cursor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ]
+    }
+  },
+  "required": [
+    "protocol_version",
+    "scope",
+    "message_id",
+    "kind",
+    "plane",
+    "binding_id",
+    "provider_session_id",
+    "provider_generation",
+    "caller_principal_id",
+    "correlation_id",
+    "sequence",
+    "contract_ref",
+    "occurred_at",
+    "deadline"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "request",
+              "event",
+              "stream_open"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "member_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "request",
+              "event",
+              "stream_chunk"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "payload"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "response"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "in_reply_to",
+          "status"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "stream_open",
+              "stream_chunk",
+              "stream_close"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "stream_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "stream_close"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "status"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "cancel"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "target_id",
+          "reason"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "error"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "in_reply_to",
+          "error"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "stream_chunk"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "plane": {
+            "const": "data"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "plane": {
+            "const": "control"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "failed"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "error"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access_scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "tenant_id",
+        "identity_id",
+        "branch_id",
+        "access_scope"
+      ]
+    },
+    "data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "private",
+            "restricted"
+          ]
+        },
+        "retention_policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "owner_id",
+        "purpose",
+        "classification",
+        "retention_policy_id",
+        "lineage_ids"
+      ]
+    },
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    },
+    "read_set": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "resource_id",
+          "kind",
+          "revision"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."
+}

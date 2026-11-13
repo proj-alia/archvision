@@ -1,0 +1,56 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "org.example.x",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "read",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "side_effect_class": "read",
+      "supports_cancel": true
+    }
+  ],
+  "events": [
+    {
+      "name": "signal",
+      "payload_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "unforeseen_dimension": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "unforeseen_dimension"
+        ]
+      }
+    }
+  ],
+  "streams": []
+}

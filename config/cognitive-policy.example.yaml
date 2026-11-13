@@ -1,0 +1,41 @@
+# 本配置样例格式版本独立于下方 core/extension 协议版本。
+schema_version: "1.0"
+runtime:
+  paths: [reflex, fast, deliberative, background]
+  turn_states: [open, awaiting_completion, responding, idle, interrupted, closed]
+  allow_silence_as_decision: true
+  defer_background_notice: true
+context:
+  required_blocks: [identity, persona, active_goal, recent_turn, authorized_memory]
+  reject_untrusted_instruction_escalation: true
+memory:
+  categories: [working, episodic, semantic, procedural, relational, autobiographical, core]
+  retrieval: [acl_filter, temporal_filter, bm25, embedding, entity_traversal, rerank]
+  require_provenance: true
+  require_lineage_for_derived: true
+  allow_delete: true
+agency:
+  allow_auto_actions_within_scope: true
+  approve_sensitive_external_actions: true
+  budget_required: true
+  include_do_nothing_option: true
+expression:
+  emit_structured_intent: true
+  # 初始交付适配器不限定核心可表达的媒介或最终能力范围。
+  initial_delivery_adapter: webui_text
+  required_fake_contracts: [audio, visual, avatar, game, device]
+  persist_delivery_receipt: true
+  allow_empty_display_bubble: false
+
+extensions:
+  protocol_version: "1.0"
+  core_contract_version: "1.0"
+  business_contracts: runtime_registered
+  permission_default: deny
+  agent_exposure: explicit_projection
+  provider_replacement: explicit_new_binding
+  unknown_payload: retain_reference_without_interpretation
+  untrusted_execution: verified_isolation_required
+  commit_read_set_required: true
+  deletion_barrier_required: true
+  control_capacity_reserved: true

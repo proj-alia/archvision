@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decision Proposal 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "data_policy": {
+      "$ref": "#/$defs/data_policy"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "reply",
+        "wait",
+        "silent",
+        "defer",
+        "clarify",
+        "act",
+        "queue_task",
+        "refuse"
+      ]
+    },
+    "read_set": {
+      "$ref": "#/$defs/read_set"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason_summary": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "planned_expression_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_intent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_proposal_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "notice_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "waiting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "completion_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deadline": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "completion_key",
+        "deadline"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "scope",
+    "data_policy",
+    "decision_id",
+    "event_id",
+    "kind",
+    "read_set",
+    "expires_at"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "reply",
+              "clarify",
+              "refuse"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "planned_expression_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "act"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "action_intent_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "queue_task"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "task_proposal_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "defer"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "notice_id"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "wait"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "waiting"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "silent"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "planned_expression_id"
+              ]
+            },
+            {
+              "required": [
+                "action_intent_id"
+              ]
+            },
+            {
+              "required": [
+                "task_proposal_id"
+              ]
+            },
+            {
+              "required": [
+                "notice_id"
+              ]
+            },
+            {
+              "required": [
+                "waiting"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access_scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "tenant_id",
+        "identity_id",
+        "branch_id",
+        "access_scope"
+      ]
+    },
+    "data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "private",
+            "restricted"
+          ]
+        },
+        "retention_policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "owner_id",
+        "purpose",
+        "classification",
+        "retention_policy_id",
+        "lineage_ids"
+      ]
+    },
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    },
+    "read_set": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "resource_id",
+          "kind",
+          "revision"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."
+}

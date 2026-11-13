@@ -1,0 +1,252 @@
+{
+  "schema": "config/technology-stack.schema.json",
+  "cases": [
+    {
+      "id": "approved_stable_selection",
+      "expected_valid": true,
+      "mutations": []
+    },
+    {
+      "id": "reject_nightly",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "components",
+            "0",
+            "version"
+          ],
+          "value": "nightly"
+        }
+      ]
+    },
+    {
+      "id": "reject_tauri_alpha",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "components",
+            "18",
+            "version"
+          ],
+          "value": "3.0.0-alpha.6"
+        }
+      ]
+    },
+    {
+      "id": "reject_wasmtime_rc",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "components",
+            "16",
+            "version"
+          ],
+          "value": "51.0.0-rc.1"
+        }
+      ]
+    },
+    {
+      "id": "reject_floating_semver",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "components",
+            "22",
+            "version"
+          ],
+          "value": "^19.3.1"
+        }
+      ]
+    },
+    {
+      "id": "reject_latest",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "components",
+            "24",
+            "version"
+          ],
+          "value": "latest"
+        }
+      ]
+    },
+    {
+      "id": "reject_implicit_privilege",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "boundaries",
+            "rust_internal_abi_plugins"
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "reject_frontend_authority",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "boundaries",
+            "authoritative_state"
+          ],
+          "value": "zustand"
+        }
+      ]
+    },
+    {
+      "id": "reject_framework_change",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "selection",
+            "webui"
+          ],
+          "value": "vue"
+        }
+      ]
+    },
+    {
+      "id": "reject_build_claim",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "validation_status",
+            "rust_build"
+          ],
+          "value": "passed"
+        }
+      ]
+    },
+    {
+      "id": "reject_contract_bump",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "contract_versions",
+            "core"
+          ],
+          "value": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "reject_automatic_updates",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "version_policy",
+            "automatic_upgrade"
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "reject_missing_version",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "remove",
+          "path": [
+            "components",
+            "0",
+            "version"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reject_unknown_manifest_field",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "autorun_extensions"
+          ],
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "reject_unsupported_core",
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "contract_versions",
+            "core"
+          ],
+          "value": "99.0"
+        }
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "reject_unsupported_extension",
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "contract_versions",
+            "extension"
+          ],
+          "value": "99.0"
+        }
+      ],
+      "expected_valid": false
+    },
+    {
+      "id": "reject_unsupported_core_v2",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "contract_versions",
+            "core"
+          ],
+          "value": "99.0"
+        }
+      ]
+    },
+    {
+      "id": "reject_unsupported_extension_v2",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "op": "set",
+          "path": [
+            "contract_versions",
+            "extension"
+          ],
+          "value": "99.0"
+        }
+      ]
+    }
+  ]
+}

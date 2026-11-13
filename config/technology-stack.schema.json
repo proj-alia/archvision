@@ -1,0 +1,354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Technology Selection Manifest 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": "1.0"
+    },
+    "decision_id": {
+      "const": "baseline"
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date"
+    },
+    "selection_status": {
+      "const": "specified"
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "core": {
+          "const": "rust_modular_monolith"
+        },
+        "rust_edition": {
+          "const": "2024"
+        },
+        "webui": {
+          "const": "react_vite_spa"
+        },
+        "desktop": {
+          "const": "tauri2"
+        },
+        "web_first": {
+          "const": true
+        }
+      },
+      "required": [
+        "core",
+        "rust_edition",
+        "webui",
+        "desktop",
+        "web_first"
+      ]
+    },
+    "contract_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "core": {
+          "const": "1.0"
+        },
+        "extension": {
+          "const": "1.0"
+        },
+        "json_schema": {
+          "const": "2020-12"
+        }
+      },
+      "required": [
+        "core",
+        "extension",
+        "json_schema"
+      ]
+    },
+    "version_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "const": "stable"
+        },
+        "exact_direct_versions": {
+          "const": true
+        },
+        "allow_prerelease": {
+          "const": false
+        },
+        "automatic_upgrade": {
+          "const": false
+        },
+        "transitive_lockfiles_status": {
+          "const": "not_created"
+        }
+      },
+      "required": [
+        "channel",
+        "exact_direct_versions",
+        "allow_prerelease",
+        "automatic_upgrade",
+        "transitive_lockfiles_status"
+      ]
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ecosystem": {
+            "enum": [
+              "rust-toolchain",
+              "node-release",
+              "postgresql",
+              "github-release",
+              "cargo",
+              "npm"
+            ]
+          },
+          "package": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:\\.(0|[1-9][0-9]*))?$"
+          },
+          "layer": {
+            "enum": [
+              "toolchain",
+              "runtime",
+              "network",
+              "storage",
+              "contracts",
+              "web",
+              "ui",
+              "state",
+              "desktop",
+              "extensions",
+              "observability",
+              "testing",
+              "tooling"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "metadata_verified": {
+            "type": "boolean"
+          },
+          "metadata_checked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "ecosystem",
+          "package",
+          "version",
+          "layer",
+          "source",
+          "metadata_verified",
+          "metadata_checked_at",
+          "metadata"
+        ]
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "domain_forbidden_dependencies": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "authoritative_state": {
+          "const": "rust_core"
+        },
+        "remote_state": {
+          "const": "tanstack_query"
+        },
+        "ephemeral_state": {
+          "const": "zustand"
+        },
+        "desktop_policy": {
+          "const": "same_application_commands"
+        },
+        "extension_transport": {
+          "const": "versioned_language_neutral_contracts"
+        },
+        "rust_internal_abi_plugins": {
+          "const": false
+        },
+        "untrusted_execution": {
+          "const": "verified_out_of_process_isolation"
+        }
+      },
+      "required": [
+        "domain_forbidden_dependencies",
+        "authoritative_state",
+        "remote_state",
+        "ephemeral_state",
+        "desktop_policy",
+        "extension_transport",
+        "rust_internal_abi_plugins",
+        "untrusted_execution"
+      ]
+    },
+    "ui_component_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "generator": {
+          "const": "shadcn"
+        },
+        "base": {
+          "const": "radix"
+        },
+        "source_review_required": {
+          "const": true
+        },
+        "actual_component_dependencies_status": {
+          "const": "not_resolved"
+        }
+      },
+      "required": [
+        "generator",
+        "base",
+        "source_review_required",
+        "actual_component_dependencies_status"
+      ]
+    },
+    "validation_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "version_metadata": {
+          "const": "verified"
+        },
+        "dependency_resolution": {
+          "const": "not_run"
+        },
+        "rust_build": {
+          "const": "not_run"
+        },
+        "web_build": {
+          "const": "not_run"
+        },
+        "database_tests": {
+          "const": "not_run"
+        },
+        "desktop_tests": {
+          "const": "not_run"
+        },
+        "differential_tests": {
+          "const": "specified"
+        },
+        "performance_tests": {
+          "const": "not_run"
+        }
+      },
+      "required": [
+        "version_metadata",
+        "dependency_resolution",
+        "rust_build",
+        "web_build",
+        "database_tests",
+        "desktop_tests",
+        "differential_tests",
+        "performance_tests"
+      ]
+    },
+    "reference_projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "frameworks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "manifest_paths": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "validation_scope": {
+            "const": "source_manifest_only"
+          }
+        },
+        "required": [
+          "name",
+          "repository",
+          "revision",
+          "frameworks",
+          "manifest_paths",
+          "sources",
+          "validation_scope"
+        ]
+      }
+    }
+  },
+  "required": [
+    "format_version",
+    "decision_id",
+    "as_of",
+    "selection_status",
+    "selection",
+    "contract_versions",
+    "version_policy",
+    "components",
+    "boundaries",
+    "ui_component_policy",
+    "validation_status",
+    "reference_projects"
+  ]
+}

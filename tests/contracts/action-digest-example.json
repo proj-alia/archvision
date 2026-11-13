@@ -1,0 +1,5 @@
+{
+  "algorithm": "RFC 8785 JCS + SHA-256",
+  "canonical_json": "{\"action_id\":\"action-1\",\"audience\":[\"user-1\"],\"binding_id\":\"binding-1\",\"capability_id\":\"org.example.read\",\"capability_version\":\"1.0.0\",\"data_policy\":{\"classification\":\"private\",\"lineage_ids\":[],\"owner_id\":\"user-1\",\"purpose\":\"contract-review\",\"retention_policy_id\":\"retain-1\"},\"decision_id\":\"decision-1\",\"expires_at\":\"2026-11-12T13:00:00Z\",\"idempotency_key\":\"once-1\",\"input\":{\"query\":\"probe\"},\"principal_id\":\"user-1\",\"read_set\":[{\"kind\":\"input.revision\",\"resource_id\":\"observation-1\",\"revision\":1}],\"schema_version\":\"1.0\",\"scope\":{\"access_scope\":\"private-1\",\"branch_id\":\"main\",\"identity_id\":\"identity-001\",\"tenant_id\":\"tenant-1\"}}",
+  "sha256": "b99c119894ed11e8db99f90b0c232369679030f1c01a20d9452153f6f5a0fc2d"
+}

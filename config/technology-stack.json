@@ -1,0 +1,856 @@
+{
+  "format_version": "1.0",
+  "decision_id": "baseline",
+  "as_of": "2026-11-12",
+  "selection_status": "specified",
+  "selection": {
+    "core": "rust_modular_monolith",
+    "rust_edition": "2024",
+    "webui": "react_vite_spa",
+    "desktop": "tauri2",
+    "web_first": true
+  },
+  "contract_versions": {
+    "core": "1.0",
+    "extension": "1.0",
+    "json_schema": "2020-12"
+  },
+  "version_policy": {
+    "channel": "stable",
+    "exact_direct_versions": true,
+    "allow_prerelease": false,
+    "automatic_upgrade": false,
+    "transitive_lockfiles_status": "not_created"
+  },
+  "components": [
+    {
+      "id": "rust",
+      "ecosystem": "rust-toolchain",
+      "package": "rust",
+      "version": "1.100.0",
+      "layer": "toolchain",
+      "source": "https://static.rust-lang.org/dist/channel-rust-stable.toml",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "channel": "stable",
+        "edition": "2024",
+        "release_commit": "0ef1bc386059596dada8fb65b50425aab2ea637a"
+      }
+    },
+    {
+      "id": "node",
+      "ecosystem": "node-release",
+      "package": "node",
+      "version": "26.13.1",
+      "layer": "toolchain",
+      "source": "https://nodejs.org/dist/index.json",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "release_status": "LTS",
+        "codename": "Lithium"
+      }
+    },
+    {
+      "id": "postgresql",
+      "ecosystem": "postgresql",
+      "package": "postgresql",
+      "version": "18.7",
+      "layer": "storage",
+      "source": "https://www.postgresql.org/support/versioning/",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "supported_major": 18
+      }
+    },
+    {
+      "id": "pgvector",
+      "ecosystem": "github-release",
+      "package": "pgvector/pgvector",
+      "version": "0.8.7",
+      "layer": "storage",
+      "source": "https://github.com/pgvector/pgvector/tree/v0.8.7",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "tag": "v0.8.7"
+      }
+    },
+    {
+      "id": "cargo:tokio",
+      "ecosystem": "cargo",
+      "package": "tokio",
+      "version": "1.54.1",
+      "layer": "runtime",
+      "source": "https://crates.io/api/v1/crates/tokio/1.54.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.85",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:axum",
+      "ecosystem": "cargo",
+      "package": "axum",
+      "version": "0.8.9",
+      "layer": "network",
+      "source": "https://crates.io/api/v1/crates/axum/0.8.9",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.80",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tower",
+      "ecosystem": "cargo",
+      "package": "tower",
+      "version": "0.5.3",
+      "layer": "network",
+      "source": "https://crates.io/api/v1/crates/tower/0.5.3",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.64.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tower-http",
+      "ecosystem": "cargo",
+      "package": "tower-http",
+      "version": "0.7.1",
+      "layer": "network",
+      "source": "https://crates.io/api/v1/crates/tower-http/0.7.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.65",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:sqlx",
+      "ecosystem": "cargo",
+      "package": "sqlx",
+      "version": "0.9.0",
+      "layer": "storage",
+      "source": "https://crates.io/api/v1/crates/sqlx/0.9.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.94.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:serde",
+      "ecosystem": "cargo",
+      "package": "serde",
+      "version": "1.0.229",
+      "layer": "contracts",
+      "source": "https://crates.io/api/v1/crates/serde/1.0.229",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.56",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:serde_json",
+      "ecosystem": "cargo",
+      "package": "serde_json",
+      "version": "1.0.154",
+      "layer": "contracts",
+      "source": "https://crates.io/api/v1/crates/serde_json/1.0.154",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.71",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:jsonschema",
+      "ecosystem": "cargo",
+      "package": "jsonschema",
+      "version": "0.61.2",
+      "layer": "contracts",
+      "source": "https://crates.io/api/v1/crates/jsonschema/0.61.2",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.85.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tracing",
+      "ecosystem": "cargo",
+      "package": "tracing",
+      "version": "0.1.44",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/tracing/0.1.44",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.65.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tracing-subscriber",
+      "ecosystem": "cargo",
+      "package": "tracing-subscriber",
+      "version": "0.3.23",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/tracing-subscriber/0.3.23",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.65.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:opentelemetry",
+      "ecosystem": "cargo",
+      "package": "opentelemetry",
+      "version": "0.33.1",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/opentelemetry/0.33.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.75.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tracing-opentelemetry",
+      "ecosystem": "cargo",
+      "package": "tracing-opentelemetry",
+      "version": "0.34.0",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/tracing-opentelemetry/0.34.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.75.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:wasmtime",
+      "ecosystem": "cargo",
+      "package": "wasmtime",
+      "version": "50.0.1",
+      "layer": "extensions",
+      "source": "https://crates.io/api/v1/crates/wasmtime/50.0.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.97.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:wasmtime-wasi",
+      "ecosystem": "cargo",
+      "package": "wasmtime-wasi",
+      "version": "50.0.1",
+      "layer": "extensions",
+      "source": "https://crates.io/api/v1/crates/wasmtime-wasi/50.0.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.97.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:tauri",
+      "ecosystem": "cargo",
+      "package": "tauri",
+      "version": "2.12.5",
+      "layer": "desktop",
+      "source": "https://crates.io/api/v1/crates/tauri/2.12.5",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.90",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:proptest",
+      "ecosystem": "cargo",
+      "package": "proptest",
+      "version": "1.12.0",
+      "layer": "testing",
+      "source": "https://crates.io/api/v1/crates/proptest/1.12.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.88",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:opentelemetry_sdk",
+      "ecosystem": "cargo",
+      "package": "opentelemetry_sdk",
+      "version": "0.33.1",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/opentelemetry_sdk/0.33.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.75.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "cargo:opentelemetry-otlp",
+      "ecosystem": "cargo",
+      "package": "opentelemetry-otlp",
+      "version": "0.33.1",
+      "layer": "observability",
+      "source": "https://crates.io/api/v1/crates/opentelemetry-otlp/0.33.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "rust_version": "1.75.0",
+        "yanked": false
+      }
+    },
+    {
+      "id": "npm:react",
+      "ecosystem": "npm",
+      "package": "react",
+      "version": "19.3.1",
+      "layer": "web",
+      "source": "https://registry.npmjs.org/react/19.3.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=0.10.0"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:react-dom",
+      "ecosystem": "npm",
+      "package": "react-dom",
+      "version": "19.3.1",
+      "layer": "web",
+      "source": "https://registry.npmjs.org/react-dom/19.3.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {},
+        "peer_dependencies": {
+          "react": "^19.3.1"
+        },
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:vite",
+      "ecosystem": "npm",
+      "package": "vite",
+      "version": "8.3.8",
+      "layer": "web",
+      "source": "https://registry.npmjs.org/vite/8.3.8",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": "^20.19.0 || >=22.12.0"
+        },
+        "peer_dependencies": {
+          "tsx": "^4.8.1",
+          "jiti": ">=1.21.0",
+          "less": "^4.0.0",
+          "sass": "^1.70.0",
+          "yaml": "^2.4.2",
+          "stylus": ">=0.54.8",
+          "terser": "^5.16.0",
+          "esbuild": "^0.27.0 || ^0.28.0",
+          "sugarss": "^5.0.0",
+          "@types/node": "^20.19.0 || >=22.12.0",
+          "sass-embedded": "^1.70.0",
+          "@vitejs/devtools": "^0.7.1 || ^0.8.0"
+        },
+        "peer_dependencies_meta": {
+          "tsx": {
+            "optional": true
+          },
+          "jiti": {
+            "optional": true
+          },
+          "less": {
+            "optional": true
+          },
+          "sass": {
+            "optional": true
+          },
+          "yaml": {
+            "optional": true
+          },
+          "stylus": {
+            "optional": true
+          },
+          "terser": {
+            "optional": true
+          },
+          "esbuild": {
+            "optional": true
+          },
+          "sugarss": {
+            "optional": true
+          },
+          "@types/node": {
+            "optional": true
+          },
+          "sass-embedded": {
+            "optional": true
+          },
+          "@vitejs/devtools": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "id": "npm:@vitejs/plugin-react",
+      "ecosystem": "npm",
+      "package": "@vitejs/plugin-react",
+      "version": "6.3.0",
+      "layer": "web",
+      "source": "https://registry.npmjs.org/%40vitejs%2Fplugin-react/6.3.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": "^20.19.0 || >=22.12.0"
+        },
+        "peer_dependencies": {
+          "vite": "^8.0.0",
+          "oxc-transform-react": ">=0.152.0 <0.157.0",
+          "@rolldown/plugin-babel": "^0.1.7 || ^0.2.0 || ^0.3.0",
+          "babel-plugin-react-compiler": "^1.0.0"
+        },
+        "peer_dependencies_meta": {
+          "oxc-transform-react": {
+            "optional": true
+          },
+          "@rolldown/plugin-babel": {
+            "optional": true
+          },
+          "babel-plugin-react-compiler": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "id": "npm:typescript",
+      "ecosystem": "npm",
+      "package": "typescript",
+      "version": "7.0.2",
+      "layer": "tooling",
+      "source": "https://registry.npmjs.org/typescript/7.0.2",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=16.20.0"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:tailwindcss",
+      "ecosystem": "npm",
+      "package": "tailwindcss",
+      "version": "4.3.5",
+      "layer": "ui",
+      "source": "https://registry.npmjs.org/tailwindcss/4.3.5",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {},
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:@tailwindcss/vite",
+      "ecosystem": "npm",
+      "package": "@tailwindcss/vite",
+      "version": "4.3.5",
+      "layer": "ui",
+      "source": "https://registry.npmjs.org/%40tailwindcss%2Fvite/4.3.5",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {},
+        "peer_dependencies": {
+          "vite": "^5.2.0 || ^6 || ^7 || ^8"
+        },
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:shadcn",
+      "ecosystem": "npm",
+      "package": "shadcn",
+      "version": "4.23.0",
+      "layer": "tooling",
+      "source": "https://registry.npmjs.org/shadcn/4.23.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=20.18.1"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:zustand",
+      "ecosystem": "npm",
+      "package": "zustand",
+      "version": "5.1.0",
+      "layer": "state",
+      "source": "https://registry.npmjs.org/zustand/5.1.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=12.20.0"
+        },
+        "peer_dependencies": {
+          "immer": ">=9.0.6",
+          "react": ">=18.0.0",
+          "@types/react": ">=18.0.0",
+          "use-sync-external-store": ">=1.2.0"
+        },
+        "peer_dependencies_meta": {
+          "immer": {
+            "optional": true
+          },
+          "react": {
+            "optional": true
+          },
+          "@types/react": {
+            "optional": true
+          },
+          "use-sync-external-store": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "id": "npm:@tanstack/react-query",
+      "ecosystem": "npm",
+      "package": "@tanstack/react-query",
+      "version": "5.107.1",
+      "layer": "state",
+      "source": "https://registry.npmjs.org/%40tanstack%2Freact-query/5.107.1",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {},
+        "peer_dependencies": {
+          "react": "^18 || ^19",
+          "@types/react": "^18 || ^19"
+        },
+        "peer_dependencies_meta": {
+          "@types/react": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "id": "npm:@tanstack/react-router",
+      "ecosystem": "npm",
+      "package": "@tanstack/react-router",
+      "version": "1.170.46",
+      "layer": "state",
+      "source": "https://registry.npmjs.org/%40tanstack%2Freact-router/1.170.46",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=20.19"
+        },
+        "peer_dependencies": {
+          "react": ">=18.0.0 || >=19.0.0",
+          "react-dom": ">=18.0.0 || >=19.0.0"
+        },
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:@tauri-apps/api",
+      "ecosystem": "npm",
+      "package": "@tauri-apps/api",
+      "version": "2.12.4",
+      "layer": "desktop",
+      "source": "https://registry.npmjs.org/%40tauri-apps%2Fapi/2.12.4",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {},
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:@tauri-apps/cli",
+      "ecosystem": "npm",
+      "package": "@tauri-apps/cli",
+      "version": "2.12.4",
+      "layer": "tooling",
+      "source": "https://registry.npmjs.org/%40tauri-apps%2Fcli/2.12.4",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">= 10"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:vitest",
+      "ecosystem": "npm",
+      "package": "vitest",
+      "version": "5.1.0",
+      "layer": "testing",
+      "source": "https://registry.npmjs.org/vitest/5.1.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+        },
+        "peer_dependencies": {
+          "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+          "jsdom": "*",
+          "happy-dom": "*",
+          "@vitest/ui": "5.1.0",
+          "@types/node": "^22.0.0 || >=24.0.0",
+          "@edge-runtime/vm": "*",
+          "@opentelemetry/api": "^1.9.0",
+          "@vitest/coverage-v8": "5.1.0",
+          "@vitest/browser-preview": "5.1.0",
+          "@vitest/coverage-istanbul": "5.1.0",
+          "@vitest/browser-playwright": "5.1.0",
+          "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+        },
+        "peer_dependencies_meta": {
+          "vite": {
+            "optional": false
+          },
+          "jsdom": {
+            "optional": true
+          },
+          "happy-dom": {
+            "optional": true
+          },
+          "@vitest/ui": {
+            "optional": true
+          },
+          "@types/node": {
+            "optional": true
+          },
+          "@edge-runtime/vm": {
+            "optional": true
+          },
+          "@opentelemetry/api": {
+            "optional": true
+          },
+          "@vitest/coverage-v8": {
+            "optional": true
+          },
+          "@vitest/browser-preview": {
+            "optional": true
+          },
+          "@vitest/coverage-istanbul": {
+            "optional": true
+          },
+          "@vitest/browser-playwright": {
+            "optional": true
+          },
+          "@vitest/browser-webdriverio": {
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "id": "npm:@playwright/test",
+      "ecosystem": "npm",
+      "package": "@playwright/test",
+      "version": "1.65.0",
+      "layer": "testing",
+      "source": "https://registry.npmjs.org/%40playwright%2Ftest/1.65.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=20"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    },
+    {
+      "id": "npm:pnpm",
+      "ecosystem": "npm",
+      "package": "pnpm",
+      "version": "12.18.0",
+      "layer": "tooling",
+      "source": "https://registry.npmjs.org/pnpm/12.18.0",
+      "metadata_verified": true,
+      "metadata_checked_at": "2026-11-12T23:56:47.489Z",
+      "metadata": {
+        "engines": {
+          "node": ">=18"
+        },
+        "peer_dependencies": {},
+        "peer_dependencies_meta": {}
+      }
+    }
+  ],
+  "boundaries": {
+    "domain_forbidden_dependencies": [
+      "tokio",
+      "axum",
+      "tower",
+      "tower-http",
+      "sqlx",
+      "tauri",
+      "wasmtime",
+      "wasmtime-wasi",
+      "react",
+      "react-dom"
+    ],
+    "authoritative_state": "rust_core",
+    "remote_state": "tanstack_query",
+    "ephemeral_state": "zustand",
+    "desktop_policy": "same_application_commands",
+    "extension_transport": "versioned_language_neutral_contracts",
+    "rust_internal_abi_plugins": false,
+    "untrusted_execution": "verified_out_of_process_isolation"
+  },
+  "ui_component_policy": {
+    "generator": "shadcn",
+    "base": "radix",
+    "source_review_required": true,
+    "actual_component_dependencies_status": "not_resolved"
+  },
+  "validation_status": {
+    "version_metadata": "verified",
+    "dependency_resolution": "not_run",
+    "rust_build": "not_run",
+    "web_build": "not_run",
+    "database_tests": "not_run",
+    "desktop_tests": "not_run",
+    "differential_tests": "specified",
+    "performance_tests": "not_run"
+  },
+  "reference_projects": [
+    {
+      "name": "AIRI",
+      "repository": "moeru-ai/airi",
+      "revision": "0f77855b45c81314090abd5f6a77361cb5bd32cc",
+      "frameworks": [
+        "Vue",
+        "Vite",
+        "Pinia",
+        "Electron"
+      ],
+      "manifest_paths": [
+        "apps/stage-web/package.json",
+        "apps/stage-tamagotchi/package.json",
+        "pnpm-workspace.yaml"
+      ],
+      "sources": [
+        "https://github.com/moeru-ai/airi/blob/0f77855b45c81314090abd5f6a77361cb5bd32cc/apps/stage-web/package.json",
+        "https://github.com/moeru-ai/airi/blob/0f77855b45c81314090abd5f6a77361cb5bd32cc/apps/stage-tamagotchi/package.json",
+        "https://github.com/moeru-ai/airi/blob/0f77855b45c81314090abd5f6a77361cb5bd32cc/pnpm-workspace.yaml"
+      ],
+      "validation_scope": "source_manifest_only"
+    },
+    {
+      "name": "Jan",
+      "repository": "menloresearch/jan",
+      "revision": "ea98bd3e0fe3dcf6374ec31f23045776d7471356",
+      "frameworks": [
+        "React",
+        "Vite",
+        "Tauri"
+      ],
+      "manifest_paths": [
+        "web-app/package.json",
+        "src-tauri/Cargo.toml"
+      ],
+      "sources": [
+        "https://github.com/menloresearch/jan/blob/ea98bd3e0fe3dcf6374ec31f23045776d7471356/web-app/package.json",
+        "https://github.com/menloresearch/jan/blob/ea98bd3e0fe3dcf6374ec31f23045776d7471356/src-tauri/Cargo.toml"
+      ],
+      "validation_scope": "source_manifest_only"
+    },
+    {
+      "name": "Open WebUI",
+      "repository": "open-webui/open-webui",
+      "revision": "b0e6098e940942281d9c83f3529ea117287a3a22",
+      "frameworks": [
+        "Svelte",
+        "SvelteKit"
+      ],
+      "manifest_paths": [
+        "package.json"
+      ],
+      "sources": [
+        "https://github.com/open-webui/open-webui/blob/b0e6098e940942281d9c83f3529ea117287a3a22/package.json"
+      ],
+      "validation_scope": "source_manifest_only"
+    },
+    {
+      "name": "LobeHub",
+      "repository": "lobehub/lobehub",
+      "revision": "69f8dcdfae1c59a5ffb703b3a0187223987bcd56",
+      "frameworks": [
+        "React",
+        "Next.js",
+        "Vite"
+      ],
+      "manifest_paths": [
+        "package.json"
+      ],
+      "sources": [
+        "https://github.com/lobehub/lobehub/blob/69f8dcdfae1c59a5ffb703b3a0187223987bcd56/package.json"
+      ],
+      "validation_scope": "source_manifest_only"
+    }
+  ]
+}

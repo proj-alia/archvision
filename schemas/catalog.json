@@ -1,0 +1,96 @@
+{
+  "design_status": "draft",
+  "catalog_version": "1.0",
+  "entries": [
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "action",
+      "path": "schemas/core/action.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "authorization",
+      "path": "schemas/core/authorization.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "capability",
+      "path": "schemas/core/capability.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "decision",
+      "path": "schemas/core/decision.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "delivery",
+      "path": "schemas/core/delivery.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "event",
+      "path": "schemas/core/event.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "expression",
+      "path": "schemas/core/expression.schema.json"
+    },
+    {
+      "family": "core",
+      "version": "1.0",
+      "name": "memory",
+      "path": "schemas/core/memory.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "binding",
+      "path": "schemas/extension/binding.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "contract",
+      "path": "schemas/extension/contract.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "control",
+      "path": "schemas/extension/control.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "grant",
+      "path": "schemas/extension/grant.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "manifest",
+      "path": "schemas/extension/manifest.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "message",
+      "path": "schemas/extension/message.schema.json"
+    },
+    {
+      "family": "extension",
+      "version": "1.0",
+      "name": "session",
+      "path": "schemas/extension/session.schema.json"
+    }
+  ]
+}

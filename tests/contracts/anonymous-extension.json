@@ -1,0 +1,333 @@
+{
+  "status": "specified",
+  "runtime_executed": false,
+  "core_changes_allowed": false,
+  "provider_manifest": {
+    "protocol_version": "1.0",
+    "manifest_version": "1.0",
+    "extension_id": "org.example.x",
+    "package_version": "2.0.0",
+    "host_protocol_range": "^1.0.0",
+    "entrypoints": [
+      {
+        "runtime_id": "runtime.external",
+        "artifact_ref": "package:entry",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "requested_permissions": [],
+    "provides": [
+      {
+        "contract_id": "org.example.x",
+        "version": "1.0.0",
+        "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+      }
+    ],
+    "uses": [],
+    "contributions": [],
+    "isolation_requirements": {
+      "profile_id": "isolation.restricted",
+      "memory_bytes": 1048576,
+      "cpu_millis": 1000,
+      "max_concurrency": 1
+    }
+  },
+  "service_contract": {
+    "protocol_version": "1.0",
+    "contract_id": "org.example.x",
+    "version": "1.0.0",
+    "methods": [
+      {
+        "name": "read",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "output_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "value"
+          ]
+        },
+        "side_effect_class": "read",
+        "supports_cancel": true
+      }
+    ],
+    "events": [
+      {
+        "name": "signal",
+        "payload_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unforeseen_dimension": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "unforeseen_dimension"
+          ]
+        }
+      }
+    ],
+    "streams": []
+  },
+  "consumer_manifest": {
+    "protocol_version": "1.0",
+    "manifest_version": "1.0",
+    "extension_id": "org.example.y",
+    "package_version": "2.0.0",
+    "host_protocol_range": "^1.0.0",
+    "entrypoints": [
+      {
+        "runtime_id": "runtime.external",
+        "artifact_ref": "package:entry",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "requested_permissions": [],
+    "provides": [],
+    "uses": [
+      {
+        "contract_id": "org.example.x",
+        "version_range": "^1.0.0",
+        "required": true
+      }
+    ],
+    "contributions": [
+      {
+        "contribution_id": "org.example.project",
+        "type_id": "org.unseen.projection",
+        "contract_ref": {
+          "contract_id": "org.example.x",
+          "version": "1.0.0",
+          "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac"
+        }
+      }
+    ],
+    "isolation_requirements": {
+      "profile_id": "isolation.restricted",
+      "memory_bytes": 1048576,
+      "cpu_millis": 1000,
+      "max_concurrency": 1
+    }
+  },
+  "scenarios": [
+    {
+      "id": "unknown_type",
+      "given": "Core types are frozen before X/Y are authored.",
+      "events": [
+        "x.validated",
+        "x.ready",
+        "y.ready",
+        "binding.created",
+        "observation.received"
+      ],
+      "assertions": [
+        "No X/Y business branch in core",
+        "Payload schema is registered and checked",
+        "Only authorized projection reaches cognition"
+      ]
+    },
+    {
+      "id": "late_dependency",
+      "given": "Y starts before X.",
+      "events": [
+        "y.waiting_dependencies",
+        "x.ready",
+        "y.starting",
+        "y.ready"
+      ],
+      "assertions": [
+        "No setup before dependencies",
+        "Snapshot resolution prevents missed readiness"
+      ]
+    },
+    {
+      "id": "cycle_conflict",
+      "given": "Required dependency cycle or duplicate provider.",
+      "events": [
+        "activation.rejected"
+      ],
+      "assertions": [
+        "Diagnostic identifies cycle/conflict",
+        "No partial registration"
+      ]
+    },
+    {
+      "id": "setup_rollback",
+      "given": "X publishes one of two reserved declarations, then fails.",
+      "events": [
+        "registration.reserved",
+        "setup.failed",
+        "registration.rolled_back"
+      ],
+      "assertions": [
+        "No provider is externally ready",
+        "All reservations released"
+      ]
+    },
+    {
+      "id": "stop_during_setup",
+      "given": "Setup returns after stop.",
+      "events": [
+        "session.stopping",
+        "session.stopped",
+        "setup.late_return"
+      ],
+      "assertions": [
+        "No late publication",
+        "Old cleanup cannot revoke replacement"
+      ]
+    },
+    {
+      "id": "provider_replacement",
+      "given": "Generation 2 replaces generation 1 during a call.",
+      "events": [
+        "binding.revoked",
+        "provider.ready",
+        "result.late"
+      ],
+      "assertions": [
+        "Old result cannot commit stale state",
+        "Uncertain effects reconciled",
+        "New binding targets generation 2"
+      ]
+    },
+    {
+      "id": "revocation",
+      "given": "Consent revoked after proposal, before dispatch.",
+      "events": [
+        "decision.proposed",
+        "privacy.consent.revoked",
+        "action.rejected"
+      ],
+      "assertions": [
+        "No external dispatch",
+        "No stream continues after revoke"
+      ]
+    },
+    {
+      "id": "data_congestion",
+      "given": "Data queue reaches limit.",
+      "events": [
+        "stream.backpressured",
+        "control.cancel",
+        "session.stopped"
+      ],
+      "assertions": [
+        "Control remains responsive",
+        "Gap reported for lossy observations"
+      ]
+    },
+    {
+      "id": "disconnect",
+      "given": "Connection drops after a write was dispatched.",
+      "events": [
+        "binding.withdrawn",
+        "action.uncertain",
+        "runtime.reconnected"
+      ],
+      "assertions": [
+        "No blind effect replay",
+        "Reauth and new binding",
+        "Resume only with supported cursor"
+      ]
+    },
+    {
+      "id": "delete_race",
+      "given": "A summarizer read data before deletion.",
+      "events": [
+        "privacy.deletion.requested",
+        "barrier.advanced",
+        "candidate.rejected"
+      ],
+      "assertions": [
+        "No stale derived write",
+        "Backup restore honors tombstone"
+      ]
+    },
+    {
+      "id": "history_after_uninstall",
+      "given": "X is removed after legitimate use.",
+      "events": [
+        "provider.withdrawn",
+        "context.revoked",
+        "self.capability.updated"
+      ],
+      "assertions": [
+        "History retains versioned evidence",
+        "SelfModel reports current unavailability",
+        "Deleted private data remains inaccessible"
+      ]
+    },
+    {
+      "id": "egress_audience_change",
+      "given": "Audience changes while generation is in flight.",
+      "events": [
+        "decision.proposed",
+        "audience.changed",
+        "egress.rejected"
+      ],
+      "assertions": [
+        "No cached private response sent",
+        "Recompile before new delivery"
+      ]
+    },
+    {
+      "id": "partial_delivery",
+      "given": "Text delivered, another projection interrupted.",
+      "events": [
+        "expression.delivery.started",
+        "expression.delivery.interrupted"
+      ],
+      "assertions": [
+        "Receipts preserve per-channel ranges",
+        "Delivered does not imply understood"
+      ]
+    },
+    {
+      "id": "cross_scene_continuity",
+      "given": "A joint project pauses and resumes in a new permitted scene.",
+      "events": [
+        "commitment.paused",
+        "context.rebuilt",
+        "commitment.resumed"
+      ],
+      "assertions": [
+        "Same identity and authorized history",
+        "No invented activity during downtime"
+      ]
+    },
+    {
+      "id": "learning_transfer",
+      "given": "A correction is evaluated in held-out tasks.",
+      "events": [
+        "learning.proposed",
+        "learning.evaluated",
+        "learning.committed"
+      ],
+      "assertions": [
+        "Behavior changes in relevant unseen cases",
+        "Ablation separates architecture effect",
+        "No hardcoded novel dialogue"
+      ]
+    }
+  ]
+}

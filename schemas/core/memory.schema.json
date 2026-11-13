@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evidence Memory 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "data_policy": {
+      "$ref": "#/$defs/data_policy"
+    },
+    "memory_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "memory_type": {
+      "type": "string",
+      "enum": [
+        "episodic",
+        "semantic",
+        "procedural",
+        "relational",
+        "autobiographical",
+        "working",
+        "core"
+      ]
+    },
+    "source_kind": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "observed",
+        "reported",
+        "inferred",
+        "hypothetical",
+        "fictional"
+      ]
+    },
+    "evidence_status": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "supported",
+        "confirmed",
+        "disputed"
+      ]
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "validated",
+        "active",
+        "superseded",
+        "retracted",
+        "deleted"
+      ]
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_event_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "derived_from": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 0,
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effective_to": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "fiction_scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "deletion_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "read_set": {
+      "$ref": "#/$defs/read_set"
+    }
+  },
+  "required": [
+    "schema_version",
+    "scope",
+    "data_policy",
+    "memory_id",
+    "subject_id",
+    "memory_type",
+    "source_kind",
+    "evidence_status",
+    "lifecycle",
+    "source_event_ids",
+    "derived_from",
+    "effective_from",
+    "effective_to",
+    "recorded_at",
+    "read_set"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "lifecycle": {
+                "enum": [
+                  "validated",
+                  "active"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "evidence_status": {
+                "const": "confirmed"
+              }
+            }
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "source_event_ids": {
+            "minItems": 1
+          },
+          "source_kind": {
+            "not": {
+              "const": "unknown"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "fictional"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "fiction_scope"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "lifecycle": {
+            "const": "deleted"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "deletion_ref"
+        ],
+        "not": {
+          "required": [
+            "content"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "content"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access_scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "tenant_id",
+        "identity_id",
+        "branch_id",
+        "access_scope"
+      ]
+    },
+    "data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": [
+            "public",
+            "internal",
+            "private",
+            "restricted"
+          ]
+        },
+        "retention_policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineage_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "owner_id",
+        "purpose",
+        "classification",
+        "retention_policy_id",
+        "lineage_ids"
+      ]
+    },
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    },
+    "read_set": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "resource_id",
+          "kind",
+          "revision"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "$comment": "Unpublished first-version design draft. Structural validation does not prove runtime behavior."
+}

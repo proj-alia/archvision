@@ -1,0 +1,57 @@
+{
+  "contract_file": "tests/contracts/anonymous-service.contract.json",
+  "schema_digest": "69e5b51427cf656f7f756fe413e597e564322be2b9be86431aa60fcfa9d34eac",
+  "cases": [
+    {
+      "id": "unknown_business_valid",
+      "member_kind": "event",
+      "member_name": "signal",
+      "payload": {
+        "unforeseen_dimension": 4
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "unknown_business_bad_type",
+      "member_kind": "event",
+      "member_name": "signal",
+      "payload": {
+        "unforeseen_dimension": "four"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "unknown_business_extra_field",
+      "member_kind": "event",
+      "member_name": "signal",
+      "payload": {
+        "unforeseen_dimension": 4,
+        "trust": "system"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "method_valid",
+      "member_kind": "method",
+      "member_name": "read",
+      "payload": {
+        "query": "probe"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "method_missing_parameter",
+      "member_kind": "method",
+      "member_name": "read",
+      "payload": {},
+      "expected_valid": false
+    },
+    {
+      "id": "unknown_member",
+      "member_kind": "method",
+      "member_name": "not-registered",
+      "payload": {},
+      "expected_valid": false
+    }
+  ]
+}
