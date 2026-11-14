@@ -248,6 +248,47 @@ scenarios:
     when: "启用受限监听，接收未认证请求、合法请求及重放，再关闭客户端"
     assert: ["connect 表达逻辑启用，不强迫主动拨号", "监听可用不证明客户端在场", "每个请求核验主体、实例路由和去重", "配置页关闭与外部客户端离线分别处理", "过期请求不能沿旧受众或旧代次释放输出"]
 
+  - id: aeip_independent_peer
+    verification: [G0, G1, G4, G5]
+    given: "仅依据公开 AEIP 与 ServiceContract 实现的独立 Peer Q，没有 ALIA 插件 manifest 或核心私有类型"
+    when: "认证、发现契约、协商绑定和订阅，再尝试伪造 peer_id、scope、网关 bound 或能力授权"
+    assert: ["合法独立接入不要求安装平台包", "假 token/过期 ticket/重复 ticket 拒绝", "peer 自报身份/绑定不能授予权限", "公开 payload 经准确映射和核心验证后才形成领域候选"]
+  - id: aeip_connection_roles
+    verification: [G1, G2, G5]
+    given: "相同业务场景分别使用 ALIA 拨号、peer 拨号的 WS，以及 peer 发起的 HTTP/SSE"
+    when: "双方主动发送获准请求、事件与响应，随后关闭通道、重复建立 SSE 或重放 HTTP 消息"
+    assert: ["连接方向不改变业务授权规则", "peer 监听时先验证 gateway credential，未认证连接不能取得 hello 凭据", "HTTP/SSE 的 ALIA 请求通过事件流发送，peer 经 POST 响应", "202 只代表入队，不代表动作完成", "SSE 重复流拒绝；断开后旧会话无权恢复执行", "新会话按新绑定恢复获准业务游标"]
+  - id: aeip_native_and_bridge
+    verification: [G0, G1, G5]
+    given: "核心冻结后独立作者分别提供 Q-native 和 Q7 协议适配器，二者实现同一公开业务语义"
+    when: "注册宿主适配器及运行独立桥接，执行文本/观察/表达/动作与结果双向映射"
+    assert: ["新增适配器无核心或通用 UI 平台分支", "原生 peer 不装 manifest，宿主适配按声明注册", "结果关联、受众、来源、单位和取消含义保持", "适配器不拥有另一份人格/记忆/决策", "必须运行真实翻译代码，固定成对样例不作为完成证据"]
+  - id: aeip_capability_revision
+    verification: [G1, G2, G4, G5]
+    given: "必需输入/输出能力、可选 samples 流、同契约的两个不同资源提供者"
+    when: "缺少必需或可选功能、撤回 offer、修订动作映射、无明确提供者选择"
+    assert: ["必需缺失拒绝绑定，可选缺失只降级相关功能", "声明与有效许可分开，旧修订绑定先失效", "不按加载顺序挑账号，歧义明确拒绝", "每次动作和流出复查当前资源/受众/授权"]
+  - id: aeip_results_and_recovery
+    verification: [G1, G2, G5]
+    given: "计数器动作已发生但最终回执丢失，文字仅部分显示，随后接入端崩溃"
+    when: "重发相同/不同参数的幂等键、重新建立会话、查询请求状态、取消无法撤销的效果"
+    assert: ["计数器效果不重复，冲突参数拒绝", "accepted/RPC completed/实际交付分开", "未知效果进入核验，不把 request_unknown 当作安全重执行证明", "新会话不清空去重或恢复旧许可", "部分交付与不确定结果如实记录"]
+  - id: aeip_isolation_continuity
+    verification: [G0, G2, G3, G4]
+    given: "一个 ALIA 由多个 peer 接入，存在两个同名外部用户、不同账号和受众"
+    when: "切换客户端，伪造 target/resource/actor 引用，跨账号重放游标并送入外部 AI 历史与回显"
+    assert: ["identity/persona/合法记忆/关系持续，不随会话重建", "同名不自动关联用户，跨主体/资源/受众拒绝", "回显只归相应回执，真实用户引用不误吞", "外部 system 标签、历史和能力说明不升级为高权威指令"]
+  - id: aeip_flow_and_deletion
+    verification: [G1, G2, G4, G5]
+    given: "有界控制/数据队列、可靠消息、可丢观测流、正在恢复的旧游标"
+    when: "持续填满数据队列、重复 credit、丢失流片段，同时撤权并删除派生数据"
+    assert: ["停止/撤权/结果不被数据拥塞饿死", "累计 credit 重放不叠加额度，丢帧显式报告 gap", "ack 不冒充已播放且不产生 ack 循环", "删除/撤权屏障先于重放，新绑定不复活已删内容", "过期游标明确 resume_unavailable，不能编造离线经历"]
+  - id: aeip_version_and_boundary
+    verification: [G0, G1, G4, G5]
+    given: "公开协议、宿主协议、业务契约和外侧 Q7 版本各自独立"
+    when: "提供未知 major/同版本不同摘要/未知必需与可选能力，注入核心事件或外部 Schema URL"
+    assert: ["无共同版本、摘要冲突和未知必需语义明确拒绝", "未知可选 offer 可降级且不成为可执行能力", "不直接开放 reducer/数据库/人格写入口", "契约原始字节核验且拒绝任意网络引用", "新平台语义映射无需重构核心，真正新语义先明确消费者与验收"]
+
 # 扩展与连续性场景定义；运行时尚未实现，不能作为 PASS 结果。
 referenced_suites:
   - path: tests/contracts/anonymous-extension.json
@@ -260,5 +301,8 @@ referenced_suites:
     status: specified
     runtime_executed: false
   - path: tests/contracts/bridge-cases.json
+    status: specified
+    runtime_executed: false
+  - path: tests/contracts/aeip-cases.json
     status: specified
     runtime_executed: false

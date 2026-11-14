@@ -455,6 +455,28 @@
         "bridge_single_delivery",
         "bridge_panel_application_boundary"
       ]
+    },
+    {
+      "document": "docs/appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md",
+      "markers": [
+        "协议统一、连接方式解耦、平台能力适配",
+        "原生应用只实现公开协议",
+        "alia.transport.websocket",
+        "alia.transport.http-sse",
+        "ExtensionSession",
+        "Adapter SPI",
+        "request_status",
+        "resume_unavailable",
+        "idempotency_conflict",
+        "aeip_independent_peer",
+        "aeip_connection_roles",
+        "aeip_native_and_bridge",
+        "aeip_capability_revision",
+        "aeip_results_and_recovery",
+        "aeip_isolation_continuity",
+        "aeip_flow_and_deletion",
+        "aeip_version_and_boundary"
+      ]
     }
   ]
 }

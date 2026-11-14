@@ -7511,6 +7511,340 @@
         }
       },
       "expected_valid": false
+    },
+    {
+      "id": "valid_aeip_hello",
+      "schema": "schemas/aeip/message.schema.json",
+      "expected_valid": true,
+      "data": {
+        "aeip_version": "1.0",
+        "message_id": "message-hello",
+        "kind": "hello",
+        "sent_at": "2026-11-14T00:00:00Z",
+        "body": {
+          "peer_id": "org.example.peer-q",
+          "implementation": {
+            "name": "Peer Q specification fixture",
+            "version": "Q7"
+          },
+          "versions": [
+            "1.0"
+          ],
+          "transports": [
+            "alia.transport.websocket",
+            "alia.transport.http-sse"
+          ],
+          "authentication": {
+            "scheme": "bearer",
+            "token": "fixture-not-a-credential"
+          }
+        }
+      }
+    },
+    {
+      "id": "valid_aeip_adapter",
+      "schema": "schemas/aeip/adapter.schema.json",
+      "expected_valid": true,
+      "data": {
+        "schema_version": "1.0",
+        "adapter_id": "org.example.q7-adapter",
+        "version": "1.0.0",
+        "native_protocol": {
+          "id": "Q7",
+          "versions": [
+            "7"
+          ]
+        },
+        "execution_location": "alia_host",
+        "transport_bindings": [
+          "alia.transport.websocket",
+          "alia.transport.http-sse"
+        ],
+        "configuration_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "connection_mode": {
+              "type": "string",
+              "enum": [
+                "dial_peer",
+                "listen_for_peer"
+              ]
+            },
+            "endpoint_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "connection_mode",
+            "endpoint_ref"
+          ]
+        },
+        "operations": [
+          "describe",
+          "start",
+          "stop",
+          "discover",
+          "ingest",
+          "dispatch",
+          "cancel",
+          "inspect",
+          "diagnose"
+        ],
+        "mappings": [
+          {
+            "direction": "inbound",
+            "native_member": "user.say",
+            "contract_ref": {
+              "contract_id": "alia.peer.interaction",
+              "version": "1.0.0",
+              "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+            },
+            "member_kind": "event",
+            "member_id": "input",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "payload_schema"
+          },
+          {
+            "direction": "outbound",
+            "native_member": "display.text",
+            "contract_ref": {
+              "contract_id": "alia.peer.interaction",
+              "version": "1.0.0",
+              "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+            },
+            "member_kind": "method",
+            "member_id": "deliver",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "input_schema"
+          },
+          {
+            "direction": "inbound",
+            "native_member": "display.result",
+            "contract_ref": {
+              "contract_id": "alia.peer.interaction",
+              "version": "1.0.0",
+              "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+            },
+            "member_kind": "event",
+            "member_id": "receipt",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "payload_schema"
+          },
+          {
+            "direction": "inbound",
+            "native_member": "sensor.sample",
+            "contract_ref": {
+              "contract_id": "alia.peer.observation",
+              "version": "1.0.0",
+              "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+            },
+            "member_kind": "event",
+            "member_id": "observe",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "payload_schema"
+          },
+          {
+            "direction": "outbound",
+            "native_member": "counter.add",
+            "contract_ref": {
+              "contract_id": "org.example.counter",
+              "version": "1.0.0",
+              "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+            },
+            "member_kind": "method",
+            "member_id": "increment",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "input_schema"
+          },
+          {
+            "direction": "inbound",
+            "native_member": "counter.result",
+            "contract_ref": {
+              "contract_id": "org.example.counter",
+              "version": "1.0.0",
+              "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+            },
+            "member_kind": "method",
+            "member_id": "increment",
+            "required_features": [],
+            "semantics": {
+              "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+              "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+              "units": "Text codepoints or counter integers; no conversion without declaration.",
+              "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+              "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+            },
+            "schema_slot": "output_schema"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valid_protocol_adapter_contribution",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": true,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.q7",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:q7-adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.transport",
+            "actions": [
+              "connect"
+            ],
+            "reason": "Only the configured synthetic Q7 endpoint."
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.peer.interaction",
+            "version": "1.0.0",
+            "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+          },
+          {
+            "contract_id": "alia.peer.observation",
+            "version": "1.0.0",
+            "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+          },
+          {
+            "contract_id": "org.example.counter",
+            "version": "1.0.0",
+            "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.q7.protocol",
+            "type_id": "alia.contribution.protocol-adapter",
+            "contract_ref": {
+              "contract_id": "alia.peer.interaction",
+              "version": "1.0.0",
+              "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+            },
+            "descriptor_ref": {
+              "path": "adapter.json",
+              "sha256": "4966766091f6ef0bb30605a682a58d9e72e8192458e571a4768402ca6ea76c76"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
+    },
+    {
+      "id": "protocol_adapter_requires_descriptor",
+      "schema": "schemas/extension/manifest.schema.json",
+      "expected_valid": false,
+      "data": {
+        "protocol_version": "1.0",
+        "manifest_version": "1.0",
+        "extension_id": "org.example.q7",
+        "package_version": "1.0.0",
+        "host_protocol_range": "^1.0.0",
+        "entrypoints": [
+          {
+            "runtime_id": "runtime.external",
+            "artifact_ref": "example:q7-adapter-not-implemented",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "requested_permissions": [
+          {
+            "scope": "connector.transport",
+            "actions": [
+              "connect"
+            ],
+            "reason": "Only the configured synthetic Q7 endpoint."
+          }
+        ],
+        "provides": [
+          {
+            "contract_id": "alia.peer.interaction",
+            "version": "1.0.0",
+            "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+          },
+          {
+            "contract_id": "alia.peer.observation",
+            "version": "1.0.0",
+            "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+          },
+          {
+            "contract_id": "org.example.counter",
+            "version": "1.0.0",
+            "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+          }
+        ],
+        "uses": [],
+        "contributions": [
+          {
+            "contribution_id": "org.example.q7.protocol",
+            "type_id": "alia.contribution.protocol-adapter",
+            "contract_ref": {
+              "contract_id": "alia.peer.interaction",
+              "version": "1.0.0",
+              "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+            }
+          }
+        ],
+        "isolation_requirements": {
+          "profile_id": "isolation.restricted",
+          "memory_bytes": 1048576,
+          "cpu_millis": 1000,
+          "max_concurrency": 1
+        }
+      }
     }
   ]
 }

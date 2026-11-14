@@ -247,6 +247,20 @@
           "value": "99.0"
         }
       ]
+    },
+    {
+      "id": "reject_unknown_aeip_version",
+      "expected_valid": false,
+      "mutations": [
+        {
+          "path": [
+            "contract_versions",
+            "aeip"
+          ],
+          "value": "2.0",
+          "op": "set"
+        }
+      ]
     }
   ]
 }

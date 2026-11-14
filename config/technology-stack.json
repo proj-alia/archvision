@@ -13,7 +13,8 @@
   "contract_versions": {
     "core": "1.0",
     "extension": "1.0",
-    "json_schema": "2020-12"
+    "json_schema": "2020-12",
+    "aeip": "1.0"
   },
   "version_policy": {
     "channel": "stable",

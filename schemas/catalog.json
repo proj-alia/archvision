@@ -109,6 +109,18 @@
       "version": "1.0",
       "name": "setup-session",
       "path": "schemas/extension/setup-session.schema.json"
+    },
+    {
+      "family": "aeip",
+      "version": "1.0",
+      "name": "message",
+      "path": "schemas/aeip/message.schema.json"
+    },
+    {
+      "family": "aeip",
+      "version": "1.0",
+      "name": "adapter",
+      "path": "schemas/aeip/adapter.schema.json"
     }
   ],
   "service_contracts": [
@@ -129,6 +141,24 @@
       "version": "1.0.0",
       "path": "schemas/services/connector-setup.contract.json",
       "schema_digest": "e4c114b6fd3eea87cef59dcec3a2d2a2e48e43684fc55c6eb77915fec2fb9c21"
+    },
+    {
+      "contract_id": "alia.peer.interaction",
+      "version": "1.0.0",
+      "path": "schemas/services/peer-interaction.contract.json",
+      "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+    },
+    {
+      "contract_id": "alia.peer.observation",
+      "version": "1.0.0",
+      "path": "schemas/services/peer-observation.contract.json",
+      "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+    },
+    {
+      "contract_id": "alia.peer.actions",
+      "version": "1.0.0",
+      "path": "schemas/services/peer-actions.contract.json",
+      "schema_digest": "862315aa620c2f6fa72106e5591b908cc3cba151cc62c92596495eaab6fe3ef6"
     }
   ]
 }

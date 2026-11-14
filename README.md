@@ -35,6 +35,8 @@ ALIA 作项目名称；品牌、角色显示名与持续身份标识独立。“
 
 A–F 全部完成且 G0–G6 通过代表首版核心验收。真实语音、视觉、形象、游戏、多端及其他开放体验分别以实际接入和体验证据验收。
 
-扩展统一安装和管理，交互与工具分别使用业务契约。官方内置 WebChat `/chat`；社区通过平台交互协议插件，在一个包中提供两侧协议的适配实现和配置贡献，WebUI 按声明生成连接表单。浏览器等工具无须聊天连接；桌宠可组合交互、渲染和工具。现有 [交互样例](config/connectors/README.md)与 [独立工具样例](config/tools/browser-read/README.md)仅为设计数据，不含可执行实现。
+扩展统一安装和管理，交互与工具分别使用业务契约。[AEIP 公开协议与适配器接口](docs/appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)区分协议语义、连接方式和平台映射：原生第三方应用可以独立实现协议，已有原生协议的应用可以通过可注册适配器接入；两条路径共用既有核心。连接发起方向不决定业务流向。
+
+官方内置 WebChat `/chat`；社区平台插件可在一个包中提供两侧适配实现和配置贡献，WebUI 按声明生成连接表单；独立 AEIP 应用无须安装平台插件。浏览器等工具无须聊天连接；桌宠可组合交互、渲染和工具。现有 [交互样例](config/connectors/README.md)、[独立工具样例](config/tools/browser-read/README.md)和 [匿名第三方端](config/aeip/anonymous-peer/README.md)仅为设计数据，不含可执行实现。
 
 设计检查入口：pwsh -NoProfile -File tests/Test-Contracts.ps1 与 pwsh -NoProfile -File tests/Test-TechnologyStack.ps1。报告默认写入仓库外临时目录。

@@ -16,7 +16,7 @@ function Read-StackJson([string]$Path) {
 }
 
 try {
-    foreach ($scriptName in @('Schema-Validation.ps1','Test-Contracts.ps1','Test-TechnologyStack.ps1')) {
+    foreach ($scriptName in @('Schema-Validation.ps1','Aeip-Checks.ps1','Test-Contracts.ps1','Test-TechnologyStack.ps1')) {
         $tokens = $null; $parseErrors = $null
         $null = [Management.Automation.Language.Parser]::ParseFile((Join-Path $PSScriptRoot $scriptName), [ref]$tokens, [ref]$parseErrors)
         Add-StackResult 'powershell-syntax' $scriptName ($parseErrors.Count -eq 0) (($parseErrors | ForEach-Object { $_.Message }) -join '; ')

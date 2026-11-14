@@ -1,0 +1,272 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEIP Adapter SPI declaration 1.0 draft",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "adapter_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "native_protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "versions"
+      ]
+    },
+    "execution_location": {
+      "type": "string",
+      "enum": [
+        "alia_host",
+        "client_plugin",
+        "standalone"
+      ]
+    },
+    "transport_bindings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "configuration_schema": {
+      "type": "object"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "describe",
+          "start",
+          "stop",
+          "discover",
+          "ingest",
+          "dispatch",
+          "cancel",
+          "inspect",
+          "diagnose"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "direction": {
+            "type": "string",
+            "enum": [
+              "inbound",
+              "outbound"
+            ]
+          },
+          "native_member": {
+            "type": "string",
+            "minLength": 1
+          },
+          "contract_ref": {
+            "$ref": "#/$defs/contract_ref"
+          },
+          "member_kind": {
+            "type": "string",
+            "enum": [
+              "method",
+              "event",
+              "stream"
+            ]
+          },
+          "member_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_features": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          },
+          "semantics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 1
+              },
+              "units": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cancellation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "receipt": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "source",
+              "audience",
+              "units",
+              "cancellation",
+              "receipt"
+            ]
+          },
+          "schema_slot": {
+            "type": "string",
+            "enum": [
+              "input_schema",
+              "output_schema",
+              "payload_schema",
+              "item_schema"
+            ]
+          }
+        },
+        "required": [
+          "direction",
+          "native_member",
+          "contract_ref",
+          "member_kind",
+          "member_id",
+          "required_features",
+          "semantics",
+          "schema_slot"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "member_kind": {
+                  "const": "method"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "schema_slot": {
+                  "enum": [
+                    "input_schema",
+                    "output_schema"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "member_kind": {
+                  "const": "event"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "schema_slot": {
+                  "enum": [
+                    "payload_schema"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "member_kind": {
+                  "const": "stream"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "schema_slot": {
+                  "enum": [
+                    "item_schema"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "adapter_id",
+    "version",
+    "native_protocol",
+    "execution_location",
+    "transport_bindings",
+    "configuration_schema",
+    "operations",
+    "mappings"
+  ],
+  "$defs": {
+    "contract_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "schema_digest": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "schema_digest"
+      ]
+    }
+  }
+}

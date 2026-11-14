@@ -1,0 +1,24 @@
+{
+  "aeip_version": "1.0",
+  "message_id": "message-hello",
+  "kind": "hello",
+  "sent_at": "2026-11-14T00:00:00Z",
+  "body": {
+    "peer_id": "org.example.peer-q",
+    "implementation": {
+      "name": "Peer Q specification fixture",
+      "version": "Q7"
+    },
+    "versions": [
+      "1.0"
+    ],
+    "transports": [
+      "alia.transport.websocket",
+      "alia.transport.http-sse"
+    ],
+    "authentication": {
+      "scheme": "bearer",
+      "token": "fixture-not-a-credential"
+    }
+  }
+}

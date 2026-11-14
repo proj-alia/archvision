@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "adapter_id": "org.example.q7-adapter",
+  "version": "1.0.0",
+  "native_protocol": {
+    "id": "Q7",
+    "versions": [
+      "7"
+    ]
+  },
+  "execution_location": "alia_host",
+  "transport_bindings": [
+    "alia.transport.websocket",
+    "alia.transport.http-sse"
+  ],
+  "configuration_schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "connection_mode": {
+        "type": "string",
+        "enum": [
+          "dial_peer",
+          "listen_for_peer"
+        ]
+      },
+      "endpoint_ref": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "connection_mode",
+      "endpoint_ref"
+    ]
+  },
+  "operations": [
+    "describe",
+    "start",
+    "stop",
+    "discover",
+    "ingest",
+    "dispatch",
+    "cancel",
+    "inspect",
+    "diagnose"
+  ],
+  "mappings": [
+    {
+      "direction": "inbound",
+      "native_member": "user.say",
+      "contract_ref": {
+        "contract_id": "alia.peer.interaction",
+        "version": "1.0.0",
+        "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+      },
+      "member_kind": "event",
+      "member_id": "input",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "payload_schema"
+    },
+    {
+      "direction": "outbound",
+      "native_member": "display.text",
+      "contract_ref": {
+        "contract_id": "alia.peer.interaction",
+        "version": "1.0.0",
+        "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+      },
+      "member_kind": "method",
+      "member_id": "deliver",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "input_schema"
+    },
+    {
+      "direction": "inbound",
+      "native_member": "display.result",
+      "contract_ref": {
+        "contract_id": "alia.peer.interaction",
+        "version": "1.0.0",
+        "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+      },
+      "member_kind": "event",
+      "member_id": "receipt",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "payload_schema"
+    },
+    {
+      "direction": "inbound",
+      "native_member": "sensor.sample",
+      "contract_ref": {
+        "contract_id": "alia.peer.observation",
+        "version": "1.0.0",
+        "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+      },
+      "member_kind": "event",
+      "member_id": "observe",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "payload_schema"
+    },
+    {
+      "direction": "outbound",
+      "native_member": "counter.add",
+      "contract_ref": {
+        "contract_id": "org.example.counter",
+        "version": "1.0.0",
+        "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+      },
+      "member_kind": "method",
+      "member_id": "increment",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "input_schema"
+    },
+    {
+      "direction": "inbound",
+      "native_member": "counter.result",
+      "contract_ref": {
+        "contract_id": "org.example.counter",
+        "version": "1.0.0",
+        "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+      },
+      "member_kind": "method",
+      "member_id": "increment",
+      "required_features": [],
+      "semantics": {
+        "source": "Preserve resource-local speaker/source IDs; gateway verifies authority.",
+        "audience": "Preserve explicit recipients; never infer cross-resource identity.",
+        "units": "Text codepoints or counter integers; no conversion without declaration.",
+        "cancellation": "Report uncertain if the original protocol cannot confirm cancellation.",
+        "receipt": "Q7 accepted is acceptance only; report actual effect or delivery separately."
+      },
+      "schema_slot": "output_schema"
+    }
+  ]
+}

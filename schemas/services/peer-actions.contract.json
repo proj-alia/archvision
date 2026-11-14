@@ -1,0 +1,57 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "alia.peer.actions",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "request",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "capability_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "arguments": {},
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "capability_ref",
+          "arguments",
+          "purpose"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "operation_ref",
+          "outcome_ref",
+          "summary"
+        ]
+      },
+      "side_effect_class": "irreversible_write",
+      "supports_cancel": true
+    }
+  ],
+  "events": [],
+  "streams": []
+}

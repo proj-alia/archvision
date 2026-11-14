@@ -166,6 +166,23 @@
                 }
               }
             }
+          },
+          {
+            "if": {
+              "properties": {
+                "type_id": {
+                  "const": "alia.contribution.protocol-adapter"
+                }
+              },
+              "required": [
+                "type_id"
+              ]
+            },
+            "then": {
+              "required": [
+                "descriptor_ref"
+              ]
+            }
           }
         ]
       },

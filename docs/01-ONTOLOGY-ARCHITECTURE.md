@@ -62,6 +62,8 @@ ContractRegistry、ExtensionHost、BindingRouter、SemanticGateway、ContextSour
 
 扩展不注册核心 reducer，不改变领域不变量。
 
+[AEIP](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)是独立外部应用的公开接入边界，与 HostControl 的包激活协议分开。原生 peer 不提供扩展 manifest；官方通用网关在内部代表受控外部资源，复用 ConnectorManager、Registry、BindingRouter 与 SemanticGateway。协议会话不等于 ExtensionSession，peer_id 不等于 Principal 或 identity_id。宿主适配器通过 SPI 接入同一语义路径，外部桥接通过 AEIP；核心无平台名称或网络角色分支。
+
 平台交互协议插件作为明确功能分类桥接 ALIA 通用交互契约与外部客户端原有协议；核心不必预知具体平台。一个逻辑连接的配置/代次归 ConnectorManager，实际传输归适配实现；共享该连接的贡献声明 connection_dependents，不能重复维护连接或扩大许可。外部客户端的 AI、Prompt、历史和角色模型不是第二份 ALIA 状态权威。
 
 ExtensionHost 统一管理扩展包，不强制统一业务协议。平台交互通过 ConnectorManager 和交互契约接入，工具通过 ServiceContract/AgentCapability 接入；模型与媒体处理按各自服务契约接入。工具可以没有任何聊天连接。一个包可组合多种贡献，桌宠等产品形态不成为核心插件类型枚举。

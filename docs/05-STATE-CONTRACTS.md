@@ -58,6 +58,12 @@ Rust/TS DTO 与首版 Schema 语义一致，不能作为另一套权威。异步
 `POST /v1/events`（提交输入，Idempotency-Key）、`GET /v1/conversations/{id}/events`（按 cursor 回放）、`GET /v1/streams`（SSE 事件推送）、`POST /v1/decisions/{id}/approve`、`GET /v1/memory`、`PATCH /v1/memory/{id}`、`POST /v1/memory/deletion-requests`、`GET /v1/identities/{id}/state`、`GET /v1/tasks`、`GET /v1/capabilities`、`GET /v1/traces/{id}`（仅调试权限）。
 所有接口需要 AuthN/AuthZ、版本、分页/流断线恢复、审计与错误码。不得直接把内部人格结构写给匿名用户。
 
+### 对外客户端协议边界
+
+[AEIP 1.0](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)使用独立 aeip_version、认证 peer、协议 session/generation、绑定和能力快照；它不复用要求 manifest 的 HostControl hello，也不把上述 WebUI 管理 API 当完整客户端协议。JSON 形状见 schemas/aeip，公开业务见 alia.peer.interaction / alia.peer.observation / alia.peer.actions。公开 ContentPart 沿用核心定义，公开交付事实由网关映射并核验 DeliveryReceipt；不得要求 peer 伪造 core scope 或已提交事件。
+
+官方网关作为受控内部提供者管理原生 peer，内部绑定引用网关的真实宿主会话及对应逻辑连接资源；外部 AEIP 会话单独关联。一个公共绑定固定内部资源、授权域、准确契约映射及代次，不能仅凭公共 binding_id 字符串访问另一账号。宿主内协议适配器的 SPI 直接复用同一应用语义，不强迫走网络。
+
 ## I. 数据归属
 
 逻辑聚合、键、约束、事务、初始化与恢复以 [存储设计](appendices/13-DATA-STORAGE.md) 为唯一来源。事件日志同样受用途、保留与删除政策约束。接口不能绕过聚合所有者直接修改表。
@@ -66,7 +72,7 @@ Rust/TS DTO 与首版 Schema 语义一致，不能作为另一套权威。异步
 
 本章定义领域语义、应用边界、目标 API 与逻辑存储责任。首版契约草案见 [Schema 目录](../schemas/README.md)。未知版本和不合法对象拒绝，不设置其他版本入口。
 
-公共契约对象：ExtensionManifest、ServiceContract、ExtensionSession、Binding、ExtensionMessage、HostControl、BindingGrant、AuthorizationRecord、DeliveryReceipt。核心对象统一 scope/data_policy；Decision/Action/Expression/Memory 候选记录 read_set。候选不能自报已授权；授权由可信 Policy 单独签发并引用。
+既有宿主与领域契约对象：ExtensionManifest、ServiceContract、ExtensionSession、Binding、ExtensionMessage、HostControl、BindingGrant、AuthorizationRecord、DeliveryReceipt；独立外部边界另由 AEIP 定义。核心对象统一 scope/data_policy；Decision/Action/Expression/Memory 候选记录 read_set。候选不能自报已授权；授权由可信 Policy 单独签发并引用。
 
 接入扩展另有 ConnectorDefinition、ConnectorInstance、SetupSession 首版 Schema；业务服务 `alia.connector.management`、`alia.connector.setup`、`alia.interaction` 精确版本/摘要登记在 Schema catalog 的 service_contracts。management 负责配置检查与连接 I/O，setup 报告认证候选，interaction 传递来源输入、端点和交付投影；不得把这些 payload 当已提交领域 Event。core Event、ContentPart、ExpressionIntent、Action 和 DeliveryReceipt 继续为唯一核心结构。
 

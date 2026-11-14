@@ -1,12 +1,13 @@
 # 首版契约草案
 
-状态：draft，尚未发布或部署。唯一设计版本为 core 1.0 / extension 1.0。
+状态：draft，尚未发布或部署。唯一设计基线为 core 1.0 / extension 1.0 / AEIP 1.0，各自承担不同边界。
 
 | 目录 | 对象 |
 |---|---|
 | core/ | event、decision、action、capability、expression、memory、authorization、delivery |
 | extension/ | manifest、contract、session、binding、message、control、grant；connector-definition、connector-instance、setup-session |
-| services/ | connector-management、connector-setup、interaction 的标准业务服务契约（*.contract.json） |
+| aeip/ | 独立客户端 message 封套及可注册 adapter 声明；不要求包 manifest |
+| services/ | connector-management、connector-setup、interaction；公开 peer-interaction、peer-observation、peer-actions 标准业务服务（*.contract.json） |
 
 [catalog.json](catalog.json) 是草案目录，不是已实现的网关。Schema 使用 JSON Schema 2020-12，自包含局部引用；不设置旧协议、隔离旧稿导入、别名或校验回退。identity_id 是持续身份，internal_agent 是事件来源类别且不证明信任或授权。
 
@@ -18,6 +19,10 @@
 4. 数据库存储验证复合归属、约束、事务和隔离，见 [数据设计](../docs/appendices/13-DATA-STORAGE.md)。
 
 服务契约 schema_digest 是分发 JSON 文件原始 UTF-8 字节的 SHA-256；ActionDigest 是完整 ActionProposal 的 RFC 8785 JCS + SHA-256。两者用途与字节定义不同。示例只核验固定样本，不实现通用 JCS 或授权服务。
+
+仓库以 .gitattributes 固定 JSON 的 LF 换行，分发使用 UTF-8 无 BOM；校验仍对实际字节求摘要，不在验证时转换字节。AEIP description 使用 base64 携带准确分发字节，二次验证 ServiceContract、摘要与本地引用限制。公开消息 payload 还须按绑定成员二次验证；形状无法证明方向、归属、能力修订、权限或效果。
+
+[公开协议](../docs/appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)分别定义 WS 两种连接方向、HTTP/SSE、业务角色、恢复与版本策略。alia.peer.interaction 为外部受限投影，网关注入内部实例和作用域；alia.peer.observation 不要求聊天会话；alia.peer.actions.request 只形成受控动作候选。公开 payload 与内部 alia.interaction 不混用。匿名 Q/Q7 资产见 [样例](../config/aeip/anonymous-peer/README.md)，没有运行 SDK、认证、翻译器或模拟客户端。
 
 manifest 格式、包版本、业务契约版本与协议版本具有独立语义。人格和认知策略是配置样例，不伪称已发布配置协议。草案修订直接同步示例和检查；真实发布后的演进依据实际消费者设计。
 

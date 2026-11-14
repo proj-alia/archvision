@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0",
+  "contract_id": "org.example.counter",
+  "version": "1.0.0",
+  "methods": [
+    {
+      "name": "increment",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "amount"
+        ]
+      },
+      "output_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "effect_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "value",
+          "effect_ref"
+        ]
+      },
+      "side_effect_class": "irreversible_write",
+      "supports_cancel": false
+    }
+  ],
+  "events": [],
+  "streams": [
+    {
+      "name": "samples",
+      "item_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "ordering": "per_stream",
+      "resume": "cursor",
+      "delivery": "lossy_observation",
+      "max_chunk_bytes": 4096
+    }
+  ]
+}

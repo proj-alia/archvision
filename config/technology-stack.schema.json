@@ -57,12 +57,16 @@
         },
         "json_schema": {
           "const": "2020-12"
+        },
+        "aeip": {
+          "const": "1.0"
         }
       },
       "required": [
         "core",
         "extension",
-        "json_schema"
+        "json_schema",
+        "aeip"
       ]
     },
     "version_policy": {

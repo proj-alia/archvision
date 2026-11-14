@@ -7,6 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $RepositoryRoot = [IO.Path]::GetFullPath($RepositoryRoot)
 . (Join-Path $PSScriptRoot 'Schema-Validation.ps1')
+. (Join-Path $PSScriptRoot 'Aeip-Checks.ps1')
 $results = [Collections.Generic.List[object]]::new()
 function Add-Result([string]$Category, [string]$Id, [bool]$Passed, [string]$Detail = '') {
     $results.Add([ordered]@{ category=$Category; id=$Id; passed=$Passed; detail=$Detail })
@@ -41,9 +42,9 @@ function Check-PayloadCases([object[]]$Cases, [hashtable]$Services, [string]$Cat
     Add-Result $Category 'unique-case-ids' (@($Cases.id | Sort-Object -Unique).Count -eq $Cases.Count)
     foreach ($case in $Cases) {
         $service = $Services[$case.contract_id]
-        $members = if ($case.member_kind -eq 'method') { @($service.methods) } else { @($service.events) }
+        $members = switch ($case.member_kind) { 'method' { $service.methods }; 'event' { $service.events }; 'stream' { $service.streams } }
         $member = @($members | Where-Object { $_.name -eq $case.member_name })
-        $allowedSlots = if ($case.member_kind -eq 'method') { @('input_schema','output_schema') } else { @('payload_schema') }
+        $allowedSlots = switch ($case.member_kind) { 'method' { 'input_schema'; 'output_schema' }; 'event' { 'payload_schema' }; 'stream' { 'item_schema' } }
         $resolved = $null -ne $service -and $member.Count -eq 1 -and $case.schema_slot -in $allowedSlots
         Add-Result $Category ($case.id+':member') $resolved
         $valid = $false
@@ -192,7 +193,8 @@ try {
         $value=$pair.alia_payload
         foreach ($token in $pair.text_pointer.TrimStart('/').Split('/')) {
             $token=$token.Replace('~1','/').Replace('~0','~')
-            $value=if ($value -is [array]) { $value[[int]$token] } else { $value.$token }
+            # Assign inside the branch: pipeline output unwraps singleton arrays.
+            if ($value -is [array]) { $value=$value[[int]$token] } else { $value=$value.$token }
         }
         Add-Result 'bridge-pairs' ($pair.id+':authored-text') ($value -ceq $pair.peer_payload.($pair.peer_text_key)) 'Fixed paired sample only; no translator executed.'
     }
@@ -239,12 +241,13 @@ try {
     }
     Add-Result 'anonymous-extension' 'honest-scope' (!$anonymous.runtime_executed -and !$anonymous.core_changes_allowed)
     $manifest = Read-Json 'config/technology-stack.json'
-    Add-Result 'configuration' 'contract-selection' ($manifest.contract_versions.core -eq '1.0' -and $manifest.contract_versions.extension -eq '1.0')
+    Add-Result 'configuration' 'contract-selection' ($manifest.contract_versions.core -eq '1.0' -and $manifest.contract_versions.extension -eq '1.0' -and $manifest.contract_versions.aeip -eq '1.0')
     $persona = Get-Content -LiteralPath (Join-Path $RepositoryRoot 'config/persona.example.yaml') -Raw
     $policy = Get-Content -LiteralPath (Join-Path $RepositoryRoot 'config/cognitive-policy.example.yaml') -Raw
     Add-Result 'configuration' 'persona-identity' ($persona -match 'identity_id:\s*"identity-001"' -and $persona -match 'schema_version:\s*"1.0"')
     Add-Result 'configuration' 'policy-contracts' ($policy -match 'protocol_version:\s*"1.0"' -and $policy -match 'core_contract_version:\s*"1.0"')
     Add-Result 'configuration' 'initial-adapter-not-capability-limit' ($policy -match 'initial_delivery_adapter:\s*webui_text' -and $policy -match 'required_fake_contracts:\s*\[audio, visual, avatar, game, device\]')
+    Test-AeipDesign
     $coverage = Read-Json 'tests/design-coverage.json'
     foreach ($group in $coverage.groups) {
         $content = Get-Content -LiteralPath (Join-Path $RepositoryRoot $group.document) -Raw

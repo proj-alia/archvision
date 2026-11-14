@@ -5,6 +5,8 @@ ALIA 核心不包含 `QQMessage`、`Live2DExpression`、`MinecraftAction`、`Rob
 
 官方定义通用交互契约并随产品提供 WebChat；社区提供其他平台适配实现和自描述连接配置，不要求修改核心或额外安装配置面板插件。平台只转换协议、收发与报告结果；共享媒体服务负责格式/识别/合成，既有核心负责人格、记忆、需要和决策。一个包可同时提供交互、工具与渲染。定义与配置生命周期见 [扩展平台](appendices/11-EXTENSION-PLATFORM.md)。
 
+外部应用还可直接实现 [AEIP](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)，不安装 ALIA 平台包。公开 alia.peer.interaction、alia.peer.observation、alia.peer.actions 分别承载交互投影、无需聊天会话的观察及外部动作候选；实际外部执行通过准确的提供者契约。公开消息和宿主契约在网关映射，不直接公开核心 Event 或授权记录。统一语义不要求同一传输，也不把双向通信当作对等执行权限。
+
 ## 二、模态统一不等于抹平差别
 活动 `ContentPart` 使用 `text | reference | typed` 三种 kind；后两者携带开放 type_id 和版本化 contract_ref，具体必填字段以 core 1.0 Schema 为准。音频、视觉、视频、空间、游戏等内容通过已注册业务契约描述；采集时间、坐标、编码、授权与来源不得因封套统一而丢失。大型二进制放受控对象存储，事件只含引用、哈希、TTL 和授权域。
 - 文本：保留发言者/角色、消息线程、编辑/撤回与源可信等级；支持未结束输入。

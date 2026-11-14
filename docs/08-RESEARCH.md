@@ -1,4 +1,4 @@
-# 08 — 参考产品、公开证据和技术取舍（核查日：2026-11-12）
+# 08 — 参考产品、公开证据和技术取舍（核查日期见各节）
 
 ## AIRI（开源，研究机制不是复制外壳）
 - 核心 Agent 关于 scheduling、context、`Conversation/Turn/Round` 和 tool invocation，明确将 core ports 与 stage UI 隔离： https://github.com/moeru-ai/airi/blob/0f77855b45c81314090abd5f6a77361cb5bd32cc/packages/core-agent/README.md
@@ -21,6 +21,31 @@
 - [平台管理器](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/manager.py)根据配置查找类、创建实例并启动运行，同时初始化内置 WebChat；内置适配器导入仍有按平台类型的分支。
 
 ALIA 的取舍：借鉴类型注册、配置贡献、运行实例的区分；官方定义通用交互语义，社区提供适配实现和配置入口，默认一包交付。交互、工具、模型及媒体只共享扩展管理机制，不强制共用交互业务协议；核心和 WebUI 不内置平台名称分支。这是 ALIA 自身设计，不表示 AstrBot 已验证本项目的身份/权限/持久化边界，也不承诺兼容其 Python 插件 ABI。
+
+## OneBot、NapCat 与 AstrBot 的协议及适配器（2026-11-14）
+
+本节为规范/源码阅读，未运行三个项目。事实与 ALIA 的设计推导分开，不以部署教程推断可靠性。
+
+| 来源快照 | 已核查的规范/实现 | 可借鉴与边界 |
+|---|---|---|
+| OneBot v11 `d4456ee706f9ada9c2dfde56a2bcfc69752600e4` | [正向 WS](https://github.com/botuniverse/onebot-11/blob/d4456ee706f9ada9c2dfde56a2bcfc69752600e4/communication/ws.md)使用 action/params/echo 请求及独立事件推送；[反向 WS](https://github.com/botuniverse/onebot-11/blob/d4456ee706f9ada9c2dfde56a2bcfc69752600e4/communication/ws-reverse.md)由实现端主动连接，Universal 在一条连接承载 API/事件，并规定重连 | 连接发起与业务方向分开，但动作调用者与事件产生者仍有业务角色；不能推导为双方任意调用 |
+| OneBot HTTP/事件 | [HTTP](https://github.com/botuniverse/onebot-11/blob/d4456ee706f9ada9c2dfde56a2bcfc69752600e4/communication/http.md)区分 ok/async/failed，async 不提供最终结果；[HTTP POST](https://github.com/botuniverse/onebot-11/blob/d4456ee706f9ada9c2dfde56a2bcfc69752600e4/communication/http-post.md)上报事件并支持快速操作；[元事件](https://github.com/botuniverse/onebot-11/blob/d4456ee706f9ada9c2dfde56a2bcfc69752600e4/event/meta.md)定义生命周期/心跳 | ALIA 须自行补齐真实交付、效果核验、权限、游标与恢复，不能把异步受理或心跳当完成 |
+| NapCat 历史提交 `0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5` | [网络管理](https://github.com/NapNeko/NapCatQQ/blob/0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5/packages/napcat-onebot/network/index.ts)按适配器注册、发送、开关/重载；[WS client](https://github.com/NapNeko/NapCatQQ/blob/0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5/packages/napcat-onebot/network/websocket-client.ts)使用 Universal、心跳和重连；[WS server](https://github.com/NapNeko/NapCatQQ/blob/0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5/packages/napcat-onebot/network/websocket-server.ts)认证后收动作并推事件 | 两种方向复用 ActionMap 与 websocketHandle；不是两套业务协议，亦不证明 ALIA 所需的持久恢复 |
+| NapCat 语义映射 | [入口](https://github.com/NapNeko/NapCatQQ/blob/0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5/packages/napcat-onebot/index.ts)将 RawMessage 经 parseMessageV2 转成 OB11Message 后分发；[SendMsg](https://github.com/NapNeko/NapCatQQ/blob/0b4cfe65ed889aa8e8061ee4c5b7edddec0d10f5/packages/napcat-onebot/action/msg/SendMsg.ts)把参数转成原生发送元素，再调用消息 API | 平台协议、标准协议与传输分别转换；不复制 QQ 字段成为 ALIA 核心 |
+| AstrBot `23db1ad08064a8330a09077138ce8ecc05362219` | [注册](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/register.py)登记类/元数据；[Platform](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/platform.py)提供生命周期、事件队列提交及发送接口；[OneBot 适配器](https://github.com/AstrBotDevs/AstrBot/blob/23db1ad08064a8330a09077138ce8ecc05362219/astrbot/core/platform/sources/aiocqhttp/aiocqhttp_platform_adapter.py)使用 CQHttp 反向连接服务，convert_message → create_event → commit_event，send_by_session 调对应发送接口 | 学习可注册适配器与统一事件处理，OneBot 只是一个适配器。AstrBotMessage 是聊天模型，不覆盖 ALIA 的所有观察、表达与动作 |
+
+NapCat 限制：核查时原官方文档地址返回 404，当前 main 已只保留 Ending README（`105f38e3ecb1428c147e0f9165f65f854233d988`）。上述固定历史提交仍可从官方仓库读取；它不代表当前维护状态或实际接入验证。AstrBot 平台插件文档辅助理解，结论以固定源码为准。
+
+### ALIA 仓库差距与选择
+
+| 类别 | 当前事实与证据 | 设计责任 |
+|---|---|---|
+| 已有可执行代码 | tests 下 PowerShell 设计检查和既有 HTML 原型；没有核心运行时工程 | 如实报告结构结果；原型不代表正式 WebChat/网关 |
+| 已有设计 | 03 的媒介语义、11 的宿主/绑定/连接管理；schemas/services/interaction.contract.json 与匿名 C7 样例 | 复用来源、权限、语义和生命周期 |
+| 缺少独立外部边界 | extension/control 的 hello 强制包 ID/版本/manifest；interaction 要求内部 connector_id | 补 AEIP 和公共业务投影；网关注入内部归属，独立应用无 manifest |
+| 缺少真实互操作证据 | SDK、网关、可执行第三方模拟端、转换和恢复未实现 | 定义 Q-native/Q7 与 aeip_*，运行状态保持 specified |
+
+ALIA 的推导：公开协议与可注册适配器并存，传输和业务角色分开，准确契约与当前授权共同决定能力；复用模块化单体设施。完整定义见 [AEIP](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)，选择与理由维护在 [设计决策](DECISIONS.md)，不追加逐轮 ADR。
 
 ## Live2D 引擎与客户端接口的区别（文档核查：2026-11-13）
 

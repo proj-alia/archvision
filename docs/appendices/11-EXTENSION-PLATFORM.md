@@ -4,6 +4,10 @@
 
 ## 0. 扩展、交互与配置的统一定义
 
+独立外部应用的公开接入规范见 [AEIP](12-EXTERNAL-INTERACTION-PROTOCOL.md)。本章的包安装、ExtensionSession 与 HostControl 不作为所有第三方客户端的前置条件：原生应用直接实现 AEIP；第三方原生协议可由宿主内可注册适配器、客户端插件或独立桥接转换。统一业务语义、传输绑定和适配器注册是分别维护的责任。
+
+原生接入在内部由官方通用 AEIP 网关贡献承载，ConnectorDefinition/ConnectorInstance 的提供者是内置网关，不是一个虚构的第三方包。网关拥有真实宿主会话，peer 的公开协议会话和稳定资源分别关联；不为每个 peer 伪造 ExtensionManifest/ExtensionSession。现有连接和绑定规则继续强制执行，公共权限不能扩大内部许可。宿主内适配可直接经受控 SPI 接入应用语义。
+
 扩展包是安装、版本和生命周期单位；适配器是协议转换职责；工具是向核心开放的操作；模态是信息形式。它们不是互斥的插件种类。一个包可以同时贡献平台接入、媒体处理、工具、命令、Skill 和配置界面，全部复用同一宿主、契约注册和权限机制。
 
 **平台交互协议插件**是明确的插件功能分类：它提供某个平台/客户端原有协议与 ALIA 通用交互契约之间的双向适配实现，以及连接配置入口。工具插件是另一功能分类；同一包可同时具有这些分类，不要求分类互斥。“平台”包括聊天服务、可交互角色客户端和本地桌宠，不限定为远程社交平台。实现上以 `alia.contribution.connector` 识别这一贡献，不在核心枚举平台名称。
@@ -234,6 +238,8 @@ ExtensionHost 采用 Rust 应用/适配实现，协议仍是开放、语言无�
 拒绝可选权限只允许保留不依赖它的能力；拒绝必需权限则相关能力不可用。安装成功/绑定就绪不等于完成真实业务。详细状态与时序见 [情境行为](15-SITUATED-BEHAVIOR.md)、[时序推演](18-BEHAVIOR-VALIDATION.md)。
 
 ## 14. 自描述接入包与配置
+
+可注册协议适配器使用开放贡献 alia.contribution.protocol-adapter，descriptor_ref 引用 schemas/aeip/adapter.schema.json 所定义的声明，携带外侧协议、版本范围、双向映射和生命周期责任；其 contract_ref 为主业务契约，其他映射契约仍须准确声明提供/使用关系。注册不执行翻译或授予权限，ConnectorDefinition 继续负责需要的连接配置。未知平台按声明注册，不新增核心或通用 WebUI 平台名称分支。独立 AEIP 客户端不需要这个宿主贡献。
 
 首版结构见 `schemas/extension/connector-definition.schema.json`、`connector-instance.schema.json`、`setup-session.schema.json`；标准业务服务见 `schemas/services/`。它们都是 draft，不代表适配器已经实现。完整示例见 [接入样例](../../config/connectors/README.md)。
 

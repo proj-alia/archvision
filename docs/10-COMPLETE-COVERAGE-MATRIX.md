@@ -19,6 +19,7 @@
 | 长任务 | durable task、checkpoint、lease、retry、timeout、compensate | 故障恢复及幂等性 |
 | 能力接入 | registry、version、ACL、MCP、A2A、结果反馈 | 工具读写/冲突/拒绝 |
 | 通用交互接入 | 官方交互契约、社区适配实现、连接定义/实例/配置会话 | 未知平台无核心/UI 分支；多实例/认证/交付与工具独立性 |
+| 独立外部协议与适配注册 | AEIP、公共业务投影、原生 peer、Adapter SPI、连接/业务角色分离 | aeip_*：独立接入、两种 WS 发起方向、HTTP/SSE、能力修订、结果与恢复；当前 specified |
 | 工具创造 | 提议、沙箱、签名、审核、注册 | 不可越权自动安装 |
 | 环境感知 | Modality Parts、source/trust/timestamps、observations | fake text/image/audio/game |
 | 媒介表达 | 消息、语音、avatar、游戏动作、物理动作投影 | fake adapter 同一认知状态 |
@@ -52,6 +53,7 @@
 | 多实例与恢复 | ConnectorInstance、准确 provider/resource 绑定、数据设计 | 同契约多提供者、账号/凭据/路由隔离、就绪无循环、旧代次不得发送 |
 | 官方 WebChat | `/chat` 与 `/console` 分开、共用交互/认知路径 | 无社区插件可真实聊天，生成/传输/显示/理解分开核验 |
 | 第三方客户端协议桥接 | 平台交互协议插件、匿名 C7 成对样例、双向语义映射 | 不预知外部协议；主动/反向/请求响应接入；外部升级、只渲染/仅模型接口与新语义边界 |
+| 原生 AEIP 与匿名 Q/Q7 | [公开规范](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)、schemas/aeip、alia.peer.*、aeip-cases | 原生无 manifest；适配注册和独立桥接分别验收；四组静态映射不冒充翻译器 |
 | 组合客户端闭环 | connection_dependents、required_features、单一表达执行归属、面板应用操作桥 | 同连接多贡献失效、可选降级、外部 AI/回显隔离、动作表修订与权限分离 |
 | 开放 payload、授权记录、分段回执及四类反例 | schemas/core 与 tests/contracts | 结构反例及运行时拒绝路径分别验收 |
 | 读集、流出检查、分支和删除屏障 | [状态契约](05-STATE-CONTRACTS.md)、[安全](04-SECURITY-DATA.md)、[数据存储](appendices/13-DATA-STORAGE.md) | 状态提交、流出与删除恢复回归 |

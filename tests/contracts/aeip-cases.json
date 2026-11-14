@@ -1,0 +1,1481 @@
+{
+  "design_status": "draft",
+  "runtime_executed": false,
+  "translation_executed": false,
+  "core_changes_allowed_for_new_platform": false,
+  "schema": "schemas/aeip/message.schema.json",
+  "adapter": "config/aeip/anonymous-peer/adapter.json",
+  "manifest": "config/aeip/anonymous-peer/manifest.json",
+  "native_schema": "config/aeip/anonymous-peer/q7.schema.json",
+  "services": [
+    {
+      "path": "config/aeip/anonymous-peer/counter.contract.json",
+      "contract_ref": {
+        "contract_id": "org.example.counter",
+        "version": "1.0.0",
+        "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+      }
+    }
+  ],
+  "messages": {
+    "hello": {
+      "aeip_version": "1.0",
+      "message_id": "message-hello",
+      "kind": "hello",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "peer_id": "org.example.peer-q",
+        "implementation": {
+          "name": "Peer Q specification fixture",
+          "version": "Q7"
+        },
+        "versions": [
+          "1.0"
+        ],
+        "transports": [
+          "alia.transport.websocket",
+          "alia.transport.http-sse"
+        ],
+        "authentication": {
+          "scheme": "bearer",
+          "token": "fixture-not-a-credential"
+        }
+      }
+    },
+    "welcome": {
+      "aeip_version": "1.0",
+      "message_id": "message-welcome",
+      "kind": "welcome",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "selected_version": "1.0",
+        "transport": "alia.transport.websocket",
+        "session_id": "session-q",
+        "generation": 1,
+        "expires_at": "2026-11-14T00:05:00Z",
+        "resource_refs": [
+          "resource-q"
+        ],
+        "target_refs": [
+          "target-1"
+        ],
+        "limits": {
+          "max_message_bytes": 1048576,
+          "max_inflight": 32,
+          "max_buffer_bytes": 4194304,
+          "heartbeat_ms": 15000,
+          "idle_timeout_ms": 45000,
+          "resume_retention_seconds": 300
+        }
+      },
+      "reply_to": "message-origin"
+    },
+    "capabilities": {
+      "aeip_version": "1.0",
+      "message_id": "message-capabilities",
+      "kind": "capabilities",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "revision": 1,
+        "offers": [
+          {
+            "offer_id": "offer-counter",
+            "provider": "peer",
+            "contract_ref": {
+              "contract_id": "org.example.counter",
+              "version": "1.0.0",
+              "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+            },
+            "members": [
+              {
+                "name": "increment",
+                "kind": "method"
+              },
+              {
+                "name": "samples",
+                "kind": "stream"
+              }
+            ],
+            "resource_ref": "resource-q",
+            "features": [
+              "counter.increment",
+              "counter.samples"
+            ],
+            "required_features": [
+              "counter.increment"
+            ],
+            "expires_at": "2026-11-14T00:05:00Z"
+          }
+        ]
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "describe": {
+      "aeip_version": "1.0",
+      "message_id": "message-describe",
+      "kind": "describe",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "contract_ref": {
+          "contract_id": "org.example.counter",
+          "version": "1.0.0",
+          "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "description": {
+      "aeip_version": "1.0",
+      "message_id": "message-description",
+      "kind": "description",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "contract_ref": {
+          "contract_id": "org.example.counter",
+          "version": "1.0.0",
+          "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+        },
+        "encoding": "base64",
+        "bytes": "ewogICJwcm90b2NvbF92ZXJzaW9uIjogIjEuMCIsCiAgImNvbnRyYWN0X2lkIjogIm9yZy5leGFtcGxlLmNvdW50ZXIiLAogICJ2ZXJzaW9uIjogIjEuMC4wIiwKICAibWV0aG9kcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiaW5jcmVtZW50IiwKICAgICAgImlucHV0X3NjaGVtYSI6IHsKICAgICAgICAidHlwZSI6ICJvYmplY3QiLAogICAgICAgICJhZGRpdGlvbmFsUHJvcGVydGllcyI6IGZhbHNlLAogICAgICAgICJwcm9wZXJ0aWVzIjogewogICAgICAgICAgImFtb3VudCI6IHsKICAgICAgICAgICAgInR5cGUiOiAiaW50ZWdlciIsCiAgICAgICAgICAgICJtaW5pbXVtIjogMSwKICAgICAgICAgICAgIm1heGltdW0iOiAxMAogICAgICAgICAgfQogICAgICAgIH0sCiAgICAgICAgInJlcXVpcmVkIjogWwogICAgICAgICAgImFtb3VudCIKICAgICAgICBdCiAgICAgIH0sCiAgICAgICJvdXRwdXRfc2NoZW1hIjogewogICAgICAgICJ0eXBlIjogIm9iamVjdCIsCiAgICAgICAgImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjogZmFsc2UsCiAgICAgICAgInByb3BlcnRpZXMiOiB7CiAgICAgICAgICAidmFsdWUiOiB7CiAgICAgICAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAgICAgICAibWluaW11bSI6IDAKICAgICAgICAgIH0sCiAgICAgICAgICAiZWZmZWN0X3JlZiI6IHsKICAgICAgICAgICAgInR5cGUiOiAic3RyaW5nIiwKICAgICAgICAgICAgIm1pbkxlbmd0aCI6IDEKICAgICAgICAgIH0KICAgICAgICB9LAogICAgICAgICJyZXF1aXJlZCI6IFsKICAgICAgICAgICJ2YWx1ZSIsCiAgICAgICAgICAiZWZmZWN0X3JlZiIKICAgICAgICBdCiAgICAgIH0sCiAgICAgICJzaWRlX2VmZmVjdF9jbGFzcyI6ICJpcnJldmVyc2libGVfd3JpdGUiLAogICAgICAic3VwcG9ydHNfY2FuY2VsIjogZmFsc2UKICAgIH0KICBdLAogICJldmVudHMiOiBbXSwKICAic3RyZWFtcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAic2FtcGxlcyIsCiAgICAgICJpdGVtX3NjaGVtYSI6IHsKICAgICAgICAidHlwZSI6ICJvYmplY3QiLAogICAgICAgICJhZGRpdGlvbmFsUHJvcGVydGllcyI6IGZhbHNlLAogICAgICAgICJwcm9wZXJ0aWVzIjogewogICAgICAgICAgInZhbHVlIjogewogICAgICAgICAgICAidHlwZSI6ICJpbnRlZ2VyIiwKICAgICAgICAgICAgIm1pbmltdW0iOiAwCiAgICAgICAgICB9CiAgICAgICAgfSwKICAgICAgICAicmVxdWlyZWQiOiBbCiAgICAgICAgICAidmFsdWUiCiAgICAgICAgXQogICAgICB9LAogICAgICAib3JkZXJpbmciOiAicGVyX3N0cmVhbSIsCiAgICAgICJyZXN1bWUiOiAiY3Vyc29yIiwKICAgICAgImRlbGl2ZXJ5IjogImxvc3N5X29ic2VydmF0aW9uIiwKICAgICAgIm1heF9jaHVua19ieXRlcyI6IDQwOTYKICAgIH0KICBdCn0K"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "bind": {
+      "aeip_version": "1.0",
+      "message_id": "message-bind",
+      "kind": "bind",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "offer_id": "offer-counter",
+        "capability_revision": 1,
+        "provider": "peer",
+        "resource_ref": "resource-q",
+        "target_ref": "target-1",
+        "members": [
+          {
+            "name": "increment",
+            "kind": "method"
+          },
+          {
+            "name": "samples",
+            "kind": "stream"
+          }
+        ],
+        "required_features": [
+          "counter.increment"
+        ]
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "bound": {
+      "aeip_version": "1.0",
+      "message_id": "message-bound",
+      "kind": "bound",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "offer_id": "offer-counter",
+        "capability_revision": 1,
+        "provider": "peer",
+        "resource_ref": "resource-q",
+        "target_ref": "target-1",
+        "contract_ref": {
+          "contract_id": "org.example.counter",
+          "version": "1.0.0",
+          "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+        },
+        "members": [
+          {
+            "name": "increment",
+            "kind": "method"
+          },
+          {
+            "name": "samples",
+            "kind": "stream"
+          }
+        ],
+        "features": [
+          "counter.increment",
+          "counter.samples"
+        ],
+        "expires_at": "2026-11-14T00:05:00Z"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "binding_revoked": {
+      "aeip_version": "1.0",
+      "message_id": "message-binding_revoked",
+      "kind": "binding_revoked",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "reason": "capability_revision_changed"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "subscribe": {
+      "aeip_version": "1.0",
+      "message_id": "message-subscribe",
+      "kind": "subscribe",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-input",
+        "member_id": "input",
+        "kind": "event"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "subscribed": {
+      "aeip_version": "1.0",
+      "message_id": "message-subscribed",
+      "kind": "subscribed",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-input",
+        "member_id": "input",
+        "subscription_id": "subscription-input",
+        "cursor": "opaque-cursor-1",
+        "replay": "fresh"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "request": {
+      "aeip_version": "1.0",
+      "message_id": "message-request",
+      "kind": "request",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "member_id": "increment",
+        "request_id": "request-counter-1",
+        "idempotency_key": "counter-once-1",
+        "deadline": "2026-11-14T00:05:00Z",
+        "payload": {
+          "amount": 1
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "response": {
+      "aeip_version": "1.0",
+      "message_id": "message-response",
+      "kind": "response",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "request_id": "request-counter-1",
+        "status": "completed",
+        "payload": {
+          "value": 1,
+          "effect_ref": "effect-q-1"
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "accepted": {
+      "aeip_version": "1.0",
+      "message_id": "message-response",
+      "kind": "response",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "request_id": "request-counter-1",
+        "status": "accepted"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "uncertain": {
+      "aeip_version": "1.0",
+      "message_id": "message-response",
+      "kind": "response",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "request_id": "request-counter-1",
+        "status": "uncertain",
+        "error": {
+          "code": "needs_reconciliation",
+          "message": "Result unavailable",
+          "retryable": false
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "request_status": {
+      "aeip_version": "1.0",
+      "message_id": "message-request_status",
+      "kind": "request_status",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "request_id": "request-counter-1",
+        "idempotency_key": "counter-once-1"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "event": {
+      "aeip_version": "1.0",
+      "message_id": "message-event",
+      "kind": "event",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-input",
+        "member_id": "input",
+        "subscription_id": "subscription-input",
+        "event_id": "event-q-1",
+        "cursor": "opaque-cursor-2",
+        "payload": {
+          "input_id": "input-q-1",
+          "revision": 1,
+          "kind": "create",
+          "occurred_at": "2026-11-14T00:00:00Z",
+          "conversation_ref": "room-q",
+          "actor_ref": "speaker-q",
+          "content_parts": [
+            {
+              "kind": "text",
+              "text": "你好"
+            }
+          ]
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "stream_open": {
+      "aeip_version": "1.0",
+      "message_id": "message-stream_open",
+      "kind": "stream_open",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "member_id": "samples",
+        "subscription_id": "subscription-samples",
+        "stream_id": "stream-q",
+        "deadline": "2026-11-14T00:05:00Z"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "stream_chunk": {
+      "aeip_version": "1.0",
+      "message_id": "message-stream_chunk",
+      "kind": "stream_chunk",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "stream_id": "stream-q",
+        "chunk_sequence": 2,
+        "cursor": "opaque-stream-cursor",
+        "dropped_before": 1,
+        "payload": {
+          "value": 1
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "stream_close": {
+      "aeip_version": "1.0",
+      "message_id": "message-stream_close",
+      "kind": "stream_close",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "stream_id": "stream-q",
+        "status": "completed",
+        "last_chunk_sequence": 2
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "cancel": {
+      "aeip_version": "1.0",
+      "message_id": "message-cancel",
+      "kind": "cancel",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "target_kind": "request",
+        "target_id": "request-counter-1",
+        "reason": "User stopped"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "credit": {
+      "aeip_version": "1.0",
+      "message_id": "message-credit",
+      "kind": "credit",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-counter",
+        "stream_id": "stream-q",
+        "max_chunk_sequence": 8
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "ack": {
+      "aeip_version": "1.0",
+      "message_id": "message-ack",
+      "kind": "ack",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "recorded_sequence": 1
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "ping": {
+      "aeip_version": "1.0",
+      "message_id": "message-ping",
+      "kind": "ping",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "nonce": "nonce-1"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "pong": {
+      "aeip_version": "1.0",
+      "message_id": "message-pong",
+      "kind": "pong",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "nonce": "nonce-1"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1,
+      "reply_to": "message-origin"
+    },
+    "close": {
+      "aeip_version": "1.0",
+      "message_id": "message-close",
+      "kind": "close",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "reason": "Client shutdown"
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "error": {
+      "aeip_version": "1.0",
+      "message_id": "message-error",
+      "kind": "error",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "code": "permission_denied",
+        "message": "Denied",
+        "retryable": false
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "preauth_error": {
+      "aeip_version": "1.0",
+      "message_id": "message-error",
+      "kind": "error",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "code": "permission_denied",
+        "message": "Denied",
+        "retryable": false
+      }
+    },
+    "external_action_request": {
+      "aeip_version": "1.0",
+      "message_id": "message-request",
+      "kind": "request",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-alia-actions",
+        "member_id": "request",
+        "request_id": "request-user-1",
+        "idempotency_key": "user-once-1",
+        "deadline": "2026-11-14T00:05:00Z",
+        "payload": {
+          "capability_ref": "capability-counter",
+          "arguments": {
+            "amount": 1
+          },
+          "purpose": "User-approved example"
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "deliver": {
+      "aeip_version": "1.0",
+      "message_id": "message-request",
+      "kind": "request",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-output",
+        "member_id": "deliver",
+        "request_id": "request-delivery-1",
+        "idempotency_key": "deliver-once-1",
+        "deadline": "2026-11-14T00:05:00Z",
+        "payload": {
+          "output_delivery_id": "delivery-1",
+          "expression_id": "expression-1",
+          "turn_id": "turn-1",
+          "endpoint_ref": "room-c",
+          "endpoint_revision": 1,
+          "audience_refs": [
+            "speaker-c"
+          ],
+          "segments": [
+            {
+              "segment_id": "segment-1",
+              "channel_id": "output.text",
+              "content_ref": "content-1",
+              "content_parts": [
+                {
+                  "kind": "text",
+                  "text": "你好"
+                }
+              ]
+            }
+          ],
+          "expires_at": "2026-11-14T00:05:00Z",
+          "cancel_generation": 0
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "receipt": {
+      "aeip_version": "1.0",
+      "message_id": "message-event",
+      "kind": "event",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-output",
+        "member_id": "receipt",
+        "subscription_id": "subscription-receipt",
+        "event_id": "event-receipt-1",
+        "cursor": "opaque-receipt-1",
+        "payload": {
+          "output_delivery_id": "delivery-1",
+          "status": "partial",
+          "recorded_at": "2026-11-14T00:00:00Z",
+          "segments": [
+            {
+              "segment_id": "segment-1",
+              "channel_id": "output.text",
+              "audience_refs": [
+                "speaker-q"
+              ],
+              "content_ref": "content-1",
+              "offset_unit": "text.codepoint",
+              "from": 0,
+              "to": 1,
+              "status": "delivered",
+              "recorded_at": "2026-11-14T00:00:00Z"
+            }
+          ]
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "observation": {
+      "aeip_version": "1.0",
+      "message_id": "message-event",
+      "kind": "event",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "binding_id": "binding-observation",
+        "member_id": "observe",
+        "subscription_id": "subscription-observation",
+        "event_id": "event-observe-1",
+        "cursor": "opaque-observe-1",
+        "payload": {
+          "observation_id": "observe-q-1",
+          "revision": 1,
+          "kind": "create",
+          "source_ref": "sensor-q",
+          "occurred_at": "2026-11-14T00:00:00Z",
+          "content_parts": [
+            {
+              "kind": "text",
+              "text": "计数器尚未变化"
+            }
+          ]
+        }
+      },
+      "session_id": "session-q",
+      "generation": 1,
+      "sequence": 1
+    },
+    "future_version_offer": {
+      "aeip_version": "1.0",
+      "message_id": "message-hello",
+      "kind": "hello",
+      "sent_at": "2026-11-14T00:00:00Z",
+      "body": {
+        "peer_id": "org.example.peer-q",
+        "implementation": {
+          "name": "Peer Q specification fixture",
+          "version": "Q7"
+        },
+        "versions": [
+          "1.0",
+          "2.0"
+        ],
+        "transports": [
+          "alia.transport.websocket",
+          "alia.transport.http-sse"
+        ],
+        "authentication": {
+          "scheme": "bearer",
+          "token": "fixture-not-a-credential"
+        }
+      }
+    }
+  },
+  "invalid_messages": [
+    {
+      "id": "hello_requires_authentication",
+      "base": "hello",
+      "path": [
+        "body",
+        "authentication"
+      ],
+      "remove": true
+    },
+    {
+      "id": "hello_is_not_an_extension",
+      "base": "hello",
+      "path": [
+        "body",
+        "manifest_ref"
+      ],
+      "remove": false,
+      "value": "fake"
+    },
+    {
+      "id": "hello_cannot_claim_session",
+      "base": "hello",
+      "path": [
+        "session_id"
+      ],
+      "remove": false,
+      "value": "session-other"
+    },
+    {
+      "id": "unsupported_major",
+      "base": "hello",
+      "path": [
+        "aeip_version"
+      ],
+      "remove": false,
+      "value": "2.0"
+    },
+    {
+      "id": "unsupported_selected_version",
+      "base": "welcome",
+      "path": [
+        "body",
+        "selected_version"
+      ],
+      "remove": false,
+      "value": "2.0"
+    },
+    {
+      "id": "missing_session",
+      "base": "request",
+      "path": [
+        "session_id"
+      ],
+      "remove": true
+    },
+    {
+      "id": "zero_generation",
+      "base": "request",
+      "path": [
+        "generation"
+      ],
+      "remove": false,
+      "value": 0
+    },
+    {
+      "id": "zero_sequence",
+      "base": "request",
+      "path": [
+        "sequence"
+      ],
+      "remove": false,
+      "value": 0
+    },
+    {
+      "id": "caller_cannot_supply_scope",
+      "base": "request",
+      "path": [
+        "scope"
+      ],
+      "remove": false,
+      "value": {
+        "identity_id": "other"
+      }
+    },
+    {
+      "id": "caller_cannot_supply_principal",
+      "base": "request",
+      "path": [
+        "caller_principal_id"
+      ],
+      "remove": false,
+      "value": "admin"
+    },
+    {
+      "id": "request_requires_binding",
+      "base": "request",
+      "path": [
+        "body",
+        "binding_id"
+      ],
+      "remove": true
+    },
+    {
+      "id": "request_requires_idempotency",
+      "base": "request",
+      "path": [
+        "body",
+        "idempotency_key"
+      ],
+      "remove": true
+    },
+    {
+      "id": "bad_deadline",
+      "base": "request",
+      "path": [
+        "body",
+        "deadline"
+      ],
+      "remove": false,
+      "value": "2026-02-30T00:00:00Z"
+    },
+    {
+      "id": "completed_requires_result",
+      "base": "response",
+      "path": [
+        "body",
+        "payload"
+      ],
+      "remove": true
+    },
+    {
+      "id": "accepted_is_not_completed",
+      "base": "accepted",
+      "path": [
+        "body",
+        "payload"
+      ],
+      "remove": false,
+      "value": {
+        "value": 1
+      }
+    },
+    {
+      "id": "uncertain_requires_reason",
+      "base": "uncertain",
+      "path": [
+        "body",
+        "error"
+      ],
+      "remove": true
+    },
+    {
+      "id": "response_requires_correlation",
+      "base": "response",
+      "path": [
+        "reply_to"
+      ],
+      "remove": true
+    },
+    {
+      "id": "unknown_message_kind",
+      "base": "request",
+      "path": [
+        "kind"
+      ],
+      "remove": false,
+      "value": "grant_root"
+    },
+    {
+      "id": "capability_needs_exact_digest",
+      "base": "capabilities",
+      "path": [
+        "body",
+        "offers",
+        0,
+        "contract_ref",
+        "schema_digest"
+      ],
+      "remove": false,
+      "value": "bad"
+    },
+    {
+      "id": "capability_needs_resource",
+      "base": "capabilities",
+      "path": [
+        "body",
+        "offers",
+        0,
+        "resource_ref"
+      ],
+      "remove": true
+    },
+    {
+      "id": "bound_needs_revision",
+      "base": "bound",
+      "path": [
+        "body",
+        "capability_revision"
+      ],
+      "remove": true
+    },
+    {
+      "id": "event_needs_subscription",
+      "base": "event",
+      "path": [
+        "body",
+        "subscription_id"
+      ],
+      "remove": true
+    },
+    {
+      "id": "negative_credit",
+      "base": "credit",
+      "path": [
+        "body",
+        "max_chunk_sequence"
+      ],
+      "remove": false,
+      "value": -1
+    },
+    {
+      "id": "invalid_contract_bytes",
+      "base": "description",
+      "path": [
+        "body",
+        "bytes"
+      ],
+      "remove": false,
+      "value": "not base64"
+    },
+    {
+      "id": "partial_error_context",
+      "base": "preauth_error",
+      "path": [
+        "session_id"
+      ],
+      "remove": false,
+      "value": "only-one-context-field"
+    }
+  ],
+  "payload_cases": [
+    {
+      "id": "public_input",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "input_id": "input-q-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-14T00:00:00Z",
+        "conversation_ref": "room-q",
+        "actor_ref": "speaker-q",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_deliver",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema",
+      "payload": {
+        "output_delivery_id": "delivery-1",
+        "expression_id": "expression-1",
+        "turn_id": "turn-1",
+        "endpoint_ref": "room-c",
+        "endpoint_revision": 1,
+        "audience_refs": [
+          "speaker-c"
+        ],
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "content_ref": "content-1",
+            "content_parts": [
+              {
+                "kind": "text",
+                "text": "你好"
+              }
+            ]
+          }
+        ],
+        "expires_at": "2026-11-14T00:05:00Z",
+        "cancel_generation": 0
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_receipt",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "receipt",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "output_delivery_id": "delivery-1",
+        "status": "partial",
+        "recorded_at": "2026-11-14T00:00:00Z",
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "audience_refs": [
+              "speaker-q"
+            ],
+            "content_ref": "content-1",
+            "offset_unit": "text.codepoint",
+            "from": 0,
+            "to": 1,
+            "status": "delivered",
+            "recorded_at": "2026-11-14T00:00:00Z"
+          }
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_endpoint",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "endpoint",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "endpoint_ref": "endpoint-q",
+        "revision": 1,
+        "conversation_ref": "room-q",
+        "audience_refs": [
+          "speaker-q"
+        ],
+        "privacy": "private",
+        "reachable": true,
+        "observed_at": "2026-11-14T00:00:00Z",
+        "expires_at": "2026-11-14T00:05:00Z",
+        "input_types": [
+          "text.plain"
+        ],
+        "output_types": [
+          "text.plain"
+        ],
+        "features": [
+          "text.deliver"
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_observation_no_conversation",
+      "contract_id": "alia.peer.observation",
+      "member_kind": "event",
+      "member_name": "observe",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "observation_id": "observe-q-1",
+        "revision": 1,
+        "kind": "create",
+        "source_ref": "sensor-q",
+        "occurred_at": "2026-11-14T00:00:00Z",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "计数器尚未变化"
+          }
+        ]
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "external_action_candidate",
+      "contract_id": "alia.peer.actions",
+      "member_kind": "method",
+      "member_name": "request",
+      "schema_slot": "input_schema",
+      "payload": {
+        "capability_ref": "capability-counter",
+        "arguments": {
+          "amount": 1
+        },
+        "purpose": "User-approved example"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "counter_input",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "input_schema",
+      "payload": {
+        "amount": 1
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "counter_result",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "output_schema",
+      "payload": {
+        "value": 1,
+        "effect_ref": "effect-q-1"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "input_cannot_claim_core_scope",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "input_id": "input-q-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-14T00:00:00Z",
+        "conversation_ref": "room-q",
+        "actor_ref": "speaker-q",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ],
+        "scope": {
+          "identity_id": "other"
+        }
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "input_cannot_claim_connector",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "input_id": "input-q-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-14T00:00:00Z",
+        "conversation_ref": "room-q",
+        "actor_ref": "speaker-q",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "你好"
+          }
+        ],
+        "connector_id": "other"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "receipt_cannot_claim_authorization",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "receipt",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "output_delivery_id": "delivery-1",
+        "status": "partial",
+        "recorded_at": "2026-11-14T00:00:00Z",
+        "segments": [
+          {
+            "segment_id": "segment-1",
+            "channel_id": "output.text",
+            "audience_refs": [
+              "speaker-q"
+            ],
+            "content_ref": "content-1",
+            "offset_unit": "text.codepoint",
+            "from": 0,
+            "to": 1,
+            "status": "delivered",
+            "recorded_at": "2026-11-14T00:00:00Z"
+          }
+        ],
+        "authorization_ref": "fake"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "observation_requires_source",
+      "contract_id": "alia.peer.observation",
+      "member_kind": "event",
+      "member_name": "observe",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "observation_id": "observe-q-1",
+        "revision": 1,
+        "kind": "create",
+        "occurred_at": "2026-11-14T00:00:00Z",
+        "content_parts": [
+          {
+            "kind": "text",
+            "text": "计数器尚未变化"
+          }
+        ]
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "counter_invalid_amount",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "input_schema",
+      "payload": {
+        "amount": -1
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "result_is_not_plain_acceptance",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "output_schema",
+      "payload": {
+        "status": "accepted"
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "public_cancel",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "method",
+      "member_name": "cancel",
+      "schema_slot": "input_schema",
+      "payload": {
+        "output_delivery_id": "delivery-1",
+        "cancel_generation": 1
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_delivery_acceptance",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "output_schema",
+      "payload": {
+        "operation_id": "delivery-1",
+        "status": "accepted"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "public_action_result",
+      "contract_id": "alia.peer.actions",
+      "member_kind": "method",
+      "member_name": "request",
+      "schema_slot": "output_schema",
+      "payload": {
+        "operation_ref": "op-1",
+        "outcome_ref": "outcome-1",
+        "summary": "Verified effect"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "empty_completion_rejected",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "receipt",
+      "schema_slot": "payload_schema",
+      "payload": {
+        "output_delivery_id": "delivery-1",
+        "status": "completed",
+        "recorded_at": "2026-11-14T00:00:00Z",
+        "segments": []
+      },
+      "expected_valid": false
+    },
+    {
+      "id": "sample_item",
+      "contract_id": "org.example.counter",
+      "member_kind": "stream",
+      "member_name": "samples",
+      "schema_slot": "item_schema",
+      "payload": {
+        "value": 1
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "sample_item_invalid",
+      "contract_id": "org.example.counter",
+      "member_kind": "stream",
+      "member_name": "samples",
+      "schema_slot": "item_schema",
+      "payload": {
+        "value": -1
+      },
+      "expected_valid": false
+    }
+  ],
+  "pairs": [
+    {
+      "id": "input_translation",
+      "message": "event",
+      "native": {
+        "protocol": "Q7",
+        "op": "user.say",
+        "speaker": "speaker-q",
+        "room": "room-q",
+        "text": "你好"
+      },
+      "comparisons": [
+        {
+          "public_pointer": "/body/payload/content_parts/0/text",
+          "native_pointer": "/text"
+        },
+        {
+          "public_pointer": "/body/payload/actor_ref",
+          "native_pointer": "/speaker"
+        },
+        {
+          "public_pointer": "/body/payload/conversation_ref",
+          "native_pointer": "/room"
+        }
+      ]
+    },
+    {
+      "id": "output_translation",
+      "message": "deliver",
+      "native": {
+        "protocol": "Q7",
+        "op": "display.text",
+        "operation": "request-delivery-1",
+        "text": "你好"
+      },
+      "comparisons": [
+        {
+          "public_pointer": "/body/payload/segments/0/content_parts/0/text",
+          "native_pointer": "/text"
+        },
+        {
+          "public_pointer": "/body/request_id",
+          "native_pointer": "/operation"
+        }
+      ]
+    },
+    {
+      "id": "action_translation",
+      "message": "request",
+      "native": {
+        "protocol": "Q7",
+        "op": "counter.add",
+        "operation": "request-counter-1",
+        "amount": 1
+      },
+      "comparisons": [
+        {
+          "public_pointer": "/body/payload/amount",
+          "native_pointer": "/amount"
+        },
+        {
+          "public_pointer": "/body/request_id",
+          "native_pointer": "/operation"
+        }
+      ]
+    },
+    {
+      "id": "result_translation",
+      "message": "response",
+      "native": {
+        "protocol": "Q7",
+        "op": "counter.result",
+        "operation": "request-counter-1",
+        "value": 1,
+        "effect_ref": "effect-q-1"
+      },
+      "comparisons": [
+        {
+          "public_pointer": "/body/payload/value",
+          "native_pointer": "/value"
+        },
+        {
+          "public_pointer": "/body/payload/effect_ref",
+          "native_pointer": "/effect_ref"
+        }
+      ]
+    }
+  ],
+  "transport_cases": [
+    {
+      "binding": "alia.transport.websocket",
+      "initiator": "alia"
+    },
+    {
+      "binding": "alia.transport.websocket",
+      "initiator": "peer"
+    },
+    {
+      "binding": "alia.transport.http-sse",
+      "initiator": "peer"
+    }
+  ],
+  "limitations": [
+    "Fixed authored messages and comparisons only; no transport, authentication, translation or execution has run.",
+    "Runtime matrix is specified in aeip_* scenarios; structural tests do not prove permissions or recovery."
+  ],
+  "configuration_cases": [
+    {
+      "id": "dial_peer",
+      "data": {
+        "connection_mode": "dial_peer",
+        "endpoint_ref": "configured-endpoint"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "listen_peer",
+      "data": {
+        "connection_mode": "listen_for_peer",
+        "endpoint_ref": "configured-listener"
+      },
+      "expected_valid": true
+    },
+    {
+      "id": "unknown_mode",
+      "data": {
+        "connection_mode": "direct_core_write",
+        "endpoint_ref": "bad"
+      },
+      "expected_valid": false
+    }
+  ],
+  "message_payload_links": [
+    {
+      "message": "event",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "input",
+      "schema_slot": "payload_schema"
+    },
+    {
+      "message": "deliver",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "method",
+      "member_name": "deliver",
+      "schema_slot": "input_schema"
+    },
+    {
+      "message": "receipt",
+      "contract_id": "alia.peer.interaction",
+      "member_kind": "event",
+      "member_name": "receipt",
+      "schema_slot": "payload_schema"
+    },
+    {
+      "message": "observation",
+      "contract_id": "alia.peer.observation",
+      "member_kind": "event",
+      "member_name": "observe",
+      "schema_slot": "payload_schema"
+    },
+    {
+      "message": "external_action_request",
+      "contract_id": "alia.peer.actions",
+      "member_kind": "method",
+      "member_name": "request",
+      "schema_slot": "input_schema"
+    },
+    {
+      "message": "request",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "input_schema"
+    },
+    {
+      "message": "response",
+      "contract_id": "org.example.counter",
+      "member_kind": "method",
+      "member_name": "increment",
+      "schema_slot": "output_schema"
+    },
+    {
+      "message": "stream_chunk",
+      "contract_id": "org.example.counter",
+      "member_kind": "stream",
+      "member_name": "samples",
+      "schema_slot": "item_schema"
+    }
+  ]
+}

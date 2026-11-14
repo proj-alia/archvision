@@ -4,7 +4,7 @@
 
 ## 1. 目标与不变量
 
-Rust 模块化单体 + PostgreSQL/pgvector + React/TypeScript/Vite；保持 core 1.0、扩展协议 1.0 和 I01–I15。框架用于实现已确定的行为，不定义身份、人格或意识。
+Rust 模块化单体 + PostgreSQL/pgvector + React/TypeScript/Vite；保持 core 1.0、扩展协议 1.0、AEIP 1.0 和 I01–I15。框架用于实现已确定的行为，不定义身份、人格或意识。
 
 直接依赖采用清单中的精确版本候选。Rust 使用 Edition 2024。Rust/Cargo 真实工程建立后写入 rust-toolchain.toml 和 Cargo.lock；前端建立后写入精确 packageManager、直接依赖及 pnpm-lock.yaml。该清单不替代这些尚不存在的解析锁文件。
 
@@ -40,6 +40,8 @@ Rust 模块化单体 + PostgreSQL/pgvector + React/TypeScript/Vite；保持 core
 - tracing 和使用量采集位于应用/适配层；领域可返回结构化审计事件，不直接写开放日志或依赖采集器。
 
 ## 4. 网页、桌面与核心通信
+
+[AEIP](12-EXTERNAL-INTERACTION-PROTOCOL.md)在已有 Axum/Tower 网络适配边界定义公开 WebSocket 与 HTTP/SSE 绑定，不新增框架或核心依赖。AEIP 会话与 HostControl 包激活分别处理；独立 peer 无须 Rust、官方 SDK 或扩展 manifest。公开 DTO/Schema 与内部业务投影显式映射，适配器注册复用现有宿主；本次没有创建工程或解析新依赖。
 
 浏览器使用认证 HTTP 命令入口和可按 cursor 恢复的 SSE；双向/连续流由既有扩展通信协议或明确的流适配承载。大媒体引用及独立数据面保持首版设计，不能把高频 chunk 当作全部需要落库的领域事件。
 

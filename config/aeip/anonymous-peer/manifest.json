@@ -1,0 +1,62 @@
+{
+  "protocol_version": "1.0",
+  "manifest_version": "1.0",
+  "extension_id": "org.example.q7",
+  "package_version": "1.0.0",
+  "host_protocol_range": "^1.0.0",
+  "entrypoints": [
+    {
+      "runtime_id": "runtime.external",
+      "artifact_ref": "example:q7-adapter-not-implemented",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "requested_permissions": [
+    {
+      "scope": "connector.transport",
+      "actions": [
+        "connect"
+      ],
+      "reason": "Only the configured synthetic Q7 endpoint."
+    }
+  ],
+  "provides": [
+    {
+      "contract_id": "alia.peer.interaction",
+      "version": "1.0.0",
+      "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+    },
+    {
+      "contract_id": "alia.peer.observation",
+      "version": "1.0.0",
+      "schema_digest": "c70468eb0b72a8c6a55a98656b12d1f5169e0569e28f6fd96bdc758b5bb6d4e8"
+    },
+    {
+      "contract_id": "org.example.counter",
+      "version": "1.0.0",
+      "schema_digest": "268394146846afac909da556b883ab41436425bbbebed4a67c0078ec0912efed"
+    }
+  ],
+  "uses": [],
+  "contributions": [
+    {
+      "contribution_id": "org.example.q7.protocol",
+      "type_id": "alia.contribution.protocol-adapter",
+      "contract_ref": {
+        "contract_id": "alia.peer.interaction",
+        "version": "1.0.0",
+        "schema_digest": "b0578bddb82df2e17fef8bfc773706a82f3ebbe3b8d399db5118ed05faeb4939"
+      },
+      "descriptor_ref": {
+        "path": "adapter.json",
+        "sha256": "4966766091f6ef0bb30605a682a58d9e72e8192458e571a4768402ca6ea76c76"
+      }
+    }
+  ],
+  "isolation_requirements": {
+    "profile_id": "isolation.restricted",
+    "memory_bytes": 1048576,
+    "cpu_millis": 1000,
+    "max_concurrency": 1
+  }
+}

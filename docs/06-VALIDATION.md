@@ -87,30 +87,39 @@
 
 ## 当前验证记录
 
-项目材料为设计规范、core/extension 1.0 草案、配置、场景输入与界面原型。领域和行为能力处于 specified；设计检查不构成运行验收。
+公开协议的设计与运行验收分别报告。AEIP 当前只有 Schema、契约、声明、正反例及固定成对样例；[协议验收矩阵](appendices/12-EXTERNAL-INTERACTION-PROTOCOL.md)和 tests/scenarios.yaml 的 aeip_* 是未来运行测试要求：
 
-检查日期：2026-11-13。本轮以第三方可交互角色客户端为例复核平台交互协议插件的双向桥接、共享连接、面板应用边界和反馈闭环，保留既有人格/动态需要与独立工具设计。环境为 Linux/bash、Python 3.13.5，未提供 pwsh、Node 或 Python YAML/JSON Schema 验证库；没有安装工具链。
-
-| 检查 | 实际结果 | 验证范围 |
+| 验收责任 | 场景 | 必须取得的运行证据 |
 |---|---|---|
-| 正式契约与设计检查 | 启动失败，退出码 127：pwsh: command not found | Test-Contracts.ps1 未执行；新增依赖/面板/桥接检查未获 PowerShell 执行验证 |
-| 正式技术栈检查 | 启动失败，退出码 127：pwsh: command not found | Test-TechnologyStack.ps1 未执行；没有更新或安装技术栈依赖 |
-| 补充静态核对 | 55 个 JSON、40 条 JSONL 可解析；18 项 Schema 目录、56 个本地 Schema 引用可解析；155 处服务版本/摘要引用与实际字节相符 | Python 标准库语法/关联检查；不执行 JSON Schema 验证器、通用 JCS 或业务代码 |
-| 设计与样例对应 | 329 项覆盖标记、199 个本地文档目标及 6 个锚点可定位；5 组连接实例关联一致；交互 ContentPart/DeliveryReceipt 与 core 定义一致 | 静态引用/子集/归属核对；文本改写后一处旧覆盖标记已同步，不证明适配或授权行为 |
-| 用例资产 | 184 个结构正反例、25 个交互/工具 payload 用例、9 个配置与 7 个依赖用例；2 对合成桥接样例及 2 个外侧帧用例；51 个场景块含 given/when/assert，其中本轮新增 9 个 bridge_* 场景 | 用例已定义，未执行 JSON Schema 或场景验证；成对文本静态相符不证明翻译器运行 |
-| 架构语义审阅 | 明确平台交互协议插件分类与双向适配；补齐主动/反向接入、共享连接归属、必需/可选能力、面板应用操作边界、单一表达执行与外部 AI/回显隔离 | 跨文档与反例审阅，不是并发、持久化、沙箱或真实媒体证明 |
-| 修改范围与格式 | 正文、Schema、配置样例、检查脚本、覆盖与场景同步；git diff --check 通过 | 未创建运行时工程、生成器、SQL 或平台专属 HTTP 接口；原型代码未改动 |
+| A/E/F：独立原生与适配接入 | aeip_independent_peer、aeip_native_and_bridge | 不依赖 manifest/核心私有类型；真实双向翻译；冻结核心后注册新适配器 |
+| E/F：连接与业务角色 | aeip_connection_roles | 两种 WS 发起方向、HTTP/SSE 均实测双方请求/事件/响应 |
+| A/B/E/F：能力与版本 | aeip_capability_revision、aeip_version_and_boundary | 修订先失效；未知语义/版本拒绝；可选降级及准确资源选择 |
+| B/E/F：结果、故障与流控 | aeip_results_and_recovery、aeip_flow_and_deletion | 实际计数器效果、交付范围、断线/重复/拥塞/撤权/删除及恢复 |
+| B/C/D/F：隔离与连续性 | aeip_isolation_continuity | 多端共用身份，外部主体/受众/历史隔离，无回显自激 |
+
+### 实际检查记录
+
+检查日期：2026-11-14。当前仍为设计、core/extension/AEIP 1.0 草案、配置、场景和旧 HTML 原型；领域及运行能力处于 specified。
+
+| 检查 | 实际结果 | 证明范围 |
+|---|---|---|
+| 契约与设计检查 | PASS：1164 项，0 失败，退出码 0 | Schema 正反例、服务/声明摘要、公共投影复用、注册引用、固定映射和文档结构 |
+| 技术清单检查 | PASS：185 项，0 失败，退出码 0 | 配置结构、脚本语法及既有 PowerShell 校验 oracle；不证明依赖已解析或构建 |
+| 既有失败修复 | 初始 956 项中 43 项失败已定位并修复：分发文件 CRLF 改变原始字节摘要；两项指针遍历丢失单元素数组 | 用 .gitattributes 固定 JSON UTF-8/LF 分发，并保留实际字节摘要校验；修正赋值位置，不放宽验证 |
+| 外部研究 | 固定 OneBot、NapCat 历史提交及 AstrBot 源码已阅读 | 规范/源码证据；NapCat 当前主分支仅剩结束说明，旧文档地址 404；三个项目均未运行 |
+| 交付边界 | 新增 AEIP、可注册适配器、公共业务投影、Q/Q7 设计资产及 aeip_* 验收要求；同步唯一基线 | 未创建运行时、SDK、客户端、生成器或 SQL；未安装工具链、执行数据库或修改既有界面原型 |
+| 差异格式 | git diff --check 通过，退出码 0 | 已跟踪改动的空白检查，不是运行验收 |
 
 实际命令：
 
-~~~bash
+~~~powershell
 pwsh -NoProfile -File tests/Test-Contracts.ps1
 pwsh -NoProfile -File tests/Test-TechnologyStack.ps1
 git diff --check
 ~~~
 
-补充核对使用 `python3 -` 执行一次性静态脚本。两条 PowerShell 命令未启动，未生成正式 report.json；静态结果不能替代它们的测试结果。角色客户端 C 的 C7 协议为合成夹具，动作能力只是待实现的声明，不属于任何真实 Live2D 客户端协议；没有运行协议翻译器、SDK、认证或连接。
+正式 report.json 默认写入系统临时目录，包含逐项结果、PowerShell 版本及限制；不作为产品状态入库。固定 Q7 双向文本、动作和结果样例只验证结构与关联内容，不执行翻译器；原生 hello 的形状通过也不证明认证成功。
 
-运行时、依赖解析与构建、数据库初始化与恢复、宿主隔离与授权执行、浏览器表单和真实登录、WebChat/社区平台收发、真实媒体与多端、人格效果、盲评及 G0–G6 均未执行。现有 HTML 原型仍是旧 13 页管理界面，没有实现正式 /chat 或自描述配置流程。
+未执行：网关及 Adapter SPI/SDK 实现、独立客户端运行、真实双向 Socket/HTTP/SSE、动态能力/权限/恢复状态机、数据库事务与初始化、宿主隔离、正式 WebChat、实际平台/媒体、多端连续性及 G0–G6。旧 HTML 原型仍不能替代正式 /chat 或协议接入。
 
-下一责任：在具备既定 PowerShell 环境时运行两条正式设计检查并修复实际失败；未来 A/B 实现契约及关联/持久化守卫，C/D 验证外部来源与认知历史连续性，E 按实际客户端协议实现双向适配、面板应用桥及共享资源管理，F 验证 bridge_*、connector_*、tool_*、webchat_* 的真实执行。具体客户端尚未指定，因此不能宣称已支持任意 Live2D 应用；后续接入须读取该项目的准确接口并实测兼容范围。
+下一责任：A 固定准确协议及语义映射；获准工程实施后，B 落实会话/去重/游标/删除屏障，C/D 保持来源和个体连续性，E 实现网关、注册式适配器与独立 Q/Q7 模拟端，F 执行 aeip_*、bridge_*、connector_* 和其他既有场景。真实平台兼容性须指定版本及接口后实测。
